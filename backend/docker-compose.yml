@@ -1,0 +1,17 @@
+# This docker-compose file will spin up a postgres database for development use.
+version: '3'
+services:
+  # PostgreSQL container
+  wizard-postgres:
+    image: "postgres:9.6.5"
+    volumes:
+      - "postgres:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=wizard
+      - POSTGRES_DB=wizard
+      - POSTGRES_PORT=5432
+    ports:
+      - "5433:5432"
+volumes:
+  postgres:

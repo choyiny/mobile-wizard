@@ -1,0 +1,25 @@
+# Base Flask Packages
+flask==1.0.2
+flask-restful==0.3.6
+
+# Websockets related
+flask-socketio
+eventlet
+
+# database
+psycopg2-binary==2.7.6
+Flask-SQLAlchemy===2.2
+sqlalchemy==1.2.7
+
+# sending external requests
+requests==2.19.1
+
+# API related
+flask-cors
+
+# testing library
+pytest
+
+# WSGI related for deployment
+gunicorn
+gevent
