@@ -5,19 +5,53 @@
 </head>
 <body>
 <a href="#" id="try_me">Click me</a>
+<p id="accelerationX"></p>
+<p id="accelerationY"></p>
+<p id="accelerationZ"></p>
 <div id="send_time"></div>
 <div id="recieve_time"></div>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
 <script type="text/javascript">
     const socket = io('http://138.51.78.127:5000/game');
-    socket.on("echo", () => {
-        document.getElementById("recieve_time").innerHTML = Date.now();
+    socket.on("echo", function(data) {
+        document.getElementById("accelerationX").innerHTML = data.x;
+        document.getElementById("accelerationY").innerHTML = data.y;
+        document.getElementById("accelerationZ").innerHTML = data.z;
     });
 
-    document.getElementById("try_me").addEventListener("click", () => {
-        document.getElementById("send_time").innerHTML = Date.now();
-        socket.emit("action", new Date());
-    });
+    // document.getElementById("try_me").addEventListener("click", () => {
+    //     document.getElementById("send_time").innerHTML = Date.now();
+    //     socket.emit("action", new Date());
+    // });
+
+    var lock = false;
+    if (window.DeviceMotionEvent !== undefined) {
+        window.ondevicemotion = function (e) {
+            if (lock) {
+                return;
+            }
+            ax = event.accelerationIncludingGravity.x * 5;
+            ay = event.accelerationIncludingGravity.y * 5;
+
+            var motion = {
+                x: e.accelerationIncludingGravity.x,
+                y: e.accelerationIncludingGravity.y,
+                z: e.accelerationIncludingGravity.z
+            };
+
+            if (e.rotationRate) {
+                motion.a = e.rotationRate.alpha;
+                motion.b = e.rotationRate.beta;
+                motion.g = e.rotationRate.gamma;
+            }
+
+            lock = true;
+            socket.emit("action", motion);
+            setTimeout(function() {
+                lock = false;
+            }, 50);
+        };
+    }
 </script>
 </body>
 </html>
