@@ -4,7 +4,7 @@ flask-restful==0.3.6
 
 # Websockets related
 flask-socketio
-eventlet
+
 
 # database
 psycopg2-binary==2.7.6
@@ -22,4 +22,4 @@ pytest
 
 # WSGI related for deployment
 gunicorn
-gevent
+eventlet
