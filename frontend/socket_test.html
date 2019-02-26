@@ -9,13 +9,13 @@
 <div id="recieve_time"></div>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
 <script type="text/javascript">
-    const socket = io('http://localhost:5000/game');
+    const socket = io('http://138.51.78.127:5000/game');
     socket.on("echo", () => {
-        document.getElementById("recieve_time").innerHTML = new Date();
+        document.getElementById("recieve_time").innerHTML = Date.now();
     });
 
-    document.getElementById("#try_me").addEventListener("click", () => {
-        document.getElementById("#send_time").innerHTML = new Date();
+    document.getElementById("try_me").addEventListener("click", () => {
+        document.getElementById("send_time").innerHTML = Date.now();
         socket.emit("action", new Date());
     });
 </script>
