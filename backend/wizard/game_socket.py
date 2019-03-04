@@ -25,3 +25,9 @@ class Game(Namespace):
             emit('spell', {'spell': spell}, broadcast=True)
 
         emit('echo', data, broadcast=True)
+
+    def on_deviceOrientationChangeEvent(self, data):
+        emit("deviceOrientationChangeEvent", data, broadcast=True)
+
+    def on_screenOrientationChangeEvent(self, data):
+        emit("screenOrientationChangeEvent", data, broadcast=True)
