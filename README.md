@@ -11,7 +11,7 @@ like street fighters.
 Cho Yin Yong, Zhili Pan, Guo Bin Liu
 
 ## Beta Version key features
-In the beta version, a game host (on a computer) will be able to host a game for two players to join.
+In the beta version, a game host (on a computer) will be able to host a game room for two players to join.
 Two players will be able to join through their mobile browsers and prepare to duel.
 
 The game host's screen will be able to show the health bar of the two players.
@@ -22,10 +22,9 @@ the other player.
 A leaderboard for the highest damage done by a single action will be available for everyone in the main website.
 
 ## Final Version additional features
-Players will be able to join a game room by taking a picture of themselves, and the system will automatically
-generate a nickname based on that image.
-
 Post game analysis shown as graphs at the end of the game.
+
+3D models that mimics the users casting the spell on the host's screen.
 
 ## Technologies
 - [Flask](http://flask.pocoo.org/) - Backend Webserver.
