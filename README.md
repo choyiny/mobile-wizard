@@ -35,7 +35,7 @@ Post game analysis shown as graphs at the end of the game.
 - [three.js](https://threejs.org) - Rendering 3D models for spectators
 - [Docker](https://docker.io) - For packaging the application for deployment at ease.
 - [Postman](https://www.getpostman.com) - Testing medium for the backend API.
-- [Google Custom Search API](https://developers.google.com/custom-search/) - for "Face ID'ing" players
+- [Firebase](https://firebase.google.com/) - For third-party authentication
 
 
 ## Top 5 Technical Challenges
