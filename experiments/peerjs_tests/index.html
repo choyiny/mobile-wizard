@@ -2,11 +2,20 @@
 <html>
 <head>
   <title>this is a peerjs test</title>
+  <style type="text/css">
+    body {
+      font-size: 4rem;
+    }
+    input {
+      height:4rem;
+      width:4rem;
+    }
+  </style>
 </head>
 <body>
   <div id="peer_id"></div>
     <form id="peer_join">
-    <label for="peerid">Peer Id: </label>
+    <label for="peerid">Connect To:</label>
     <input type="text" id="form_peerid" name="peerid">
     <input type="submit" name="Submit">
   </form>
@@ -16,7 +25,10 @@
     <input type="text" id="form_message" name="message">
     <input type="submit" name="Submit">
   </form>
-  <div id="messages">Messages:</div>
+  <div id="info"></div>
+  <div>Messages:
+    <div id="messages"></div>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js"></script>
   <script type="text/javascript" src="index.js"></script>
 </body>
