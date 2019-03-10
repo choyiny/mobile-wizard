@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>this is a peerjs test</title>
+</head>
+<body>
+  <div id="peer_id"></div>
+    <form id="peer_join">
+    <label for="peerid">Peer Id: </label>
+    <input type="text" id="form_peerid" name="peerid">
+    <input type="submit" name="Submit">
+  </form>
+
+  <form id="peer_send">
+    <label for="peerid">Message: </label>
+    <input type="text" id="form_message" name="message">
+    <input type="submit" name="Submit">
+  </form>
+  <div id="messages">Messages:</div>
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js"></script>
+  <script type="text/javascript" src="index.js"></script>
+</body>
+</html>
