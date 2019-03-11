@@ -1,12 +1,20 @@
-export class Action {
-  id: number;
+export abstract class Action {
 
-  constructor(json: {
-    id: number
-  }) {
-    this.id = json.id;
+  constructor(private name: string) {
+    this.timestamp = Date.now();
+    this.actor = null;
   }
 
-  // action methods here
+  public getName(): string {
+  	return this.name;
+  }
+
+  public getTimestamp(): int {
+  	return this.timestamp;
+  }
+
+  public setActor(user: string) {
+  	this.actor = user;
+  }
 
 }
