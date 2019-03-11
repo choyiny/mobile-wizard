@@ -21,7 +21,7 @@ export class GameComponent implements OnInit {
   ngOnInit() {
   }
 
-  damage(player: int, value: int) {
+  damage(player: number, value: number) {
     if (player === 1) {
       this.health1 -= value;
     } else {

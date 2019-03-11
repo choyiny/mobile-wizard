@@ -1,15 +1,20 @@
 import {Action} from './action';
 
 export class Attack extends Action {
-	constructor(private name: string, private damage: int, private dfrange: int) {
-		super(name);
-	}
+  damage: number;
+  dfrange: number;
 
-	public getDamage(): int {
-		return this.damage;
-	}
+  constructor(name: string, damage: number, dfrange: number) {
+    super(name);
+    this.damage = damage;
+    this.dfrange = dfrange;
+  }
 
-	public getDfrange(): int {
-		return this.dfrange;
-	}
+  public getDamage(): number {
+    return this.damage;
+  }
+
+  public getDfrange(): number {
+    return this.dfrange;
+  }
 }

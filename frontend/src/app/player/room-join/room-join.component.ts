@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Detector} from '../../motion/detector';
+import {ActionProcessor} from '../../processor/action-processor';
 
 @Component({
   selector: 'wizard-room-join',
@@ -10,7 +12,13 @@ export class RoomJoinComponent implements OnInit {
 
   private status = 'Throw to ready!';
 
-  constructor() { }
+  private output = 'none';
+
+  constructor() {
+    const processor = new ActionProcessor((action) => this.status = action.name);
+    const detector = new Detector(processor);
+    this.output = '';
+  }
 
   ngOnInit() {
   }
