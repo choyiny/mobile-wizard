@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {RoomCreationComponent} from './room-creation/room-creation.component';
 import {RoomLobbyComponent} from './room-lobby/room-lobby.component';
 
 const routes: Routes = [
   {
     path: 'hosts',
-    component: RoomCreationComponent,
+    component: RoomLobbyComponent,
     children: [
       {
         path: 'lobby',

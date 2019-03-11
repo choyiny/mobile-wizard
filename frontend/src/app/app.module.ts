@@ -9,6 +9,8 @@ import {HostModule} from './host/host.module';
 import {PlayerModule} from './player/player.module';
 import { CreditsComponent } from './credits/credits.component';
 import { HomeComponent } from './home/home.component';
+import {HttpClientModule} from '@angular/common/http';
+import {WizardAPIService} from './external/wizard-api.service';
 
 @NgModule({
   declarations: [
@@ -18,13 +20,14 @@ import { HomeComponent } from './home/home.component';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     HostModule,
     PlayerModule,
     AppRoutingModule,
     PlayerRoutingModule,
-    HostRoutingModule
+    HostRoutingModule,
   ],
-  providers: [],
+  providers: [WizardAPIService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
