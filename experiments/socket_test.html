@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket.io Test</title>
+</head>
+<body>
+<p id="error"></p>
+<p id="accelerationX"></p>
+<p id="accelerationY"></p>
+<p id="accelerationZ"></p>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script type="text/javascript">
+    const socket = io('http://138.51.78.127:5000/game', {transports: ['websocket']});
+    // socket.on("echo", function(data) {
+    //     document.getElementById("accelerationX").innerHTML = data.x;
+    //     document.getElementById("accelerationY").innerHTML = data.y;
+    //     document.getElementById("accelerationZ").innerHTML = data.z;
+    // });
+    var lock = false;
+    if (window.DeviceMotionEvent !== undefined) {
+        window.ondevicemotion = function (e) {
+            if (lock) {
+                return;
+            }
+
+            var motion = {
+                x: Math.round(e.acceleration.x),
+                y: Math.round(e.acceleration.y),
+                z: Math.round(e.acceleration.z)
+            };
+
+            if (e.rotationRate) {
+                motion.a = e.rotationRate.alpha;
+                motion.b = e.rotationRate.beta;
+                motion.g = e.rotationRate.gamma;
+            }
+
+            lock = true;
+            socket.emit("action", motion);
+            setTimeout(function() {
+                lock = false;
+            }, 50); // send every 50ms
+        };
+    }
+</script>
+</body>
+</html>

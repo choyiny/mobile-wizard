@@ -33,9 +33,10 @@ $ source wizard-venv/bin/activate
 ```
 _Note: The PostgreSQL server is binded to port 5433 (default port 5432) to prevent clashes with
 the local PostgreSQL instance._
-3. Start server with debug mode on, and binded to listen to all interfaces.
+
+3. Start server with gunicorn, and binded to listen to all interfaces.
 ```
-(wizard-venv) $ FLASKDEBUG=1 flask run --host=0.0.0.0
+(wizard-venv) $ gunicorn --worker-class eventlet -w 4 wsgi:app -b 0.0.0.0:5000
 ```
 4. You should now able to access the API with devices connected to the local internet.
 ```

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Socket.io Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/epoch/0.8.4/css/epoch.min.css" />
+    <style>
+        .chart {
+            height: 50% !important;
+            width: 50% !important;
+            display: inline-block;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<canvas class="chart" id="xChart"></canvas>
+<canvas class="chart" id="aChart"></canvas>
+<canvas class="chart" id="yChart"></canvas>
+<canvas class="chart" id="bChart"></canvas>
+<canvas class="chart" id="zChart"></canvas>
+<canvas class="chart" id="gChart"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script type="text/javascript" src="chartjs-plugin-streaming.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+<script type="text/javascript">
+    const socket = io('http://138.51.78.127:5000/game', {transports: ['websocket']});
+
+    var xChart = new Chart(document.getElementById('xChart').getContext('2d'), {
+      type: 'line',
+      data: {
+          datasets: [{
+              data: []
+        }]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            type: 'realtime',
+            realtime: {         // per-axis options
+                duration: 5000,
+                delay: 50,
+                ttl: 5000
+            }
+          }]
+        },
+        plugins: {
+            streaming: {            // per-chart option
+                frameRate: 30       // chart is drawn 30 times every second
+            }
+        }
+      }
+    });
+
+    var yChart = new Chart(document.getElementById('yChart').getContext('2d'), {
+      type: 'line',
+      data: {
+          datasets: [{
+              data: []
+        }]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            type: 'realtime',
+            realtime: {         // per-axis options
+                duration: 5000,
+                delay: 50,
+                ttl: 5000
+            }
+          }]
+        },
+        plugins: {
+            streaming: {            // per-chart option
+                frameRate: 30       // chart is drawn 30 times every second
+            }
+        }
+      }
+    });
+
+    var zChart = new Chart(document.getElementById('zChart').getContext('2d'), {
+      type: 'line',
+      data: {
+          datasets: [{
+              data: []
+        }]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            type: 'realtime',
+            realtime: {         // per-axis options
+                duration: 5000,
+                delay: 50,
+                ttl: 5000
+            }
+          }]
+        },
+        plugins: {
+            streaming: {            // per-chart option
+                frameRate: 30       // chart is drawn 30 times every second
+            }
+        }
+      }
+    });
+
+    var aChart = new Chart(document.getElementById('aChart').getContext('2d'), {
+      type: 'line',
+      data: {
+          datasets: [{
+              data: []
+        }]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            type: 'realtime',
+            realtime: {         // per-axis options
+                duration: 5000,
+                delay: 50,
+                ttl: 5000
+            }
+          }],
+          yAxes: [{
+              ticks: {
+                  min: -1000,
+                  max: 1000
+              }
+          }]
+        },
+        plugins: {
+            streaming: {            // per-chart option
+                frameRate: 30       // chart is drawn 30 times every second
+            }
+        }
+      }
+    });
+
+    var bChart = new Chart(document.getElementById('bChart').getContext('2d'), {
+      type: 'line',
+      data: {
+          datasets: [{
+              data: []
+        }]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            type: 'realtime',
+            realtime: {         // per-axis options
+                duration: 5000,
+                delay: 50,
+                ttl: 5000
+            }
+          }],
+          yAxes: [{
+              ticks: {
+                  min: -1000,
+                  max: 1000
+              }
+          }]
+        },
+        plugins: {
+            streaming: {            // per-chart option
+                frameRate: 30       // chart is drawn 30 times every second
+            }
+        }
+      }
+    });
+
+    var gChart = new Chart(document.getElementById('gChart').getContext('2d'), {
+      type: 'line',
+      data: {
+          datasets: [{
+              data: []
+        }]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            type: 'realtime',
+            realtime: {         // per-axis options
+                duration: 5000,
+                delay: 50,
+                ttl: 5000
+            }
+          }],
+          yAxes: [{
+              ticks: {
+                  min: -1000,
+                  max: 1000
+              }
+          }]
+        },
+        plugins: {
+            streaming: {            // per-chart option
+                frameRate: 30       // chart is drawn 30 times every second
+            }
+        }
+      }
+    });
+
+    socket.on("echo", function(data) {
+        xChart.data.datasets[0].data.push({x: data.timestamp * 1000, y: data.x});
+        yChart.data.datasets[0].data.push({x: data.timestamp * 1000, y: data.y});
+        zChart.data.datasets[0].data.push({x: data.timestamp * 1000, y: data.z});
+        xChart.update({ preservation: true });
+        yChart.update({ preservation: true });
+        zChart.update({ preservation: true });
+
+        aChart.data.datasets[0].data.push({x: data.timestamp * 1000, y: data.a});
+        bChart.data.datasets[0].data.push({x: data.timestamp * 1000, y: data.b});
+        gChart.data.datasets[0].data.push({x: data.timestamp * 1000, y: data.g});
+        aChart.update({ preservation: true });
+        bChart.update({ preservation: true });
+        gChart.update({ preservation: true });
+    });
+
+    socket.on('spell', function(data) {
+        console.log(data);
+    });
+
+</script>
+</body>
+</html>
