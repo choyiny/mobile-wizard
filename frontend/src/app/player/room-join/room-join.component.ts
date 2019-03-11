@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Detector} from '../../motion/detector';
 import {ActionProcessor} from '../../processor/action-processor';
+import {PlayerPeerService} from '../../peer/player-peer.service';
 
 @Component({
   selector: 'wizard-room-join',
@@ -14,8 +15,11 @@ export class RoomJoinComponent implements OnInit {
 
   private output = 'none';
 
-  constructor() {
-    const processor = new ActionProcessor((action) => this.status = action.name);
+  constructor(private peerService: PlayerPeerService) {
+    const processor = new ActionProcessor((action) => {
+      this.status = action.name;
+      peerService.sendAction(action);
+    });
     const detector = new Detector(processor);
     this.output = '';
   }

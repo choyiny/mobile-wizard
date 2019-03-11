@@ -11,11 +11,14 @@ export class ActionProcessor {
     this.lock = false;
   }
 
-  public add_action(data) {
+  public add_action(data: object) {
     if (this.lock) { return; }
-    data.forEach((val, key, self) => {
-      if (key in this.actions) { this.actions[key].push(val); }
-    });
+    for (const key in data) {
+      const value = data[key];
+      if (key in this.actions) {
+        this.actions[key].push(value);
+      }
+    }
     const l = this.actions['x'].length;
     if (this.actions['y'][l - 1] > 70 || this.actions['x'][l - 1] > 70) {
       this.on_action_data();
