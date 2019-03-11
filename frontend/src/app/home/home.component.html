@@ -6,10 +6,10 @@
   <div id="create_room" class="item">
     <div class="nes-field">
       <label for="room_id">Room Name</label>
-      <input type="text" id="room_id" class="nes-input" autocomplete="off" placeholder="Thierry's Office">
+      <input #newRoomName type="text" id="room_id" class="nes-input" autocomplete="off" placeholder="Thierry's Office" (blur)="updateRoomName(newRoomName.value)">
     </div>
   </div>
-  <button type="button" class="nes-btn is-primary">Create a game</button>
+  <button type="button" class="nes-btn is-primary" (click)="createRoom()">Create a game</button>
 </section>
 
 <!--Joining a game from mobile-->
@@ -21,7 +21,7 @@
       <input #wizardName id="wizard_name" class="nes-input" autocomplete="off" placeholder="Thierry" (blur)="updateWizardName(wizardName.value)">
       <label for="rooms_available">Select a room</label>
       <div class="nes-select">
-        <select #roomName required="" id="rooms_available" (click)="updateRoomName(roomName.value)">
+        <select #roomName required="" id="rooms_available" (click)="updateRoomId(roomName.value)">
           <option>--select--</option>
           <option *ngFor="let r of availableRooms" [value]="r.id">{{r.name}}</option>
         </select>

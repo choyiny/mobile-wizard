@@ -12,22 +12,23 @@ export class HomeComponent implements OnInit {
 
   private wizardName: string;
   private roomId: string;
+  private roomName: string;
 
   public availableRooms: Room[] = [];
 
   constructor(public deviceService: DeviceService,
               private apiService: WizardAPIService) {
-    // apiService.getRooms().subscribe(
-    //   data => this.availableRooms = data,
-    //   err => console.log(err)
-    // );
+    apiService.getRooms().subscribe(
+      data => this.availableRooms = data,
+      err => console.log(err)
+    );
   }
 
   ngOnInit() {
 
   }
 
-  public updateRoomName(id: string) {
+  public updateRoomId(id: string) {
     this.roomId = id;
   }
 
@@ -38,12 +39,16 @@ export class HomeComponent implements OnInit {
   }
 
   public createRoom() {
-    this.apiService.createRoom(name).subscribe(
+    this.apiService.createRoom(this.roomName).subscribe(
       data => console.log(data)
     );
   }
 
   public updateWizardName(value: string) {
     this.wizardName = value;
+  }
+
+  public updateRoomName(value: string) {
+    this.roomName = value;
   }
 }

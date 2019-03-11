@@ -6,14 +6,7 @@ import {DeviceGuard} from '../helpers/device.guard';
 const routes: Routes = [
   {
     path: 'players',
-    component: RoomJoinComponent,
-    children: [
-      {
-        path: 'join',
-        component: RoomJoinComponent
-      },
-      { path: '', redirectTo: 'join', pathMatch: 'full' }
-    ]
+    component: RoomJoinComponent
   }
 ];
 

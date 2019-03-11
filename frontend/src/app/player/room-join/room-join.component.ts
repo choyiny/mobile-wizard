@@ -6,10 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./room-join.component.scss']
 })
 export class RoomJoinComponent implements OnInit {
+  player_name = 'Player';
+
+  private status = 'Throw to ready!';
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  public getStatus(): string {
+    return this.status;
   }
 
 }

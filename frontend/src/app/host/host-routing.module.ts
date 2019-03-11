@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {RoomLobbyComponent} from './room-lobby/room-lobby.component';
+import {GameComponent} from './game/game.component';
 
 const routes: Routes = [
   {
     path: 'hosts',
-    component: RoomLobbyComponent,
+    component: GameComponent,
     children: [
       {
-        path: 'lobby',
-        component: RoomLobbyComponent
+        path: 'game',
+        component: GameComponent
       }
     ]
   }
