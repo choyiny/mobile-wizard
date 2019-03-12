@@ -6,14 +6,13 @@ import {GameGuard} from '../helpers/game.guard';
 
 const routes: Routes = [
   {
-    path: 'players',
+    path: '',
     component: RoomJoinComponent
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-  providers: [DeviceGuard, GameGuard]
+  exports: [RouterModule]
 })
 export class PlayerRoutingModule { }

@@ -21,11 +21,7 @@ import {WizardAPIService} from './external/wizard-api.service';
   imports: [
     BrowserModule,
     HttpClientModule,
-    HostModule,
-    PlayerModule,
-    AppRoutingModule,
-    PlayerRoutingModule,
-    HostRoutingModule,
+    AppRoutingModule
   ],
   providers: [WizardAPIService],
   bootstrap: [AppComponent]

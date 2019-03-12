@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core';
 })
 export class GameService {
 
-  private inGame = false;
+  // set to true temporarily for debugging purposes so we can access all views until peer is setup
+  private inGame = true;
 
   constructor() { }
 
