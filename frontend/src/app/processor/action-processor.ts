@@ -1,5 +1,6 @@
 import {Strike} from './strike';
 import {Throw} from './throw';
+import {Defense} from './defense';
 
 export class ActionProcessor {
 
@@ -20,7 +21,7 @@ export class ActionProcessor {
       }
     }
     const l = this.actions['x'].length;
-    if (this.actions['y'][l - 1] > 70 || this.actions['x'][l - 1] > 70) {
+    if (this.actions['y'][l - 1] > 70 || this.actions['x'][l - 1] > 70 || this.actions['z'][l - 1] < -30) {
       this.on_action_data();
     }
   }
@@ -42,6 +43,22 @@ export class ActionProcessor {
     return (my > 60 && ly < -20 && lxpos < mypos && Math.abs(cores_g) < 500);
   }
 
+  private is_defense() {
+
+    const l = this.actions['z'].length;
+    const lst = this.actions['z'].slice(l - 15);
+    const mz = Math.max.apply(null, lst);
+    const mzpos = this.actions['z'].lastIndexOf(mz);
+
+    const lz = this.actions['z'][l - 1];
+    const miny = Math.min.apply(null, this.actions['y'].slice(mzpos));
+    const maxx = Math.max.apply(null, this.actions['x'].slice(mzpos));
+    const maxa  = Math.max.apply(null, this.actions['a'].slice(mzpos));
+    const maxb  = Math.max.apply(null, this.actions['b'].slice(mzpos));
+    const maxg  = Math.max.apply(null, this.actions['g'].slice(mzpos));
+    return lz < -30 && miny > 0 && maxx < 0 && maxa < 0 && maxb < 0 && maxg < 0;
+  }
+
   private on_action_data() {
     if (this.lock) { return; }
     this.lock = true;
@@ -53,14 +70,19 @@ export class ActionProcessor {
     const mz = Math.max.apply(null, this.actions['z']);
     if (this.is_strike(ly, my)) {
       this.clear();
+      this.lock = false;
       // Call listener with new action
       this.observer(new Strike());
-      this.lock = false;
     } else if (this.is_throw(lx)) {
       this.clear();
+      this.lock = false;
       // Call listener with new action
       this.observer(new Throw());
+    } else if (this.is_defense()) {
+      this.clear();
       this.lock = false;
+      this.observer(new Defense());
+
     } else {
       this.lock = false;
     }
