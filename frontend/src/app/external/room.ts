@@ -1,12 +1,9 @@
 export class Room {
-  id: string;
-  name: string;
+  hostid: string;
 
   constructor(json: {
-    id: string,
-    name: string
+    hostid: string,
   }) {
-    this.id = json.id;
-    this.name = json.name;
+    this.hostid = json.hostid;
   }
 }

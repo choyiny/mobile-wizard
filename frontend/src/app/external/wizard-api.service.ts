@@ -19,11 +19,7 @@ export class WizardAPIService {
     return this.http.get<Room[]>(this.endpoint + 'rooms');
   }
 
-  public joinRoom(roomId: string, name: string) {
-    return this.http.patch(this.endpoint + 'rooms', {room_id: roomId, name: name});
-  }
-
-  public createRoom(name: string) {
-    return this.http.post(this.endpoint + 'rooms', {name: name});
+  public createRoom(hostid: string) {
+    return this.http.post(this.endpoint + 'rooms', {hostid: hostid});
   }
 }

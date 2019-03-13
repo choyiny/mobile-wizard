@@ -10,10 +10,6 @@ class Room(BaseModel):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     hostid = db.Column(db.String, nullable=False)
 
-    # members are linked to a user and a business
-    # player1 = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    # player2 = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-
     # updated and created at
     updated_at = db.Column(db.DateTime, nullable=False, onupdate=datetime.now(), default=datetime.now())
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())

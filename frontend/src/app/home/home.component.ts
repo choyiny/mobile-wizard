@@ -39,9 +39,6 @@ export class HomeComponent implements OnInit {
   public joinRoom() {
     this.peerService.connectToHost(this.roomId);
     this.router.navigate(['players']);
-    // this.apiService.joinRoom(this.roomId, this.wizardName).subscribe(
-    //   data => console.log(data)
-    // );
   }
 
   public createRoom() {

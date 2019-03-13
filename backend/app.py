@@ -23,7 +23,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(c)
 
-    CORS(app, expose_headers=['Authorization'])
+    CORS(app, expose_headers=['Authorization'], resources={r'/rooms/*': {'origins': '*'}})
     api = Api(app, errors=ERROR_MESSAGES)
 
     # setup socket server
