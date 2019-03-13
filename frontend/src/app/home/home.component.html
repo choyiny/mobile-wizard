@@ -1,0 +1,34 @@
+<h1>Mobile Wizard</h1>
+
+<!--Creating a game from desktop-->
+<section *ngIf="deviceService.deviceIsDesktop()" class="nes-container with-title">
+  <h3 class="title">Create a game</h3>
+  <div id="create_room" class="item">
+    <div class="nes-field">
+      <label for="room_id">Room Name</label>
+      <input #newRoomName type="text" id="room_id" class="nes-input" autocomplete="off" placeholder="Thierry's Office" (blur)="updateRoomName(newRoomName.value)">
+    </div>
+  </div>
+  <button type="button" class="nes-btn is-primary" (click)="createRoom()">Create a game</button>
+</section>
+
+<!--Joining a game from mobile-->
+<section *ngIf="!deviceService.deviceIsDesktop()" class="nes-container with-title">
+  <h3 class="title">Join a game</h3>
+  <div id="inputs" class="item">
+    <div class="nes-field">
+      <label for="wizard_name">Your wizard name</label>
+      <input #wizardName id="wizard_name" class="nes-input" autocomplete="off" placeholder="Thierry" (blur)="updateWizardName(wizardName.value)">
+      <label for="rooms_available">Select a room</label>
+      <!--<div class="nes-select">-->
+        <!--&lt;!&ndash;<select #roomName required="" id="rooms_available" (click)="updateRoomId(roomName.value)">&ndash;&gt;-->
+          <!--&lt;!&ndash;<option>&#45;&#45;select&#45;&#45;</option>&ndash;&gt;-->
+          <!--&lt;!&ndash;<option *ngFor="let r of availableRooms" [value]="r.id">{{r.name}}</option>&ndash;&gt;-->
+        <!--&lt;!&ndash;</select>&ndash;&gt;-->
+      <!--</div>-->
+      <input #roomName id="rooms_available" class="nes-input" autocomplete="off" placeholder="Thierry" (blur)="updateRoomId(roomName.value)">
+    </div>
+  </div>
+  <button type="button" class="nes-btn is-success" (click)="joinRoom()">Join a game</button>
+</section>
+<h5><a routerLink="../credits">Credits</a></h5>

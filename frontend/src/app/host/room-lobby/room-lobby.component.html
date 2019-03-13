@@ -1,0 +1,15 @@
+<div class="players">
+  <div class="player player1">
+    <section class="nes-container with-title">
+      <h3 class="title">Player 1: {{player_one_name}}</h3>
+      <h1>{{player_one_status}}</h1>
+    </section>
+  </div>
+  <div class="player player2">
+    <section class="nes-container with-title">
+      <h3 class="title">Player 2: {{player_two_name}}</h3>
+      <h1>{{player_two_status}}</h1>
+    </section>
+  </div>
+</div>
+<button *ngIf="gameStartable()" type="button" class="nes-btn is-success" (click)="startGame()">Start Game</button>
