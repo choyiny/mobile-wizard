@@ -20,12 +20,13 @@
       <label for="wizard_name">Your wizard name</label>
       <input #wizardName id="wizard_name" class="nes-input" autocomplete="off" placeholder="Thierry" (blur)="updateWizardName(wizardName.value)">
       <label for="rooms_available">Select a room</label>
-      <div class="nes-select">
-        <select #roomName required="" id="rooms_available" (click)="updateRoomId(roomName.value)">
-          <option>--select--</option>
-          <option *ngFor="let r of availableRooms" [value]="r.id">{{r.name}}</option>
-        </select>
-      </div>
+      <!--<div class="nes-select">-->
+        <!--&lt;!&ndash;<select #roomName required="" id="rooms_available" (click)="updateRoomId(roomName.value)">&ndash;&gt;-->
+          <!--&lt;!&ndash;<option>&#45;&#45;select&#45;&#45;</option>&ndash;&gt;-->
+          <!--&lt;!&ndash;<option *ngFor="let r of availableRooms" [value]="r.id">{{r.name}}</option>&ndash;&gt;-->
+        <!--&lt;!&ndash;</select>&ndash;&gt;-->
+      <!--</div>-->
+      <input #roomName id="rooms_available" class="nes-input" autocomplete="off" placeholder="Thierry" (blur)="updateRoomId(roomName.value)">
     </div>
   </div>
   <button type="button" class="nes-btn is-success" (click)="joinRoom()">Join a game</button>

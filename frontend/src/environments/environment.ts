@@ -4,7 +4,13 @@
 
 export const environment = {
   production: false,
-  backend: 'http://localhost:8000/'
+  backend: 'http://localhost:8000/',
+  peerserver: {
+    id: 'asdf', // blank string for random room id
+    host: '192.168.0.104',
+    port: 9000,
+    key: 'peerjs',
+  },
 };
 
 /*

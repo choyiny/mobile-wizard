@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {HostPeerService} from '../../peer/host-peer.service';
 
 @Component({
@@ -6,7 +6,7 @@ import {HostPeerService} from '../../peer/host-peer.service';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, OnDestroy {
 
   public readonly maxHealth = 100;
 
@@ -28,10 +28,32 @@ export class GameComponent implements OnInit {
   private YELLOW_THRESHOLD = 60;
   private RED_THRESHOLD = 20;
 
-  constructor(public peerService: HostPeerService) { }
+  private subscription;
+
+  constructor(
+    public peerService: HostPeerService,
+    private ref: ChangeDetectorRef
+    ) {
+    this.subscription = peerService.fromEvent('action').subscribe((data) => {
+      console.log(data);
+      if (data['actor'] === 1) {
+        this.setAction1(data['name']);
+        this.damage(2, 10);
+      } else if (data['actor'] === 2) {
+        this.setAction2(data['name']);
+        this.damage(1, 10);
+      }
+      this.ref.detectChanges();
+    });
+  }
 
   ngOnInit() {
   }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
 
   damage(player: number, value: number) {
     // TODO: find some better way to do this. this is ugly af
@@ -61,6 +83,7 @@ export class GameComponent implements OnInit {
     setTimeout(() => {
       this.action2class = 'player-action p2-action';
       this.action2 = '';
+      this.ref.detectChanges();
     }, 500);
   }
 
@@ -71,6 +94,7 @@ export class GameComponent implements OnInit {
     setTimeout(() => {
       this.action1class = 'player-action p1-action';
       this.action1 = '';
+      this.ref.detectChanges();
     }, 500);
   }
 }

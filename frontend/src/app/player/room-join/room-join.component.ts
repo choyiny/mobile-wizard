@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Detector} from '../../motion/detector';
 import {ActionProcessor} from '../../processor/action-processor';
 import {PlayerPeerService} from '../../peer/player-peer.service';
+import {Throw} from '../../processor/throw';
 
 @Component({
   selector: 'wizard-room-join',
@@ -31,4 +32,7 @@ export class RoomJoinComponent implements OnInit {
     return this.status;
   }
 
+  throwyou() {
+    this.peerService.sendAction(new Throw());
+  }
 }

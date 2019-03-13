@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {DeviceService} from '../helpers/device.service';
 import {Room} from '../external/room';
 import {WizardAPIService} from '../external/wizard-api.service';
+import {PlayerPeerService} from '../peer/player-peer.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'wizard-home',
@@ -17,7 +19,9 @@ export class HomeComponent implements OnInit {
   public availableRooms: Room[] = [];
 
   constructor(public deviceService: DeviceService,
-              private apiService: WizardAPIService) {
+              private apiService: WizardAPIService,
+              private peerService: PlayerPeerService,
+              private router: Router) {
     apiService.getRooms().subscribe(
       data => this.availableRooms = data,
       err => console.log(err)
@@ -33,9 +37,11 @@ export class HomeComponent implements OnInit {
   }
 
   public joinRoom() {
-    this.apiService.joinRoom(this.roomId, this.wizardName).subscribe(
-      data => console.log(data)
-    );
+    this.peerService.connectToHost(this.roomId);
+    this.router.navigate(['players']);
+    // this.apiService.joinRoom(this.roomId, this.wizardName).subscribe(
+    //   data => console.log(data)
+    // );
   }
 
   public createRoom() {
