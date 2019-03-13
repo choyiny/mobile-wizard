@@ -31,16 +31,18 @@ Post game analysis shown as graphs at the end of the game.
 - [Flask SocketIO](https://flask-socketio.readthedocs.io/en/latest/) - Websocket communication between client and server.
 - [PostgreSQL](https://www.postgresql.org/) - DMBS of choice to store information about players and the game session.
 - [Angular](https://angular.io) - Framework responsible for client routing and frontend interactions.
-- [three.js](https://threejs.org) - Rendering 3D models for spectators
 - [Docker](https://docker.io) - For packaging the application for deployment at ease.
 - [Postman](https://www.getpostman.com) - Testing medium for the backend API.
 - [Firebase](https://firebase.google.com/) - For third-party authentication
+- [PeerJS](https://peerjs.com/) - Peer to peer javascript library
+- [PeerServer](https://github.com/peers/peerjs-server) - Broker connections between PeerJS clients.
+- [Nginx](https://www.nginx.com/) - Web serving, reverse proxying, caching, load balancing 
+- [LetsEncrypt](https://letsencrypt.org/) - Free, automated certificate generation and renewal
 
 
 ## Top 5 Technical Challenges
 1. **Real-time communication** - The synchronization[[1]](http://www.gabrielgambetta.com/client-server-game-architecture.html) with a client-server game architecture through websockets.
 2. **Capturing and processing motion** - How to translate the motion received by the mobile browser[[2]](http://www.albertosarullo.com/demos/accelerometer/) to an actual action with backend magic?
-3. **3D models** - Display 3D models that can dynamically move based on game action.
 4. **Post game statistics** - Storing data of a game for analysis after the game so that graphing statistics is possible.
 5. **Deploy ready application** - Have everything packaged with Docker (reverse proxy, compiling assets, load balancing etc)
 
