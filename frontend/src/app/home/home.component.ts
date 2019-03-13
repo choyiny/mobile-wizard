@@ -4,6 +4,7 @@ import {Room} from '../external/room';
 import {WizardAPIService} from '../external/wizard-api.service';
 import {PlayerPeerService} from '../peer/player-peer.service';
 import {Router} from '@angular/router';
+import {GameHostService} from '../peer/game-host.service';
 
 @Component({
   selector: 'wizard-home',
@@ -18,14 +19,17 @@ export class HomeComponent implements OnInit {
 
   public availableRooms: Room[] = [];
 
+  // TODO: refactor this crap to use angular forms.
+
   constructor(public deviceService: DeviceService,
               private apiService: WizardAPIService,
-              private peerService: PlayerPeerService,
+              private playerService: PlayerPeerService,
+              private hostService: GameHostService,
               private router: Router) {
-    apiService.getRooms().subscribe(
-      data => this.availableRooms = data,
-      err => console.log(err)
-    );
+    // apiService.getRooms().subscribe(
+    //   data => this.availableRooms = data,
+    //   err => console.log(err)
+    // );
   }
 
   ngOnInit() {
@@ -37,7 +41,7 @@ export class HomeComponent implements OnInit {
   }
 
   public joinRoom() {
-    this.peerService.connectToHost(this.roomId);
+    this.playerService.connectToHost(this.roomId);
     this.router.navigate(['players']);
     // this.apiService.joinRoom(this.roomId, this.wizardName).subscribe(
     //   data => console.log(data)
@@ -45,9 +49,12 @@ export class HomeComponent implements OnInit {
   }
 
   public createRoom() {
-    this.apiService.createRoom(this.roomName).subscribe(
-      data => console.log(data)
-    );
+    // this.apiService.createRoom(this.roomName).subscribe(
+    //   data => console.log(data)
+    // );
+    // TODO: fail to create? non-unique room id?
+    this.hostService.createGame(this.roomName);
+    this.router.navigate(['hosts/lobby']);
   }
 
   public updateWizardName(value: string) {
@@ -57,4 +64,5 @@ export class HomeComponent implements OnInit {
   public updateRoomName(value: string) {
     this.roomName = value;
   }
+
 }

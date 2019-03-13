@@ -13,7 +13,10 @@ export class GameHostService {
   // Peer connection object
   private peer: Peer;
   private actionListeners = [];
-  private connections = Array<Peer.DataConnection>();
+  private connections = {
+    1: null,
+    2: null
+  };
 
   private gameState: GameState;
 
@@ -23,16 +26,17 @@ export class GameHostService {
   };
 
   constructor() {
-    this.createGame();
+
   }
 
-  public createGame() {
+  public createGame(gameId: string) {
     this.gameState = GameState.Lobby;
-    this.peer = new Peer(environment.peerserver.id, {
+    this.peer = new Peer(gameId, {
       host: environment.peerserver.host,
       port: environment.peerserver.port,
       key: environment.peerserver.key
     });
+    console.log(this.peer);
     this.initWebRTCListeners();
   }
 
@@ -42,9 +46,9 @@ export class GameHostService {
     });
   }
 
-  private attachListenersToConnection(conn: Peer.DataConnection) {
+  private attachListenersToConnection(conn: Peer.DataConnection, playerId: number) {
     conn.on('open', () => {
-      this.assignPlayer(conn);
+      conn.send({type: 'setPlayerId', playerId: playerId});
     });
 
     conn.on('close', () => {
@@ -65,11 +69,33 @@ export class GameHostService {
   }
 
   private unassignPlayer(conn: Peer.DataConnection) {
-
+    if (this.connections[1] === conn) {
+      this.connections[1] = null;
+    } else if (this.connections[2] === conn) {
+      this.connections[2] = null;
+    }
   }
 
   private assignPlayer(conn: Peer.DataConnection) {
+    if (this.connections[1] === null) {
+      this.connections[1] = conn;
+      this.attachListenersToConnection(conn, 1);
+      console.log('assigned player 1');
+    } else if (this.connections[2] === null) {
+      this.connections[2] = conn;
+      this.attachListenersToConnection(conn, 2);
+      console.log('assigned player 2');
+      conn.send({type: 'setPlayerId', playerId: 2});
+    } else {
+      console.log('full');
+      conn.send({type: 'error', msg: 'room full'});
+      // conn.close();
+      return;
+    }
 
+    if (this.connections[1] && this.connections[2] && this.gameState === GameState.Lobby) {
+      this.changeState(GameState.Countdown);
+    }
   }
 
   public changeState(state: GameState) {

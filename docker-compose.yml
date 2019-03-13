@@ -31,6 +31,16 @@ services:
       - VIRTUAL_PORT=80
       - LETSENCRYPT_HOST=test.choy.in
       - LETSENCRYPT_EMAIL=i@choy.in
+  peerserver:
+    build: "peerserver/"
+    expose:
+      - 9000
+    environment:
+      - VIRTUAL_HOST=peer.choy.in
+#       - VIRTUAL_PORT=9000
+      - LETSENCRYPT_HOST=peer.choy.in
+      - LETSENCRYPT_EMAIL=i@choy.in
+      - SECRET_KEY=peerjs
 #  backend:
 #    build: "backend/"
 #    environment:

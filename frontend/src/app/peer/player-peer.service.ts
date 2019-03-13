@@ -47,10 +47,11 @@ export class PlayerPeerService {
       if (data.type === 'setPlayerId') {
         this.playerId = data['playerId'];
         console.log(`I am player ${this.playerId}`);
-      } else if (data.type === 'reject') {
-        this.host.close();
-        this.host = null;
       }
+    });
+    this.host.on('close', () => {
+      this.host.close();
+      this.host = null;
     });
   }
 }

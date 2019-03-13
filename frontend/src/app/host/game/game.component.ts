@@ -32,7 +32,7 @@ export class GameComponent implements OnInit, OnDestroy {
   private subscription;
 
   constructor(
-    public peerService: HostPeerService,
+    public peerService: GameHostService,
     private ref: ChangeDetectorRef
     ) {
     this.subscription = peerService.fromEvent('action').subscribe((data) => {

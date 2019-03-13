@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN apk --no-cache add git && npm install
 COPY . .
-RUN npm run build
+RUN npm run build-prod
 
 # Stage 2: serving the actual app
 FROM nginx:1.13.12-alpine
