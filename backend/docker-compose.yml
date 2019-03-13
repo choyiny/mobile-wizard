@@ -12,6 +12,6 @@ services:
       - POSTGRES_DB=wizard
       - POSTGRES_PORT=5432
     ports:
-      - "5433:5432"
+      - "5432:5432"
 volumes:
   postgres:
