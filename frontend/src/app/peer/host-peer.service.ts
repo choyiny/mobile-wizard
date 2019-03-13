@@ -27,16 +27,19 @@ export class HostPeerService {
     });
 
     peer.on('connection', (conn) => {
+
+      // handling data from the player
+      conn.on('open', () => {
+        // tell the player his id
+        const playerId = Object.keys(this.players).length;
+        console.log('assigning player ' + playerId);
+        conn.send({type: 'setPlayerId', playerId: playerId});
+      });
+
       // Host can only handle 2 players for now
       if (Object.keys(this.players).length < 2) {
         console.log(`${conn.peer} connected`);
 
-        // handling data from the player
-        conn.on('open', () => {
-          // tell the player his id
-          console.log('assigning player ' + Object.keys(this.players).length);
-          conn.send({type: 'setPlayerId', playerId: Object.keys(this.players).length});
-        });
         conn.on('data', (data) => {
           this.actionListener.forEach( (actionHandler) => {
             if (data.type === 'action') {

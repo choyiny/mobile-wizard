@@ -1,5 +1,6 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {HostPeerService} from '../../peer/host-peer.service';
+import {GameHostService} from '../../peer/game-host.service';
 
 @Component({
   selector: 'wizard-game',

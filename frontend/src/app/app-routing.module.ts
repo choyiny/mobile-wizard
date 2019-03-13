@@ -9,7 +9,6 @@ const routes: Routes = [
   {
     path: 'hosts',
     loadChildren: './host/host.module#HostModule',
-    canActivateChild: [GameGuard]
   },
   {
     path: 'players',

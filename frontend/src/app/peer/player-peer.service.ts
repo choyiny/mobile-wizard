@@ -3,6 +3,7 @@ import {Action} from '../processor/action';
 // @ts-ignore
 import Peer from 'peerjs';
 import {environment} from '../../environments/environment';
+import {GameService} from '../helpers/game.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,25 +15,12 @@ export class PlayerPeerService {
   private playerId: number;
 
   constructor() {
-    const peer = new Peer({
+    this.host = null;
+    this.peer = new Peer({
         host: environment.peerserver.host,
         port: environment.peerserver.port,
         key: environment.peerserver.key
       });
-    this.peer = peer;
-    if (environment.peerserver.id) {
-      // connect to the host
-      this.host = peer.connect(environment.peerserver.id);
-
-      // get my id from the host
-      this.host.on('data', data => {
-        console.log(data);
-        if (data['type'] === 'setPlayerId') {
-          this.playerId = data['playerId'];
-          console.log(`I am player ${this.playerId}`);
-        }
-      });
-    }
   }
 
   public sendAction(action: Action) {
@@ -46,5 +34,23 @@ export class PlayerPeerService {
 
   public connectToHost(id: string) {
     this.host = this.peer.connect(id);
+    this.attachHostListeners();
+  }
+
+  public inGame() {
+    return this.host !== null;
+  }
+
+  private attachHostListeners() {
+    this.host.on('data', data => {
+      console.log(data);
+      if (data.type === 'setPlayerId') {
+        this.playerId = data['playerId'];
+        console.log(`I am player ${this.playerId}`);
+      } else if (data.type === 'reject') {
+        this.host.close();
+        this.host = null;
+      }
+    });
   }
 }
