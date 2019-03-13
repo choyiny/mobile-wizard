@@ -1,0 +1,32 @@
+import {Injectable} from '@angular/core';
+import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanActivateChild} from '@angular/router';
+import {Observable} from 'rxjs';
+import {GameService} from './game.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GameGuard implements CanActivate, CanActivateChild {
+
+  constructor(private gameService: GameService,
+              private router: Router) {
+  }
+
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    // return true;
+    if (this.gameService.isInGame()) {
+      return true;
+    } else {
+      this.router.navigate(['home']);
+      return false;
+    }
+  }
+
+  canActivateChild(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    return this.canActivate(next, state);
+  }
+}
