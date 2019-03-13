@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {HostPeerService} from '../../peer/host-peer.service';
 import {GameHostService} from '../../peer/game-host.service';
+import {GameState} from '../../peer/game-state.enum';
 
 @Component({
   selector: 'wizard-room-lobby',
@@ -12,11 +12,13 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
   public player_one_name = 'Empty';
   public player_two_name = 'Empty';
 
-  private event;
+  private actionEvent;
+  private joinEvent;
+  private leftEvent;
 
   public status = {
-    1: 'Throw to get ready!',
-    2: 'Strike to get ready!'
+    1: 'Waiting for player to join...',
+    2: 'Waiting for player to join...'
   };
 
   constructor(
@@ -24,8 +26,28 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
     public router: Router,
     private ref: ChangeDetectorRef
   ) {
+    // detect when join!
+    this.joinEvent = this.peerService.fromEvent('join').subscribe((playerId) => {
+      if (playerId === 1) {
+        this.status[1] = 'Throw to get ready!';
+      } else if (playerId === 2) {
+        this.status[2] = 'Strike to get ready!';
+      }
+      this.ref.detectChanges();
+    });
+
+    // detect when left!
+    this.leftEvent = this.peerService.fromEvent('left').subscribe((playerId) => {
+      if (playerId === 1) {
+        this.status[1] = 'Waiting for player to join...';
+      } else if (playerId === 2) {
+        this.status[2] = 'Waiting for player to join...';
+      }
+      this.ref.detectChanges();
+    });
+
     // when ready, start the game, obviously.
-    this.event = this.peerService.fromEvent('action').subscribe((data) => {
+    this.actionEvent = this.peerService.fromEvent('action').subscribe((data) => {
       console.log(data);
       if (data['name'] === 'Throw' && data['actor'] === 1) {
           this.status[1] = 'Ready';
@@ -41,11 +63,13 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.event.unsubscribe();
+    this.actionEvent.unsubscribe();
+    this.joinEvent.unsubscribe();
+    this.leftEvent.unsubscribe();
   }
 
   startGame() {
-    this.router.navigate(['/hosts/game']);
+    this.peerService.changeState(GameState.Countdown);
   }
 
   gameStartable(): boolean {

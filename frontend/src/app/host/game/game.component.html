@@ -2,7 +2,7 @@
   <div class="player player1">
     <section class="nes-container with-title">
       <h3 class="title">Player 1: {{player_one_name}}</h3>
-      <progress [ngClass]="health1Class" value="{{health1}}" max="{{maxHealth}}"></progress>
+      <progress class="nes-progress is-success" [ngClass]="health1Class" value="{{health1}}" max="{{maxHealth}}"></progress>
     </section>
     <div class="player-canvas">
       <h2 [ngClass]="action1class">{{action1}}</h2>
@@ -11,7 +11,7 @@
   <div class="player player2">
     <section class="nes-container with-title">
       <h3 class="title">Player 2: {{player_two_name}}</h3>
-      <progress [ngClass]="health2Class" value="{{health2}}" max="{{maxHealth}}"></progress>
+      <progress class="nes-progress is-success" [ngClass]="health2Class" value="{{health2}}" max="{{maxHealth}}"></progress>
     </section>
     <div class="player-canvas">
       <h2 [ngClass]="action2class">{{action2}}</h2>

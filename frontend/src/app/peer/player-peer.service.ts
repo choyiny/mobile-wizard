@@ -4,6 +4,7 @@ import {Action} from '../processor/action';
 import Peer from 'peerjs';
 import {environment} from '../../environments/environment';
 import {GameService} from '../helpers/game.service';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class PlayerPeerService {
 
   private host: Peer.DataConnection;
   private peer: Peer;
-  private playerId: number;
+  public playerId: number;
+  private hostListeners = [];
 
   constructor() {
     this.host = null;
@@ -47,11 +49,28 @@ export class PlayerPeerService {
       if (data.type === 'setPlayerId') {
         this.playerId = data['playerId'];
         console.log(`I am player ${this.playerId}`);
+        this.hostListeners.forEach( (listener) => {
+          listener({'type': 'playerId', 'playerId': this.playerId});
+        });
       }
     });
     this.host.on('close', () => {
       this.host.close();
       this.host = null;
+    });
+  }
+
+  public fromEvent(eventName) {
+    return new Observable((observer) => {
+      const handler = (e) => {
+        observer.next(e);
+      };
+
+      if (eventName === 'host') {
+        this.hostListeners.push(handler);
+      }
+
+      return () => {};
     });
   }
 }

@@ -4,15 +4,19 @@ import Peer from 'peerjs';
 import {environment} from '../../environments/environment';
 import {GameState} from './game-state.enum';
 import {Observable} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameHostService {
 
+  constructor(private router: Router) {
+
+  }
+
   // Peer connection object
-  private peer: Peer;
-  private actionListeners = [];
+  private peer: Peer = null;
   private connections = {
     1: null,
     2: null
@@ -20,14 +24,9 @@ export class GameHostService {
 
   private gameState: GameState;
 
-  private playerState = {
-    1: null,
-    2: null
-  };
-
-  constructor() {
-
-  }
+  private actionListeners = [];
+  private joinListeners = [];
+  private leftListeners = [];
 
   public createGame(gameId: string) {
     this.gameState = GameState.Lobby;
@@ -64,26 +63,39 @@ export class GameHostService {
     });
   }
 
-  public isFull() {
-    return this.connections[1] !== null && this.connections[2] !== null;
+  private unassignPlayer(conn: Peer.DataConnection) {
+    conn.close();
+    if (this.connections[1] && this.connections[1].peer === conn.peer) {
+      this.connections[1] = null;
+      this.notifyPlayerHasLeft(1);
+    } else if (this.connections[2] && this.connections[2].peer === conn.peer) {
+      this.connections[2] = null;
+      this.notifyPlayerHasLeft(2);
+    }
   }
 
-  private unassignPlayer(conn: Peer.DataConnection) {
-    if (this.connections[1] === conn) {
-      this.connections[1] = null;
-    } else if (this.connections[2] === conn) {
-      this.connections[2] = null;
-    }
+  public notifyPlayerHasJoined(playerId: number) {
+    this.joinListeners.forEach((joinHandler) => {
+      joinHandler(playerId);
+    });
+  }
+
+  public notifyPlayerHasLeft(playerId: number) {
+    this.leftListeners.forEach((joinHandler) => {
+      joinHandler(playerId);
+    });
   }
 
   private assignPlayer(conn: Peer.DataConnection) {
     if (this.connections[1] === null) {
       this.connections[1] = conn;
       this.attachListenersToConnection(conn, 1);
+      this.notifyPlayerHasJoined(1);
       console.log('assigned player 1');
     } else if (this.connections[2] === null) {
       this.connections[2] = conn;
       this.attachListenersToConnection(conn, 2);
+      this.notifyPlayerHasJoined(2);
       console.log('assigned player 2');
       conn.send({type: 'setPlayerId', playerId: 2});
     } else {
@@ -99,29 +111,32 @@ export class GameHostService {
   }
 
   public changeState(state: GameState) {
-    if (state === GameState.Lobby) {
-
-    } else if (state === GameState.Countdown) {
-
+    this.gameState = state;
+    if (state === GameState.Countdown) {
+      this.router.navigate(['/hosts/game']);
     } else if (state === GameState.InGame) {
 
-    } else if (state === GameState.Pause) {
+    } else if (state === GameState.Ended) {
 
     } else {
       // state == ended
     }
   }
-
   public fromEvent(eventName) {
     return new Observable((observer) => {
-      const handler = (e) => {
-        observer.next(e);
-      };
-
       if (eventName === 'action') {
-        this.actionListeners.push(handler);
+        this.actionListeners.push(observer.next);
+      } else if (eventName === 'join') {
+        this.joinListeners.push(observer.next);
+      } else if (eventName === 'left') {
+        this.leftListeners.push(observer.next);
       }
+
       return () => {};
     });
+  }
+
+  public hostingGame(): boolean {
+    return this.peer !== null;
   }
 }
