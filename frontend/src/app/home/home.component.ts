@@ -19,6 +19,8 @@ export class HomeComponent implements OnInit {
 
   public availableRooms: Room[] = [];
 
+  private isHost: boolean;
+
   // TODO: refactor this crap to use angular forms.
 
   constructor(public deviceService: DeviceService,
@@ -30,10 +32,19 @@ export class HomeComponent implements OnInit {
     //   data => this.availableRooms = data,
     //   err => console.log(err)
     // );
+    this.isHost = deviceService.deviceIsDesktop();
   }
 
   ngOnInit() {
 
+  }
+
+  public isHostScreen() {
+    return this.isHost;
+  }
+
+  public setHostScreen() {
+    this.isHost = true;
   }
 
   public updateRoomId(id: string) {

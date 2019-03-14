@@ -1,7 +1,7 @@
 <h1>Mobile Wizard</h1>
 
 <!--Creating a game from desktop-->
-<section *ngIf="deviceService.deviceIsDesktop()" class="nes-container with-title">
+<section *ngIf="isHostScreen()" class="nes-container with-title">
   <h3 class="title">Create a game</h3>
   <div id="create_room" class="item">
     <div class="nes-field">
@@ -13,7 +13,7 @@
 </section>
 
 <!--Joining a game from mobile-->
-<section *ngIf="!deviceService.deviceIsDesktop()" class="nes-container with-title">
+<section *ngIf="!isHostScreen()" class="nes-container with-title">
   <h3 class="title">Join a game</h3>
   <div id="inputs" class="item">
     <div class="nes-field">
@@ -31,4 +31,7 @@
   </div>
   <button type="button" class="nes-btn is-success" (click)="joinRoom()">Join a game</button>
 </section>
-<h5><a routerLink="../credits">Credits</a></h5>
+<h5>
+  <a routerLink="../credits">Credits</a>
+  <span *ngIf="!deviceService.deviceIsDesktop() && !isHostScreen()"> | <a (click)="setHostScreen()">Create room</a></span>
+</h5>
