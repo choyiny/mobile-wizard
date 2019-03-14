@@ -1,5 +1,6 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {GameHostService} from '../../peer/game-host.service';
+import {GameState} from '../../peer/game-state.enum';
 
 @Component({
   selector: 'wizard-game',
@@ -24,19 +25,42 @@ export class GameComponent implements OnInit, OnDestroy {
   private RED_THRESHOLD = 20;
 
   private subscription;
+  private countdown_display: any; // string or number
 
   constructor(
     public peerService: GameHostService,
     private ref: ChangeDetectorRef
     ) {
-    this.subscription = peerService.fromEvent('action').subscribe((data) => {
-      console.log(data);
-      if (data['actor'] === 1 || data['actor'] === 2) {
-        this.setAction(data['name'], data['actor'] - 1);
-        // TODO: damage should only apply for attack, and should get from action
-        this.damage(data['actor'] % 2, 10);
+
+    // start countdown on screen
+    if (peerService.gameState === GameState.Countdown) {
+      for (let i = 0; i < 4; i++) {
+        setTimeout(() => {
+          this.countdown_display = 3 - i;
+          if (this.countdown_display === 0) {
+            this.peerService.changeState(GameState.InGame);
+            this.countdown_display = 'GO!';
+            this.peerService.startTime = new Date();
+          } else if (this.countdown_display === -1) {
+            this.countdown_display = '';
+          }
+          this.ref.detectChanges();
+        }, i * 1000);
       }
-      this.ref.detectChanges();
+    }
+
+    this.subscription = peerService.fromEvent('action').subscribe((data) => {
+      // if game state is in game, process action.
+      if (peerService.gameState === GameState.InGame) {
+        if (data['actor'] === 1 || data['actor'] === 2) {
+          this.setAction(data['name'], data['actor'] - 1);
+          // TODO: damage should only apply for attack, and should get from action
+          this.damage(data['actor'] % 2, 2);
+
+          this.checkIfEnd();
+        }
+        this.ref.detectChanges();
+      }
     });
   }
 
@@ -66,5 +90,15 @@ export class GameComponent implements OnInit, OnDestroy {
       this.action[actor] = '';
       this.ref.detectChanges();
     }, 500);
+  }
+
+  private checkIfEnd() {
+    if (this.health[0] <= 0) {
+      this.countdown_display = 'Player 2 has won!';
+      this.peerService.changeState(GameState.Ended);
+    } else if (this.health[1] <= 0) {
+      this.countdown_display = 'Player 1 has won!';
+      this.peerService.changeState(GameState.Ended);
+    }
   }
 }
