@@ -7,10 +7,10 @@ export const environment = {
   backend: 'http://localhost:8000/',
   peerserver: {
     id: 'asdf', // blank string for random room id
-    host: '138.51.68.181',
-    port: 9000,
+    host: 'peer.choy.in',
+    port: 443,
     key: 'peerjs',
-  },
+  }
 };
 
 /*

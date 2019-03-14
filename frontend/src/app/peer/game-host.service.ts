@@ -124,12 +124,15 @@ export class GameHostService {
   }
   public fromEvent(eventName) {
     return new Observable((observer) => {
+      const handler = (e) => {
+        observer.next(e);
+      };
       if (eventName === 'action') {
-        this.actionListeners.push(observer.next);
+        this.actionListeners.push(handler);
       } else if (eventName === 'join') {
-        this.joinListeners.push(observer.next);
+        this.joinListeners.push(handler);
       } else if (eventName === 'left') {
-        this.leftListeners.push(observer.next);
+        this.leftListeners.push(handler);
       }
 
       return () => {};
