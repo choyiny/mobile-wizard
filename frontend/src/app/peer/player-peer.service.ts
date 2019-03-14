@@ -3,7 +3,6 @@ import {Action} from '../processor/action';
 // @ts-ignore
 import Peer from 'peerjs';
 import {environment} from '../../environments/environment';
-import {GameService} from '../helpers/game.service';
 import {Observable} from 'rxjs';
 
 @Injectable({

@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanActivateChild} from '@angular/router';
 import {Observable} from 'rxjs';
-import {GameService} from './game.service';
 import {PlayerPeerService} from '../peer/player-peer.service';
 import {GameHostService} from '../peer/game-host.service';
 

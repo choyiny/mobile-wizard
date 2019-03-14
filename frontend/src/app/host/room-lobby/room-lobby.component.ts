@@ -69,7 +69,11 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
   }
 
   startGame() {
-    this.peerService.changeState(GameState.Countdown);
+    // countdown 3 seconds then move to the actual game page
+    setTimeout(() => {
+      this.peerService.changeState(GameState.Countdown);
+      this.router.navigate(['/hosts/game']);
+    }, 3000);
   }
 
   gameStartable(): boolean {

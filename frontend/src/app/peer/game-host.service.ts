@@ -22,7 +22,9 @@ export class GameHostService {
     2: null
   };
 
-  private gameState: GameState;
+  public startTime;
+
+  public gameState: GameState;
 
   private actionListeners = [];
   private joinListeners = [];
@@ -110,18 +112,14 @@ export class GameHostService {
     }
   }
 
+  public gotoCountdown() {
+
+  }
+
   public changeState(state: GameState) {
     this.gameState = state;
-    if (state === GameState.Countdown) {
-      this.router.navigate(['/hosts/game']);
-    } else if (state === GameState.InGame) {
-
-    } else if (state === GameState.Ended) {
-
-    } else {
-      // state == ended
-    }
   }
+
   public fromEvent(eventName) {
     return new Observable((observer) => {
       const handler = (e) => {
