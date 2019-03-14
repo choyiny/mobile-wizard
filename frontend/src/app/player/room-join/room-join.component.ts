@@ -3,6 +3,8 @@ import {Detector} from '../../motion/detector';
 import {ActionProcessor} from '../../processor/action-processor';
 import {PlayerPeerService} from '../../peer/player-peer.service';
 import {Throw} from '../../processor/throw';
+import {AuthService} from '../../core/auth.service';
+import {Strike} from '../../processor/strike';
 
 @Component({
   selector: 'wizard-room-join',
@@ -20,7 +22,8 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
 
   constructor(
     private peerService: PlayerPeerService,
-    private ref: ChangeDetectorRef) {
+    private ref: ChangeDetectorRef,
+    public auth: AuthService) {
     this.hostEvent = this.peerService.fromEvent('host').subscribe((data) => {
       console.log(data);
       if (data['playerId'] === 1) {
@@ -53,5 +56,9 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
 
   throwyou() {
     this.peerService.sendAction(new Throw());
+  }
+
+  strikeyou() {
+    this.peerService.sendAction(new Strike());
   }
 }

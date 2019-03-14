@@ -11,17 +11,24 @@ import { CreditsComponent } from './credits/credits.component';
 import { HomeComponent } from './home/home.component';
 import {HttpClientModule} from '@angular/common/http';
 import {WizardAPIService} from './external/wizard-api.service';
+import {CoreModule} from './core/core.module';
+import {AngularFireModule} from '@angular/fire';
+import {environment} from '../environments/environment';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreditsComponent,
-    HomeComponent
+    HomeComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    CoreModule
   ],
   providers: [WizardAPIService],
   bootstrap: [AppComponent]
