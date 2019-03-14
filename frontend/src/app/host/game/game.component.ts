@@ -34,22 +34,33 @@ export class GameComponent implements OnInit, OnDestroy {
 
     // start countdown on screen
     if (peerService.gameState === GameState.Countdown) {
-      this.startCountdown();
+      for (let i = 0; i < 4; i++) {
+        setTimeout(() => {
+          this.countdown_display = 3 - i;
+          if (this.countdown_display === 0) {
+            this.peerService.changeState(GameState.InGame);
+            this.countdown_display = 'GO!';
+            this.peerService.startTime = new Date();
+          } else if (this.countdown_display === -1) {
+            this.countdown_display = '';
+          }
+          this.ref.detectChanges();
+        }, i * 1000);
+      }
     }
 
     this.subscription = peerService.fromEvent('action').subscribe((data) => {
-      console.log(data);
       // if game state is in game, process action.
       if (peerService.gameState === GameState.InGame) {
         if (data['actor'] === 1 || data['actor'] === 2) {
           this.setAction(data['name'], data['actor'] - 1);
           // TODO: damage should only apply for attack, and should get from action
-          this.damage(data['actor'] % 2, 10);
+          this.damage(data['actor'] % 2, 2);
 
           this.checkIfEnd();
         }
+        this.ref.detectChanges();
       }
-      this.ref.detectChanges();
     });
   }
 
@@ -81,26 +92,11 @@ export class GameComponent implements OnInit, OnDestroy {
     }, 500);
   }
 
-  private startCountdown() {
-    for (let i = 0; i < 4; i++) {
-      setTimeout(() => {
-        this.countdown_display = 3 - i;
-        if (this.countdown_display === 0) {
-          this.peerService.changeState(GameState.InGame);
-          this.countdown_display = 'GO!';
-          this.peerService.startTime = new Date();
-        } else if (this.countdown_display === -1) {
-          this.countdown_display = '';
-        }
-      }, i * 1000);
-    }
-  }
-
   private checkIfEnd() {
-    if (this.health[1] <= 0) {
+    if (this.health[0] <= 0) {
       this.countdown_display = 'Player 2 has won!';
       this.peerService.changeState(GameState.Ended);
-    } else if (this.health[2] <= 0) {
+    } else if (this.health[1] <= 0) {
       this.countdown_display = 'Player 1 has won!';
       this.peerService.changeState(GameState.Ended);
     }
