@@ -10,20 +10,15 @@ export class GameComponent implements OnInit, OnDestroy {
 
   public readonly maxHealth = 100;
 
-  public health1 = 100;
-  public health2 = 100;
+  public health = [100, 100];
 
-  public health1Class = 'nes-progress is-success';
-  public health2Class = 'nes-progress is-success';
+  public healthClass = ['nes-progress is-success', 'nes-progress is-success'];
 
-  public action1 = '';
-  public action2 = '';
+  public action = ['', ''];
 
-  public player_one_name = '';
-  public player_two_name = '';
+  public player_name = ['', ''];
 
-  public action1class = 'player-action p1-action';
-  public action2class = 'player-action p2-action';
+  public actionClass = ['player-action p1-action', 'player-action p2-action'];
 
   private YELLOW_THRESHOLD = 60;
   private RED_THRESHOLD = 20;
@@ -36,12 +31,10 @@ export class GameComponent implements OnInit, OnDestroy {
     ) {
     this.subscription = peerService.fromEvent('action').subscribe((data) => {
       console.log(data);
-      if (data['actor'] === 1) {
-        this.setAction1(data['name']);
-        this.damage(2, 10);
-      } else if (data['actor'] === 2) {
-        this.setAction2(data['name']);
-        this.damage(1, 10);
+      if (data['actor'] === 1 || data['actor'] === 2) {
+        this.setAction(data['name'], data['actor'] - 1);
+        // TODO: damage should only apply for attack, and should get from action
+        this.damage(data['actor'] % 2, 10);
       }
       this.ref.detectChanges();
     });
@@ -56,44 +49,21 @@ export class GameComponent implements OnInit, OnDestroy {
 
 
   damage(player: number, value: number) {
-    // TODO: find some better way to do this. this is ugly af
-    if (player === 1) {
-      this.health1 -= value;
-      if (this.health1 < this.YELLOW_THRESHOLD) {
-        this.health1Class = 'nes-progress is-warning';
-      }
-      if (this.health1 < this.RED_THRESHOLD) {
-        this.health1Class = 'nes-progress is-error';
-      }
-    } else {
-      this.health2 -= value;
-      if (this.health2 < this.YELLOW_THRESHOLD) {
-        this.health2Class = 'nes-progress is-warning';
-      }
-      if (this.health2 < this.RED_THRESHOLD) {
-        this.health2Class = 'nes-progress is-error';
-      }
+    this.health[player] -= value;
+    if (this.health[player] < this.YELLOW_THRESHOLD) {
+      this.healthClass[player] = 'nes-progress is-warning';
+    }
+    if (this.health[player] < this.RED_THRESHOLD) {
+      this.healthClass[player] = 'nes-progress is-error';
     }
   }
 
-  setAction2(actionName: string) {
-    this.action2 = actionName;
-    this.action2class = 'player-action p2-action animated fadeOutUp';
-    // TODO: refactor this bad code
+  setAction(actionName: string, actor: number) {
+    this.action[actor] = actionName;
+    this.actionClass[actor] = 'player-action p' + (actor + 1) + '-action animated fadeOutUp';
     setTimeout(() => {
-      this.action2class = 'player-action p2-action';
-      this.action2 = '';
-      this.ref.detectChanges();
-    }, 500);
-  }
-
-  setAction1(actionName: string) {
-    this.action1 = actionName;
-    this.action1class = 'player-action p1-action animated fadeOutUp';
-    // TODO: refactor this bad code
-    setTimeout(() => {
-      this.action1class = 'player-action p1-action';
-      this.action1 = '';
+      this.actionClass[actor] = 'player-action p' + (actor + 1) + '-action';
+      this.action[actor] = '';
       this.ref.detectChanges();
     }, 500);
   }
