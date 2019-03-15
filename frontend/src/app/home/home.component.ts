@@ -45,8 +45,8 @@ export class HomeComponent implements OnInit {
     return this.isHost;
   }
 
-  public setHostScreen() {
-    this.isHost = true;
+  public setHostScreen(op: boolean) {
+    this.isHost = op;
   }
 
   public updateRoomId(id: string) {

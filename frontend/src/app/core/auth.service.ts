@@ -19,18 +19,30 @@ export class AuthService {
 
 
   user: Observable<User>;
+  public token = null;
+  userDetails: User;
+
+  public isReady: boolean;
 
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private router: Router
   ) {
-    //// Get auth data, then get firestore user document || null
+    this.isReady = false;
+    // Get auth data, then get firestore user document || null
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+          this.userDetails = user;
+          this.isReady = true;
+          user.getIdToken().then((idToken) => {
+            this.token = idToken;
+          });
+          return of(user);
         } else {
+          this.userDetails = null;
+          this.isReady = true;
           return of(null);
         }
       })

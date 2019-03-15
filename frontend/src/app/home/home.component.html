@@ -20,7 +20,8 @@
 </section>
 <h5>
   <a routerLink="../credits">Credits</a>
-  <span *ngIf="!deviceService.deviceIsDesktop() && !isHostScreen()"> | <a (click)="setHostScreen()">Create room</a></span>
+  <span *ngIf="!deviceService.deviceIsDesktop() && !isHostScreen()"> | <a (click)="setHostScreen(true)">Create room</a></span>
+  <span *ngIf="!deviceService.deviceIsDesktop() && isHostScreen()"> | <a (click)="setHostScreen(false)">Join room</a></span>
 </h5>
 
 <ng-template #guest>
@@ -28,7 +29,7 @@
   <p>Login to get started...</p>
 
   <button type="button" class="nes-btn is-success" (click)="auth.googleLogin()">
-    <i class="fa fa-google"></i> Connect Google
+    <i class="nes-icon google"></i> Google
   </button>
 </ng-template>
 
@@ -37,15 +38,15 @@
   <h3 class="title">Join a game</h3>
   <div id="inputs" class="item">
     <div class="nes-field">
-      <div *ngIf="auth.user | async as user">
-        <p>Howdy, {{ user.displayName }}!</p>
-      </div>
-      <label for="rooms_available">Select a room</label>
-      <input #roomName id="rooms_available" class="nes-input" autocomplete="off" placeholder="Thierry" (blur)="updateRoomId(roomName.value)">
+      <p>You're a wizard, {{auth.userDetails.displayName}}.</p>
+      <label for="wizard_name">Nickname</label>
+      <input #wizardName id="wizard_name" class="nes-input" autocomplete="off" placeholder="Harry" (blur)="updateWizardName(wizardName.value)">
+      <label for="rooms_available">Room ID</label>
+      <input #roomName id="rooms_available" class="nes-input" autocomplete="off" placeholder="ABC" (blur)="updateRoomId(roomName.value)">
     </div>
   </div>
-  <div>
-    <button type="button" class="nes-btn is-success" (click)="joinRoom()">Join a game</button>
+  <div class="actions">
+    <button type="button" class="nes-btn is-success" (click)="joinRoom()">Fight!</button>
     <button type="button" class="nes-btn is-warning" (click)="auth.signOut()">Logout</button>
   </div>
 </ng-template>
