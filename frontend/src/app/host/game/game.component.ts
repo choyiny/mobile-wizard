@@ -1,5 +1,6 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {HostPeerService} from '../../peer/host-peer.service';
+import {GameHostService} from '../../peer/game-host.service';
+import {GameState} from '../../peer/game-state.enum';
 
 @Component({
   selector: 'wizard-game',
@@ -10,40 +11,43 @@ export class GameComponent implements OnInit, OnDestroy {
 
   public readonly maxHealth = 100;
 
-  public health1 = 100;
-  public health2 = 100;
+  public health = [100, 100];
 
-  public health1Class = 'nes-progress is-success';
-  public health2Class = 'nes-progress is-success';
+  public healthClass = ['nes-progress is-success', 'nes-progress is-success'];
 
-  public action1 = '';
-  public action2 = '';
+  public action = ['', ''];
 
-  public player_one_name = '';
-  public player_two_name = '';
+  public player_name = ['', ''];
 
-  public action1class = 'player-action p1-action';
-  public action2class = 'player-action p2-action';
+  public actionClass = ['player-action p1-action', 'player-action p2-action'];
 
   private YELLOW_THRESHOLD = 60;
   private RED_THRESHOLD = 20;
 
   private subscription;
+  public countdown_display: any; // string or number
 
+  private player_defense = [-1, -1];
   constructor(
-    public peerService: HostPeerService,
+    public peerService: GameHostService,
     private ref: ChangeDetectorRef
     ) {
+
+    // start countdown on screen
+    if (peerService.gameState === GameState.Countdown) {
+      this.startCountdown();
+    }
+
     this.subscription = peerService.fromEvent('action').subscribe((data) => {
-      console.log(data);
-      if (data['actor'] === 1) {
-        this.setAction1(data['name']);
-        this.damage(2, 10);
-      } else if (data['actor'] === 2) {
-        this.setAction2(data['name']);
-        this.damage(1, 10);
+      // if game state is in game, process action.
+      if (peerService.gameState === GameState.InGame) {
+        const action = JSON.parse(data['action']);
+        if (action['actor'] === 1 || action['actor'] === 2) {
+          this.setAction(action['name'], action['actor'] - 1);
+          this.judge(action);
+        }
+        this.ref.detectChanges();
       }
-      this.ref.detectChanges();
     });
   }
 
@@ -54,47 +58,69 @@ export class GameComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  judge(action) {
+    // Get current player and opposite
+    const me = action['actor'] - 1;
+    const oppo = action['actor'] % 2;
+    if (action['name'] === 'Strike' || action['name'] === 'Throw') {
+      console.log('Player' + (oppo + 1) + ' last defense: ' + this.player_defense[oppo]);
+      // On attack action, it current player didn't perform a defense, or last defense is
+      // performed before attack defense time range, this attack succeeds, calculate damage.
+      if (this.player_defense[oppo] < 0 || action['timestamp'] - this.player_defense[oppo] > action['dfrange']) {
+        this.player_defense[oppo] = -1; // The latest defense is no longer effective, reset.
+        this.damage(oppo, action['damage']);
+      }
+    } else if (action['name'] === 'Defense') {
+      // Update the latest defense of current player
+      this.player_defense[me] = action['timestamp'];
+    }
+    this.checkIfEnd();
+  }
+
 
   damage(player: number, value: number) {
-    // TODO: find some better way to do this. this is ugly af
-    if (player === 1) {
-      this.health1 -= value;
-      if (this.health1 < this.YELLOW_THRESHOLD) {
-        this.health1Class = 'nes-progress is-warning';
-      }
-      if (this.health1 < this.RED_THRESHOLD) {
-        this.health1Class = 'nes-progress is-error';
-      }
-    } else {
-      this.health2 -= value;
-      if (this.health2 < this.YELLOW_THRESHOLD) {
-        this.health2Class = 'nes-progress is-warning';
-      }
-      if (this.health2 < this.RED_THRESHOLD) {
-        this.health2Class = 'nes-progress is-error';
-      }
+    this.health[player] -= value;
+    if (this.health[player] < this.YELLOW_THRESHOLD) {
+      this.healthClass[player] = 'nes-progress is-warning';
+    }
+    if (this.health[player] < this.RED_THRESHOLD) {
+      this.healthClass[player] = 'nes-progress is-error';
     }
   }
 
-  setAction2(actionName: string) {
-    this.action2 = actionName;
-    this.action2class = 'player-action p2-action animated fadeOutUp';
-    // TODO: refactor this bad code
+  setAction(actionName: string, actor: number) {
+    this.action[actor] = actionName;
+    this.actionClass[actor] = 'player-action p' + (actor + 1) + '-action animated fadeOutUp';
     setTimeout(() => {
-      this.action2class = 'player-action p2-action';
-      this.action2 = '';
+      this.actionClass[actor] = 'player-action p' + (actor + 1) + '-action';
+      this.action[actor] = '';
       this.ref.detectChanges();
     }, 500);
   }
 
-  setAction1(actionName: string) {
-    this.action1 = actionName;
-    this.action1class = 'player-action p1-action animated fadeOutUp';
-    // TODO: refactor this bad code
-    setTimeout(() => {
-      this.action1class = 'player-action p1-action';
-      this.action1 = '';
-      this.ref.detectChanges();
-    }, 500);
+  private checkIfEnd() {
+    if (this.health[0] <= 0) {
+      this.countdown_display = 'Player 2 has won!';
+      this.peerService.changeState(GameState.Ended);
+    } else if (this.health[1] <= 0) {
+      this.countdown_display = 'Player 1 has won!';
+      this.peerService.changeState(GameState.Ended);
+    }
+  }
+
+  private startCountdown() {
+    for (let i = 0; i < 4; i++) {
+      setTimeout(() => {
+        this.countdown_display = 3 - i;
+        if (this.countdown_display === 0) {
+          this.peerService.changeState(GameState.InGame);
+          this.countdown_display = 'GO!';
+          this.peerService.startTime = new Date();
+        } else if (this.countdown_display === -1) {
+          this.countdown_display = '';
+        }
+        this.ref.detectChanges();
+      }, i * 1000);
+    }
   }
 }

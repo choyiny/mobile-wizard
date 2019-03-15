@@ -12,7 +12,7 @@ services:
       - 80:80
       - 443:443
     environment:
-      - DEFAULT_HOST=test.choy.in
+      - DEFAULT_HOST=projectmobilewizard.com
   letsencrypt:
     container_name: nginx-proxy-letsencrypt
     image: jrcs/letsencrypt-nginx-proxy-companion
@@ -27,10 +27,20 @@ services:
   frontend:
     build: "frontend/"
     environment:
-      - VIRTUAL_HOST=test.choy.in
+      - VIRTUAL_HOST=projectmobilewizard.com
       - VIRTUAL_PORT=80
-      - LETSENCRYPT_HOST=test.choy.in
+      - LETSENCRYPT_HOST=projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
+  peerserver:
+    build: "peerserver/"
+    expose:
+      - 9000
+    environment:
+      - VIRTUAL_HOST=peer.projectmobilewizard.com
+#       - VIRTUAL_PORT=9000
+      - LETSENCRYPT_HOST=peer.projectmobilewizard.com
+      - LETSENCRYPT_EMAIL=i@choy.in
+      - SECRET_KEY=peerjs
 #  backend:
 #    build: "backend/"
 #    environment:

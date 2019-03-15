@@ -4,7 +4,6 @@ from flask_cors import CORS
 from flask_socketio import SocketIO
 
 import config as c
-from wizard.game_socket import Game
 from wizard import routes
 from wizard.error_messages import ERROR_MESSAGES
 from wizard.extensions import db
@@ -25,11 +24,6 @@ def create_app():
 
     CORS(app, expose_headers=['Authorization'], resources={r'/rooms/*': {'origins': '*'}})
     api = Api(app, errors=ERROR_MESSAGES)
-
-    # setup socket server
-    socketio = SocketIO(app)
-    game = Game('/game')
-    socketio.on_namespace(game)
 
     # connect to databases
     with app.app_context():

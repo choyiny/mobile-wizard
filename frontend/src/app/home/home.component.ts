@@ -4,6 +4,8 @@ import {Room} from '../external/room';
 import {WizardAPIService} from '../external/wizard-api.service';
 import {PlayerPeerService} from '../peer/player-peer.service';
 import {Router} from '@angular/router';
+import {GameHostService} from '../peer/game-host.service';
+import {AuthService} from '../core/auth.service';
 
 @Component({
   selector: 'wizard-home',
@@ -16,20 +18,33 @@ export class HomeComponent implements OnInit {
   private roomId: string;
   private roomName: string;
 
-  public availableRooms: Room[] = [];
+  private isHost: boolean;
+
+  // TODO: refactor this crap to use angular forms.
 
   constructor(public deviceService: DeviceService,
               private apiService: WizardAPIService,
-              private peerService: PlayerPeerService,
-              private router: Router) {
-    apiService.getRooms().subscribe(
-      data => this.availableRooms = data,
-      err => console.log(err)
-    );
+              private playerService: PlayerPeerService,
+              private hostService: GameHostService,
+              private router: Router,
+              public auth: AuthService) {
+    // apiService.getRooms().subscribe(
+    //   data => this.availableRooms = data,
+    //   err => console.log(err)
+    // );
+    this.isHost = deviceService.deviceIsDesktop();
   }
 
   ngOnInit() {
 
+  }
+
+  public isHostScreen() {
+    return this.isHost;
+  }
+
+  public setHostScreen(op: boolean) {
+    this.isHost = op;
   }
 
   public updateRoomId(id: string) {
@@ -37,14 +52,17 @@ export class HomeComponent implements OnInit {
   }
 
   public joinRoom() {
-    this.peerService.connectToHost(this.roomId);
+    this.playerService.connectToHost(this.roomId, this.wizardName);
     this.router.navigate(['players']);
   }
 
   public createRoom() {
-    this.apiService.createRoom(this.roomName).subscribe(
-      data => console.log(data)
-    );
+    // this.apiService.createRoom(this.roomName).subscribe(
+    //   data => console.log(data)
+    // );
+    // TODO: fail to create? non-unique room id?
+    this.hostService.createGame(this.roomName);
+    this.router.navigate(['hosts/lobby']);
   }
 
   public updateWizardName(value: string) {
@@ -54,4 +72,5 @@ export class HomeComponent implements OnInit {
   public updateRoomName(value: string) {
     this.roomName = value;
   }
+
 }

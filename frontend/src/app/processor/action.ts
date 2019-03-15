@@ -1,23 +1,15 @@
 export abstract class Action {
   name: string;
   timestamp: number;
-  actor?: string;
+  actor: number;
 
-  constructor(name: string) {
+  protected constructor(name: string) {
     this.name = name;
     this.timestamp = Date.now();
-    this.actor = null;
+    this.actor = -1;
   }
 
-  public getName(): string {
-    return this.name;
-  }
-
-  public getTimestamp(): number {
-    return this.timestamp;
-  }
-
-  public setActor(user: string) {
+  public setActor(user: number) {
     this.actor = user;
   }
 

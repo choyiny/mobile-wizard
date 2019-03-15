@@ -6,12 +6,16 @@ import {RoomLobbyComponent} from './room-lobby/room-lobby.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'lobby',
     component: RoomLobbyComponent
   },
   {
     path: 'game',
     component: GameComponent
+  },
+  {
+    path: '',
+    redirectTo: 'game'
   }
 ];
 

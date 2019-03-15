@@ -1,9 +1,11 @@
 <div class="player">
   <section class="nes-container with-title">
-    <h3 class="title">{{player_name}}</h3>
+    <h3 class="title">{{getMyName()}}</h3>
     <h1>{{getStatus()}}</h1>
-    <h1>{{action}}</h1>
-    <h1>{{output}}</h1>
-    <button class="nes-btn is-success" (click)="throwyou()">click</button>
+    <div>
+      <button class="nes-btn is-success" (click)="testThrow()">Throw</button>
+      <button class="nes-btn is-success" (click)="testStrike()">Strike</button>
+      <button class="nes-btn is-success" (click)="testDefense()">Defend</button>
+    </div>
   </section>
 </div>
