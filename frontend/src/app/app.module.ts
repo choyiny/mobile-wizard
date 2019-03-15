@@ -11,6 +11,9 @@ import {CoreModule} from './core/core.module';
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../environments/environment';
 import {AuthService} from './core/auth.service';
+import {AuthGuard} from './core/auth.guard';
+import {DeviceGuard} from './helpers/device.guard';
+import {GameGuard} from './helpers/game.guard';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,7 @@ import {AuthService} from './core/auth.service';
     AngularFireModule.initializeApp(environment.firebase),
     CoreModule
   ],
-  providers: [WizardAPIService, AuthService],
+  providers: [WizardAPIService, AuthService, AuthGuard, DeviceGuard, GameGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
