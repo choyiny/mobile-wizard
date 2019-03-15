@@ -1,18 +1,10 @@
 import { Injectable } from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {Router} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
-import {auth} from 'firebase';
+import {auth, User} from 'firebase';
 
-interface User {
-  uid: string;
-  email: string;
-  photoURL?: string;
-  displayName?: string;
-  favoriteColor?: string;
-}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -26,7 +18,6 @@ export class AuthService {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private afs: AngularFirestore,
     private router: Router
   ) {
     this.isReady = false;
@@ -60,29 +51,8 @@ export class AuthService {
   }
 
   private oAuthLogin(provider) {
-    return this.afAuth.auth.signInWithPopup(provider)
-      .then((credential) => {
-        this.updateUserData(credential.user);
-      });
+    return this.afAuth.auth.signInWithPopup(provider);
   }
-
-
-  private updateUserData(user) {
-    // Sets user data to firestore on login
-
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-
-    const data: User = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL
-    };
-
-    return userRef.set(data, { merge: true });
-
-  }
-
 
   signOut() {
     this.afAuth.auth.signOut().then(() => {

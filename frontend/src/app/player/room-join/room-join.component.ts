@@ -42,6 +42,10 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     this.output = '';
   }
 
+  public getMyName() {
+    return this.peerService.myName;
+  }
+
   ngOnInit() {
   }
 

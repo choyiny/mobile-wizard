@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import {AngularFirestore} from '@angular/fire/firestore';
-import {Observable} from 'rxjs';
-import {AuthService} from './core/auth.service';
 
 @Component({
   selector: 'wizard-root',
