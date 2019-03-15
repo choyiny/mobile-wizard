@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  backend: 'http://localhost:8000/',
+  backend: 'http://localhost:5000',
   peerserver: {
     host: 'peer.projectmobilewizard.com',
     port: 443,

@@ -16,8 +16,8 @@ class UserDetails(BaseModel):
 
     def to_dict(self):
         return {
-            'nickname': self.nickname,
-            'fastest_game': self.fastest_game,
-            'most_damage_in_game': self.most_damage_in_game,
-            'most_damage_blocked_in_game': self.most_damage_blocked_in_game
+            'nickname': self.nickname or '',
+            'fastest_game': self.fastest_game or '',
+            'most_damage_in_game': self.most_damage_in_game or '',
+            'most_damage_blocked_in_game': self.most_damage_blocked_in_game or ''
         }

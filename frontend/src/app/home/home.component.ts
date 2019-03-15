@@ -13,7 +13,7 @@ import {AuthService} from '../core/auth.service';
 })
 export class HomeComponent implements OnInit {
 
-  private wizardName: string;
+  public myWizardName: string;
   private roomId: string;
   private roomName: string;
 
@@ -31,7 +31,17 @@ export class HomeComponent implements OnInit {
     //   data => this.availableRooms = data,
     //   err => console.log(err)
     // );
+    this.myWizardName = '';
     this.isHost = deviceService.deviceIsDesktop();
+
+    this.auth.user.subscribe((user) => {
+      this.apiService.getUserProfile().subscribe(
+        (data) => {
+          if (data) {
+            this.myWizardName = data['nickname'];
+          }
+        });
+    });
   }
 
   ngOnInit() {
@@ -51,7 +61,7 @@ export class HomeComponent implements OnInit {
   }
 
   public joinRoom() {
-    this.playerService.connectToHost(this.roomId, this.wizardName);
+    this.playerService.connectToHost(this.roomId, this.myWizardName);
     this.router.navigate(['players']);
   }
 
@@ -65,7 +75,11 @@ export class HomeComponent implements OnInit {
   }
 
   public updateWizardName(value: string) {
-    this.wizardName = value;
+    this.myWizardName = value;
+    this.apiService.changeNickName(this.myWizardName).subscribe(
+      data => console.log('changed nickname to ' + data['nickname'])
+    );
+
   }
 
   public updateRoomName(value: string) {

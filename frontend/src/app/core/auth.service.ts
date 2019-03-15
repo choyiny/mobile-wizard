@@ -4,13 +4,14 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
 import {auth, User} from 'firebase/app';
+import {fromPromise} from 'rxjs/internal-compatibility';
 
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
 
-  user: Observable<User>;
+  public user: Observable<User>;
   public token = null;
   userDetails: User;
 
@@ -35,14 +36,13 @@ export class AuthService {
       })
     );
 
-    // get token from user
-    this.user.subscribe((user) => {
-      if (user) {
-        user.getIdToken().then((idToken) => {
-          this.token = idToken;
-        });
-      }
-    });
+  }
+
+  public getUserToken(): Observable<string> {
+    if (this.userDetails) {
+      return fromPromise(this.userDetails.getIdToken());
+    }
+    return of(null);
   }
 
   googleLogin() {

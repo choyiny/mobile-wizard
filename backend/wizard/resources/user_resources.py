@@ -19,6 +19,9 @@ class UserResource(Resource):
 
     @login_required
     def patch(self, firebase_id: str):
+        """
+        PATCH /users/<firebase_id>
+        """
         if g.user.firebase_id != firebase_id:
             raise AuthorizationError('No Permissions to view resource')
 
@@ -26,7 +29,7 @@ class UserResource(Resource):
         parser.add_argument("nickname", type=str, required=True)
         args = parser.parse_args()
 
-        user_details: UserDetails = UserDetails.find_by(firebase_id=firebase_id).to_dict()
+        user_details: UserDetails = UserDetails.find_by(firebase_id=firebase_id)
         user_details.nickname = args.get('nickname')
         user_details.save()
 

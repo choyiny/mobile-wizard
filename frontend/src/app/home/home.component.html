@@ -45,7 +45,7 @@
     <div class="nes-field">
       <p>You're a wizard, {{auth.userDetails.displayName}}.</p>
       <label for="wizard_name">Nickname</label>
-      <input #wizardName id="wizard_name" class="nes-input" autocomplete="off" placeholder="Harry" (blur)="updateWizardName(wizardName.value)">
+      <input #wizardName id="wizard_name" class="nes-input" autocomplete="off" placeholder="Harry" value="{{myWizardName}}" (blur)="updateWizardName(wizardName.value)">
       <label for="rooms_available">Room ID</label>
       <input #roomName id="rooms_available" class="nes-input" autocomplete="off" placeholder="ABC" (blur)="updateRoomId(roomName.value)">
     </div>
