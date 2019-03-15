@@ -3,6 +3,7 @@ import {Detector} from '../../motion/detector';
 import {ActionProcessor} from '../../processor/action-processor';
 import {PlayerPeerService} from '../../peer/player-peer.service';
 import {Throw} from '../../processor/throw';
+import {Defense} from '../../processor/defense';
 import {AuthService} from '../../core/auth.service';
 import {Strike} from '../../processor/strike';
 
@@ -57,11 +58,15 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     return this.status;
   }
 
-  throwyou() {
+  testThrow() {
     this.peerService.sendAction(new Throw());
   }
 
-  strikeyou() {
+  testDefense() {
+    this.peerService.sendAction(new Defense());
+  }
+
+  testStrike() {
     this.peerService.sendAction(new Strike());
   }
 }

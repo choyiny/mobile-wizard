@@ -23,12 +23,12 @@ export class PlayerPeerService {
   }
 
   public sendAction(action: Action) {
-    this.host.send({
+    action.setActor(this.playerId);
+    const data = {
       type: 'action',
-      name: action.name,
-      timestamp: action.timestamp,
-      actor: this.playerId,
-    });
+      action: JSON.stringify(action)
+    };
+    this.host.send(data);
   }
 
   public connectToHost(id: string, name: string) {

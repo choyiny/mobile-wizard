@@ -9,12 +9,4 @@ export class Attack extends Action {
     this.damage = damage;
     this.dfrange = dfrange;
   }
-
-  public getDamage(): number {
-    return this.damage;
-  }
-
-  public getDfrange(): number {
-    return this.dfrange;
-  }
 }
