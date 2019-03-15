@@ -11,5 +11,5 @@ import {AuthService} from './core/auth.service';
 export class AppComponent {
   title = 'mobile-wizard-frontend';
 
-  constructor(public authService: AuthService) {}
+  constructor() {}
 }

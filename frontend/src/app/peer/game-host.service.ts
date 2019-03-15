@@ -4,20 +4,24 @@ import Peer from 'peerjs';
 import {environment} from '../../environments/environment';
 import {GameState} from './game-state.enum';
 import {Observable} from 'rxjs';
-import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameHostService {
 
-  constructor(private router: Router) {
+  constructor() {
 
   }
 
   // Peer connection object
   private peer: Peer = null;
   private connections = {
+    1: null,
+    2: null
+  };
+
+  public playerNames = {
     1: null,
     2: null
   };
@@ -29,6 +33,7 @@ export class GameHostService {
   private actionListeners = [];
   private joinListeners = [];
   private leftListeners = [];
+
 
   public createGame(gameId: string) {
     this.gameState = GameState.Lobby;
@@ -50,6 +55,7 @@ export class GameHostService {
   private attachListenersToConnection(conn: Peer.DataConnection, playerId: number) {
     conn.on('open', () => {
       conn.send({type: 'setPlayerId', playerId: playerId});
+      this.playerNames[playerId] = conn.metadata['name'];
     });
 
     conn.on('close', () => {

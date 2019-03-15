@@ -15,6 +15,8 @@ export class PlayerPeerService {
   public playerId: number;
   private hostListeners = [];
 
+  public myName = '';
+
   constructor() {
     this.host = null;
     this.peer = new Peer({
@@ -33,8 +35,9 @@ export class PlayerPeerService {
     });
   }
 
-  public connectToHost(id: string) {
-    this.host = this.peer.connect(id);
+  public connectToHost(id: string, name: string) {
+    this.myName = name;
+    this.host = this.peer.connect(id, {metadata: {name: name}, serialization: 'json'});
     this.attachHostListeners();
   }
 

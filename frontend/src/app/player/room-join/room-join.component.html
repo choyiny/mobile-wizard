@@ -1,6 +1,6 @@
 <div class="player">
   <section class="nes-container with-title">
-    <h3 *ngIf="auth.user | async as user"  class="title">{{user.displayName}}</h3>
+    <h3 class="title">{{peerService.myName}}</h3>
     <h1>{{getStatus()}}</h1>
     <div>
       <button class="nes-btn is-success" (click)="this.throwyou()">Throw</button>

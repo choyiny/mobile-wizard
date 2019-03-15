@@ -12,7 +12,6 @@ import {Strike} from '../../processor/strike';
   styleUrls: ['./room-join.component.scss']
 })
 export class RoomJoinComponent implements OnInit, OnDestroy {
-  player_name = 'Player';
 
   private status = '';
 

@@ -18,8 +18,6 @@ export class HomeComponent implements OnInit {
   private roomId: string;
   private roomName: string;
 
-  public availableRooms: Room[] = [];
-
   private isHost: boolean;
 
   // TODO: refactor this crap to use angular forms.
@@ -54,7 +52,7 @@ export class HomeComponent implements OnInit {
   }
 
   public joinRoom() {
-    this.playerService.connectToHost(this.roomId);
+    this.playerService.connectToHost(this.roomId, this.wizardName);
     this.router.navigate(['players']);
     // this.apiService.joinRoom(this.roomId, this.wizardName).subscribe(
     //   data => console.log(data)

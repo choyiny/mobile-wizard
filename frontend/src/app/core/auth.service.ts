@@ -33,20 +33,25 @@ export class AuthService {
     // Get auth data, then get firestore user document || null
     this.user = this.afAuth.authState.pipe(
       switchMap(user => {
+        this.isReady = true;
         if (user) {
           this.userDetails = user;
-          this.isReady = true;
-          user.getIdToken().then((idToken) => {
-            this.token = idToken;
-          });
           return of(user);
         } else {
           this.userDetails = null;
-          this.isReady = true;
           return of(null);
         }
       })
     );
+
+    // get token from user
+    this.user.subscribe((user) => {
+      if (user) {
+        user.getIdToken().then((idToken) => {
+          this.token = idToken;
+        });
+      }
+    });
   }
 
   googleLogin() {
