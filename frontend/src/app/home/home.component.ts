@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {DeviceService} from '../helpers/device.service';
-import {Room} from '../external/room';
 import {WizardAPIService} from '../external/wizard-api.service';
 import {PlayerPeerService} from '../peer/player-peer.service';
 import {Router} from '@angular/router';

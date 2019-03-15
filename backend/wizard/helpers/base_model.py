@@ -1,4 +1,4 @@
-from wizard.core.exceptions import ResourceDoesNotExist
+from wizard.exceptions import ResourceDoesNotExist
 from wizard.extensions import db
 
 
