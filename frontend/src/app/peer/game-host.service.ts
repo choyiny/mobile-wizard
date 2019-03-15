@@ -37,11 +37,7 @@ export class GameHostService {
 
   public createGame(gameId: string) {
     this.gameState = GameState.Lobby;
-    this.peer = new Peer(gameId, {
-      host: environment.peerserver.host,
-      port: environment.peerserver.port,
-      key: environment.peerserver.key
-    });
+    this.peer = new Peer(gameId, environment.peerserver);
     console.log(this.peer);
     this.initWebRTCListeners();
   }

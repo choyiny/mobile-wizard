@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { PlayerRoutingModule } from './player-routing.module';
 import {RoomJoinComponent} from './room-join/room-join.component';
+import {AuthService} from '../core/auth.service';
 
 @NgModule({
   declarations: [
@@ -11,6 +12,7 @@ import {RoomJoinComponent} from './room-join/room-join.component';
   imports: [
     CommonModule,
     PlayerRoutingModule
-  ]
+  ],
+  providers: [AuthService]
 })
 export class PlayerModule { }

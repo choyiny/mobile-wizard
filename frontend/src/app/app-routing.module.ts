@@ -5,7 +5,6 @@ import {HomeComponent} from './home/home.component';
 import {GameGuard} from './helpers/game.guard';
 import {DeviceGuard} from './helpers/device.guard';
 import {AuthGuard} from './core/auth.guard';
-import {AuthService} from './core/auth.service';
 
 const routes: Routes = [
   {

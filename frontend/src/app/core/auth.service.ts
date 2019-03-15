@@ -3,7 +3,7 @@ import {Observable, of} from 'rxjs';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
 import {switchMap} from 'rxjs/operators';
-import {auth, User} from 'firebase';
+import {auth, User} from 'firebase/app';
 
 
 @Injectable({ providedIn: 'root' })

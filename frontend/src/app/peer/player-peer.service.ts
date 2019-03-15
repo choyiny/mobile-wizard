@@ -19,11 +19,7 @@ export class PlayerPeerService {
 
   constructor() {
     this.host = null;
-    this.peer = new Peer({
-        host: environment.peerserver.host,
-        port: environment.peerserver.port,
-        key: environment.peerserver.key
-      });
+    this.peer = new Peer(environment.peerserver);
   }
 
   public sendAction(action: Action) {

@@ -6,10 +6,9 @@ export const environment = {
   production: false,
   backend: 'http://localhost:8000/',
   peerserver: {
-    id: 'asdf', // blank string for random room id
-    host: 'peer.choy.in',
+    host: 'peer.projectmobilewizard.com',
     port: 443,
-    key: 'peerjs',
+    secure: true
   },
   firebase: {
     apiKey: 'AIzaSyA26YNIsHkO16TniyYAVFxtZYZ6o96OV_s',

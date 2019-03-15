@@ -10,6 +10,7 @@ import {WizardAPIService} from './external/wizard-api.service';
 import {CoreModule} from './core/core.module';
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../environments/environment';
+import {AuthService} from './core/auth.service';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import {environment} from '../environments/environment';
     AngularFireModule.initializeApp(environment.firebase),
     CoreModule
   ],
-  providers: [WizardAPIService],
+  providers: [WizardAPIService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
