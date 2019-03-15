@@ -1,7 +1,6 @@
 from flask import Flask
-from flask_restful import Api
 from flask_cors import CORS
-from flask_socketio import SocketIO
+from flask_restful import Api
 
 import config as c
 from wizard import routes
@@ -22,7 +21,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(c)
 
-    CORS(app, expose_headers=['Authorization'], resources={r'/rooms/*': {'origins': '*'}})
+    CORS(app, expose_headers=['Authorization'])
     api = Api(app, errors=ERROR_MESSAGES)
 
     # connect to databases

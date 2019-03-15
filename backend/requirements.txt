@@ -5,6 +5,9 @@ flask-restful==0.3.6
 # Websockets related
 flask-socketio
 
+# Firebase
+firebase-admin==2.14.0
+
 
 # database
 psycopg2-binary==2.7.6

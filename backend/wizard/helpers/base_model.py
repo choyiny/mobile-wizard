@@ -3,7 +3,9 @@ from wizard.extensions import db
 
 
 class BaseModel(db.Model):
-
+    """
+    Stores useful helper methods for interacting with db.Model
+    """
     __abstract__ = True
 
     @classmethod
