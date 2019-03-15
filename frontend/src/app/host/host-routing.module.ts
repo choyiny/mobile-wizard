@@ -12,6 +12,10 @@ const routes: Routes = [
   {
     path: 'game',
     component: GameComponent
+  },
+  {
+    path: '',
+    redirectTo: 'game'
   }
 ];
 

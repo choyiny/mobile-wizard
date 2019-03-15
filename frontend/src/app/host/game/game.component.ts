@@ -25,7 +25,7 @@ export class GameComponent implements OnInit, OnDestroy {
   private RED_THRESHOLD = 20;
 
   private subscription;
-  private countdown_display: any; // string or number
+  public countdown_display: any; // string or number
 
   constructor(
     public peerService: GameHostService,

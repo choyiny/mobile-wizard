@@ -9,8 +9,6 @@ import {GameState} from '../../peer/game-state.enum';
   styleUrls: ['./room-lobby.component.scss']
 })
 export class RoomLobbyComponent implements OnInit, OnDestroy {
-  public player_one_name = 'Empty';
-  public player_two_name = 'Empty';
 
   private actionEvent;
   private joinEvent;

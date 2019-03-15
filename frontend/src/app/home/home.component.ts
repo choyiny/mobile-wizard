@@ -5,6 +5,7 @@ import {WizardAPIService} from '../external/wizard-api.service';
 import {PlayerPeerService} from '../peer/player-peer.service';
 import {Router} from '@angular/router';
 import {GameHostService} from '../peer/game-host.service';
+import {AuthService} from '../core/auth.service';
 
 @Component({
   selector: 'wizard-home',
@@ -17,8 +18,6 @@ export class HomeComponent implements OnInit {
   private roomId: string;
   private roomName: string;
 
-  public availableRooms: Room[] = [];
-
   private isHost: boolean;
 
   // TODO: refactor this crap to use angular forms.
@@ -27,7 +26,8 @@ export class HomeComponent implements OnInit {
               private apiService: WizardAPIService,
               private playerService: PlayerPeerService,
               private hostService: GameHostService,
-              private router: Router) {
+              private router: Router,
+              public auth: AuthService) {
     // apiService.getRooms().subscribe(
     //   data => this.availableRooms = data,
     //   err => console.log(err)
@@ -43,8 +43,8 @@ export class HomeComponent implements OnInit {
     return this.isHost;
   }
 
-  public setHostScreen() {
-    this.isHost = true;
+  public setHostScreen(op: boolean) {
+    this.isHost = op;
   }
 
   public updateRoomId(id: string) {
@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
   }
 
   public joinRoom() {
-    this.playerService.connectToHost(this.roomId);
+    this.playerService.connectToHost(this.roomId, this.wizardName);
     this.router.navigate(['players']);
     // this.apiService.joinRoom(this.roomId, this.wizardName).subscribe(
     //   data => console.log(data)

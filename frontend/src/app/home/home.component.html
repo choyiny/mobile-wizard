@@ -1,37 +1,57 @@
-<h1>Mobile Wizard</h1>
+<div class="loading" *ngIf="!auth.isReady">
+  <i class="loading-icon nes-icon coin is-large"></i>
+</div>
+<div class="container">
+  <h1>Mobile Wizard</h1>
 
-<!--Creating a game from desktop-->
-<section *ngIf="isHostScreen()" class="nes-container with-title">
-  <h3 class="title">Create a game</h3>
-  <div id="create_room" class="item">
-    <div class="nes-field">
-      <label for="room_id">Room Name</label>
-      <input #newRoomName type="text" id="room_id" class="nes-input" autocomplete="off" placeholder="Thierry's Office" (blur)="updateRoomName(newRoomName.value)">
+  <!--Creating a game from desktop-->
+  <section *ngIf="isHostScreen()" class="nes-container with-title">
+    <h3 class="title">Create a game</h3>
+    <div id="create_room" class="item">
+      <div class="nes-field">
+        <label for="room_id">Room Name</label>
+        <input #newRoomName type="text" id="room_id" class="nes-input" autocomplete="off" placeholder="Thierry's Office" (blur)="updateRoomName(newRoomName.value)">
+      </div>
     </div>
-  </div>
-  <button type="button" class="nes-btn is-primary" (click)="createRoom()">Create a game</button>
-</section>
+    <button type="button" class="nes-btn is-primary" (click)="createRoom()">Create a game</button>
+  </section>
 
-<!--Joining a game from mobile-->
-<section *ngIf="!isHostScreen()" class="nes-container with-title">
+  <!--Joining a game from mobile-->
+  <section *ngIf="!isHostScreen()" class="nes-container with-title">
+    <div *ngIf="auth.user | async; then authenticated else guest">
+      <!--template will replace this div-->
+    </div>
+  </section>
+  <h5>
+    <a routerLink="../credits">Credits</a>
+    <span *ngIf="!deviceService.deviceIsDesktop() && !isHostScreen()"> | <a (click)="setHostScreen(true)">Create room</a></span>
+    <span *ngIf="!deviceService.deviceIsDesktop() && isHostScreen()"> | <a (click)="setHostScreen(false)">Join room</a></span>
+  </h5>
+</div>
+
+<ng-template #guest>
+  <h3 class="title">Howdy!</h3>
+  <p>Login to get started...</p>
+
+  <button type="button" class="nes-btn is-success" (click)="auth.googleLogin()">
+    <i class="nes-icon google"></i> Google
+  </button>
+</ng-template>
+
+
+<ng-template #authenticated>
   <h3 class="title">Join a game</h3>
   <div id="inputs" class="item">
     <div class="nes-field">
-      <label for="wizard_name">Your wizard name</label>
-      <input #wizardName id="wizard_name" class="nes-input" autocomplete="off" placeholder="Thierry" (blur)="updateWizardName(wizardName.value)">
-      <label for="rooms_available">Select a room</label>
-      <!--<div class="nes-select">-->
-        <!--&lt;!&ndash;<select #roomName required="" id="rooms_available" (click)="updateRoomId(roomName.value)">&ndash;&gt;-->
-          <!--&lt;!&ndash;<option>&#45;&#45;select&#45;&#45;</option>&ndash;&gt;-->
-          <!--&lt;!&ndash;<option *ngFor="let r of availableRooms" [value]="r.id">{{r.name}}</option>&ndash;&gt;-->
-        <!--&lt;!&ndash;</select>&ndash;&gt;-->
-      <!--</div>-->
-      <input #roomName id="rooms_available" class="nes-input" autocomplete="off" placeholder="Thierry" (blur)="updateRoomId(roomName.value)">
+      <p>You're a wizard, {{auth.userDetails.displayName}}.</p>
+      <label for="wizard_name">Nickname</label>
+      <input #wizardName id="wizard_name" class="nes-input" autocomplete="off" placeholder="Harry" (blur)="updateWizardName(wizardName.value)">
+      <label for="rooms_available">Room ID</label>
+      <input #roomName id="rooms_available" class="nes-input" autocomplete="off" placeholder="ABC" (blur)="updateRoomId(roomName.value)">
     </div>
   </div>
-  <button type="button" class="nes-btn is-success" (click)="joinRoom()">Join a game</button>
-</section>
-<h5>
-  <a routerLink="../credits">Credits</a>
-  <span *ngIf="!deviceService.deviceIsDesktop() && !isHostScreen()"> | <a (click)="setHostScreen()">Create room</a></span>
-</h5>
+  <div class="actions">
+    <button type="button" class="nes-btn is-success" (click)="joinRoom()">Fight!</button>
+    <button type="button" class="nes-btn is-warning" (click)="auth.signOut()">Logout</button>
+  </div>
+</ng-template>

@@ -4,6 +4,7 @@ import {CreditsComponent} from './credits/credits.component';
 import {HomeComponent} from './home/home.component';
 import {GameGuard} from './helpers/game.guard';
 import {DeviceGuard} from './helpers/device.guard';
+import {AuthGuard} from './core/auth.guard';
 
 const routes: Routes = [
   {
@@ -14,7 +15,7 @@ const routes: Routes = [
   {
     path: 'players',
     loadChildren: './player/player.module#PlayerModule',
-    canActivateChild: [DeviceGuard, GameGuard]
+    canActivateChild: [AuthGuard, DeviceGuard, GameGuard]
   },
   {
     path: 'home',
