@@ -96,6 +96,7 @@ export class GameHostService {
       this.attachListenersToConnection(conn, 1);
       this.notifyPlayerHasJoined(1);
       console.log('assigned player 1');
+      conn.send({type: 'setPlayerId', playerId: 1});
     } else if (this.connections[2] === null) {
       this.connections[2] = conn;
       this.attachListenersToConnection(conn, 2);
