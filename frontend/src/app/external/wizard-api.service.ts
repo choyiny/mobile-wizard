@@ -29,4 +29,12 @@ export class WizardAPIService {
     return this.http.patch(`${environment.backend}/users/${this.authService.userDetails.uid}`, {nickname: nickname});
   }
 
+  updateStats(fastest_game: number, most_damage: number, most_damage_blocked: number) {
+    return this.http.patch(`${environment.backend}/users/${this.authService.userDetails.uid}`, {
+      fastest_game: fastest_game,
+      most_damage: most_damage,
+      most_damage_blocked: most_damage_blocked
+    });
+  }
+
 }

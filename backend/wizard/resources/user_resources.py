@@ -23,15 +23,17 @@ class UserResource(Resource):
         PATCH /users/<firebase_id>
         """
         if g.user.firebase_id != firebase_id:
-            raise AuthorizationError('No Permissions to view resource')
+            raise AuthorizationError('No Permissions to update resource')
 
         parser = reqparse.RequestParser()
-        parser.add_argument("nickname", type=str, required=True)
-        args = parser.parse_args()
+        parser.add_argument("nickname", type=str)
+        parser.add_argument("fastest_game", type=float)
+        parser.add_argument("most_damage", type=int)
+        parser.add_argument("most_damage_blocked", type=int)
+        user_details_args = parser.parse_args()
 
         user_details: UserDetails = UserDetails.find_by(firebase_id=firebase_id)
-        user_details.nickname = args.get('nickname')
+        user_details.update_attributes(**user_details_args)
         user_details.save()
 
         return user_details.to_dict()
-
