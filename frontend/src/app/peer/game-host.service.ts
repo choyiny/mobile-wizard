@@ -26,7 +26,7 @@ export class GameHostService {
     2: null
   };
 
-  public startTime;
+  // public startTime;
 
   public gameState: GameState;
 
