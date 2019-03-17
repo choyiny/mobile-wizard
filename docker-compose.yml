@@ -65,6 +65,8 @@ services:
       - "5432:5432"
     networks:
       - wizard-backend
+    depends_on:
+      - backend
 volumes:
   certs:
   html:
