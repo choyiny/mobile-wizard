@@ -12,7 +12,7 @@ export class ResultComponent implements OnInit, OnDestroy {
   constructor(public gamestats: GamestatsService,
               private router: Router,
               private ref: ChangeDetectorRef) {
-    console.log(gamestats);
+    console.log(this.gamestats);
   }
 
   ngOnInit() {
@@ -23,7 +23,7 @@ export class ResultComponent implements OnInit, OnDestroy {
     this.gamestats.reset();
   }
 
-  backHome() {
+  public backHome() {
     this.router.navigate(['/home']);
   }
 

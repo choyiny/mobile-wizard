@@ -5,26 +5,24 @@ import { Injectable } from '@angular/core';
 })
 export class GamestatsService {
 
-  public playName;
+  public playName = ['', ''];
 
-  private startTime;
-  private endTime;
+  private startTime = 0;
+  private endTime = 0;
 
-  public winner;
+  public winner = -1;
 
   // The max continuous damage one player made
-  public maxDamage;
+  public maxDamage = [0, 0];
   // The max continuous defense one player made
-  public maxDefense;
+  public maxDefense = [0, 0];
 
   // The accumulated continuous damage one player made
-  private accuDamage;
+  private accuDamage = [0, 0];
   // The accumulated continuous defense one player made
-  private accuDefense;
+  private accuDefense = [0, 0];
 
-  constructor() {
-    this.reset();
-  }
+  constructor() {}
 
   public gameStart() {
     this.startTime = Date.now();
@@ -84,7 +82,7 @@ export class GamestatsService {
     this.accuDefense = [0, 0];
     this.startTime = 0;
     this.endTime = 0;
-    this.winner = '';
+    this.winner = -1;
   }
 
 }
