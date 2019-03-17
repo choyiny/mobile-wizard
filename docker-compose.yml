@@ -1,7 +1,7 @@
 version: '3'
 services:
-  nginx-proxy:
-    container_name: nginx-proxy
+  wizard-proxy:
+    container_name: wizard-proxy
     image: "jwilder/nginx-proxy:alpine"
     volumes:
       - certs:/etc/nginx/certs
@@ -14,7 +14,7 @@ services:
     environment:
       - DEFAULT_HOST=projectmobilewizard.com
   letsencrypt:
-    container_name: nginx-proxy-letsencrypt
+    container_name: wizard-proxy-letsencrypt
     image: jrcs/letsencrypt-nginx-proxy-companion
     volumes:
       - certs:/etc/nginx/certs
@@ -23,7 +23,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      - NGINX_PROXY_CONTAINER=nginx-proxy
+      - NGINX_PROXY_CONTAINER=wizard-proxy
   frontend:
     build: "frontend/"
     environment:
@@ -37,17 +37,38 @@ services:
       - 9000
     environment:
       - VIRTUAL_HOST=peer.projectmobilewizard.com
-#       - VIRTUAL_PORT=9000
       - LETSENCRYPT_HOST=peer.projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
       - SECRET_KEY=peerjs
-#  backend:
-#    build: "backend/"
-#    environment:
-#      - VIRTUAL_HOST=test.choy.in
-#      - VIRTUAL_PORT=5000
-#      - LETSENCRYPT_HOST=test.choy.in
-#      - LETSENCRYPT_EMAIL=i@choy.in
+  backend:
+    build: "backend/"
+    expose:
+      - 5000
+    volumes:
+      - ./project-mobile-wizard-firebase-adminsdk-6bmre-c67afcaefa.json:/app/project-mobile-wizard-firebase-adminsdk-6bmre-c67afcaefa.json
+    environment:
+      - VIRTUAL_HOST=api.projectmobilewizard.com
+      - LETSENCRYPT_HOST=api.projectmobilewizard.com
+      - LETSENCRYPT_EMAIL=i@choy.in
+    networks:
+      - wizard-backend
+  wizard-postgres:
+    image: "postgres:9.6.5"
+    volumes:
+      - "postgres:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=wizard
+      - POSTGRES_DB=wizard
+      - POSTGRES_PORT=5432
+    ports:
+      - "5432:5432"
+    networks:
+      - wizard-backend
 volumes:
   certs:
   html:
+  postgres:
+
+networks:
+  wizard-backend:

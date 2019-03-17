@@ -18,7 +18,7 @@
 
   <!--Joining a game from mobile-->
   <section *ngIf="!isHostScreen()" class="nes-container with-title">
-    <div *ngIf="auth.user | async; then authenticated else guest">
+    <div *ngIf="auth.userDetails; then authenticated else guest">
       <!--template will replace this div-->
     </div>
   </section>
