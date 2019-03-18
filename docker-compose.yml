@@ -29,9 +29,15 @@ services:
     expose:
       - 80
     environment:
-      - VIRTUAL_HOST=projectmobilewizard.com
-      - LETSENCRYPT_HOST=projectmobilewizard.com
+      - VIRTUAL_HOST=beta.projectmobilewizard.com
+      - LETSENCRYPT_HOST=beta.projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
+    depends_on:
+      - wizard-proxy
+      - letsencrypt
+      - peerserver
+      - wizard-postgres
+      - backend
   peerserver:
     build: "peerserver/"
     expose:
@@ -43,18 +49,16 @@ services:
       - SECRET_KEY=peerjs
   backend:
     build: "backend/"
-    expose:
-      - 5000
     volumes:
       - ./project-mobile-wizard-firebase-adminsdk-6bmre-c67afcaefa.json:/app/project-mobile-wizard-firebase-adminsdk-6bmre-c67afcaefa.json
+    expose:
+      - 5000
     environment:
       - VIRTUAL_HOST=api.projectmobilewizard.com
       - LETSENCRYPT_HOST=api.projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
     depends_on:
       - wizard-postgres
-    networks:
-      - wizard-backend
   wizard-postgres:
     image: "postgres:9.6.5"
     volumes:
@@ -66,12 +70,7 @@ services:
       - POSTGRES_PORT=5432
     ports:
       - "5432:5432"
-    networks:
-      - wizard-backend
 volumes:
   certs:
   html:
   postgres:
-
-networks:
-  wizard-backend:
