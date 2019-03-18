@@ -29,8 +29,8 @@ services:
     expose:
       - 80
     environment:
-      - VIRTUAL_HOST=projectmobilewizard.com
-      - LETSENCRYPT_HOST=projectmobilewizard.com
+      - VIRTUAL_HOST=beta.projectmobilewizard.com
+      - LETSENCRYPT_HOST=beta.projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
     depends_on:
       - wizard-proxy
