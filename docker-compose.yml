@@ -1,7 +1,7 @@
 version: '3'
 services:
-  nginx-proxy:
-    container_name: nginx-proxy
+  wizard-proxy:
+    container_name: wizard-proxy
     image: "jwilder/nginx-proxy:alpine"
     volumes:
       - certs:/etc/nginx/certs
@@ -14,7 +14,7 @@ services:
     environment:
       - DEFAULT_HOST=projectmobilewizard.com
   letsencrypt:
-    container_name: nginx-proxy-letsencrypt
+    container_name: wizard-proxy-letsencrypt
     image: jrcs/letsencrypt-nginx-proxy-companion
     volumes:
       - certs:/etc/nginx/certs
@@ -23,7 +23,7 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
-      - NGINX_PROXY_CONTAINER=nginx-proxy
+      - NGINX_PROXY_CONTAINER=wizard-proxy
   frontend:
     build: "frontend/"
     expose:
@@ -32,6 +32,12 @@ services:
       - VIRTUAL_HOST=projectmobilewizard.com
       - LETSENCRYPT_HOST=projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
+    depends_on:
+      - wizard-proxy
+      - letsencrypt
+      - peerserver
+      - wizard-postgres
+      - backend
   peerserver:
     build: "peerserver/"
     expose:
@@ -43,12 +49,28 @@ services:
       - SECRET_KEY=peerjs
   backend:
     build: "backend/"
+    volumes:
+      - ./project-mobile-wizard-firebase-adminsdk-6bmre-c67afcaefa.json:/app/project-mobile-wizard-firebase-adminsdk-6bmre-c67afcaefa.json
     expose:
       - 5000
     environment:
       - VIRTUAL_HOST=api.projectmobilewizard.com
       - LETSENCRYPT_HOST=api.projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
+    depends_on:
+      - wizard-postgres
+  wizard-postgres:
+    image: "postgres:9.6.5"
+    volumes:
+      - "postgres:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=wizard
+      - POSTGRES_DB=wizard
+      - POSTGRES_PORT=5432
+    ports:
+      - "5432:5432"
 volumes:
   certs:
   html:
+  postgres:
