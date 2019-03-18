@@ -39,6 +39,7 @@ export class HomeComponent implements OnInit {
         (data) => {
           if (data) {
             this.myWizardName = data['nickname'];
+            console.log(data);
           }
         });
     });

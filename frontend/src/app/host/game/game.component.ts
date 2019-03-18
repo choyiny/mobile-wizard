@@ -130,6 +130,14 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   private displayStatic() {
+    // Send back game statistics
+    // For player 1
+    this.peerService.sendGameStats(0, this.gamestats.getDuration(),
+      this.gamestats.maxDamage[0], this.gamestats.maxDefense[0]);
+    // For player 2
+    this.peerService.sendGameStats(1, this.gamestats.getDuration(),
+      this.gamestats.maxDamage[1], this.gamestats.maxDefense[1]);
+    // Go to result page after 2s, in case some operations in setAction haven't finished
     setTimeout(() => {
       this.router.navigate(['/hosts/result']);
     }, 2000);

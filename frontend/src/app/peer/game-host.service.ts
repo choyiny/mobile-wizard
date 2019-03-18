@@ -96,6 +96,7 @@ export class GameHostService {
       this.attachListenersToConnection(conn, 1);
       this.notifyPlayerHasJoined(1);
       console.log('assigned player 1');
+      conn.send({type: 'setPlayerId', playerId: 1});
     } else if (this.connections[2] === null) {
       this.connections[2] = conn;
       this.attachListenersToConnection(conn, 2);
@@ -141,5 +142,13 @@ export class GameHostService {
 
   public hostingGame(): boolean {
     return this.peer !== null;
+  }
+
+  public sendGameStats(player: number, fastest_game: number,
+                       most_damage: number, most_damage_blocked: number) {
+    const conn = this.connections[player + 1];
+    conn.send({type: 'gamestats', fastest_game:　fastest_game,
+      most_damage:　most_damage, most_damage_blocked: most_damage_blocked});
+    console.log('Stats sent to Player ' + (player + 1));
   }
 }

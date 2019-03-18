@@ -6,6 +6,7 @@ import {Throw} from '../../processor/throw';
 import {Defense} from '../../processor/defense';
 import {AuthService} from '../../core/auth.service';
 import {Strike} from '../../processor/strike';
+import {WizardAPIService} from '../../external/wizard-api.service';
 
 @Component({
   selector: 'wizard-room-join',
@@ -18,13 +19,15 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
 
   private output = 'none';
 
-  private hostEvent;
+  private playerIdEvent;
+  private gameStatsEvent;
 
   constructor(
     private peerService: PlayerPeerService,
     private ref: ChangeDetectorRef,
+    private apiService: WizardAPIService,
     public auth: AuthService) {
-    this.hostEvent = this.peerService.fromEvent('host').subscribe((data) => {
+    this.playerIdEvent = this.peerService.fromEvent('playerId').subscribe((data) => {
       console.log(data);
       if (data['playerId'] === 1) {
         this.status = 'Throw to get ready!';
@@ -32,6 +35,12 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
         this.status = 'Strike to get ready!';
       }
       this.ref.detectChanges();
+    });
+    this.gameStatsEvent = this.peerService.fromEvent('gamestats').subscribe((data) => {
+      this.apiService.updateStats(data['fastest_game'], data['most_damage'], data['most_damage_blocked'])
+        .subscribe((res) => {
+        console.log(res);
+      });
     });
     // waiting in lobby
     // TODO: we can include how to throw/strike in here.
@@ -51,7 +60,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.hostEvent.unsubscribe();
+    this.playerIdEvent.unsubscribe();
   }
 
   public getStatus(): string {

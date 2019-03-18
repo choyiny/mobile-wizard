@@ -13,7 +13,8 @@ export class PlayerPeerService {
   private host: Peer.DataConnection;
   private peer: Peer;
   public playerId: number;
-  private hostListeners = [];
+  private playerIdListeners = [];
+  private statsListeners = [];
 
   public myName = '';
 
@@ -47,8 +48,13 @@ export class PlayerPeerService {
       if (data.type === 'setPlayerId') {
         this.playerId = data['playerId'];
         console.log(`I am player ${this.playerId}`);
-        this.hostListeners.forEach( (listener) => {
+        this.playerIdListeners.forEach( (listener) => {
           listener({'type': 'playerId', 'playerId': this.playerId});
+        });
+      } else if (data.type === 'gamestats') {
+        console.log('Ready to update stats');
+        this.statsListeners.forEach((listener) => {
+          listener(data);
         });
       }
     });
@@ -64,8 +70,10 @@ export class PlayerPeerService {
         observer.next(e);
       };
 
-      if (eventName === 'host') {
-        this.hostListeners.push(handler);
+      if (eventName === 'playerId') {
+        this.playerIdListeners.push(handler);
+      } else if (eventName === 'gamestats') {
+        this.statsListeners.push(handler);
       }
 
       return () => {};
