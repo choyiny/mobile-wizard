@@ -8,7 +8,7 @@ deaths by casting spells at the other player. The game host will show the health
 like street fighters.
 
 ## Live Demo
-A live demo is available at https://projectmobilewizard.com.
+A live demo is available at https://beta.projectmobilewizard.com.
 
 ## Project Contributors
 Cho Yin Yong, Zhili Pan, Guo Bin Liu
