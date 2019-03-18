@@ -26,7 +26,7 @@ export class GameHostService {
     2: null
   };
 
-  public startTime;
+  // public startTime;
 
   public gameState: GameState;
 
@@ -142,5 +142,13 @@ export class GameHostService {
 
   public hostingGame(): boolean {
     return this.peer !== null;
+  }
+
+  public sendGameStats(player: number, fastest_game: number,
+                       most_damage: number, most_damage_blocked: number) {
+    const conn = this.connections[player + 1];
+    conn.send({type: 'gamestats', fastest_game:　fastest_game,
+      most_damage:　most_damage, most_damage_blocked: most_damage_blocked});
+    console.log('Stats sent to Player ' + (player + 1));
   }
 }

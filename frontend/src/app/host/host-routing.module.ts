@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import {GameComponent} from './game/game.component';
 import {GameGuard} from '../helpers/game.guard';
 import {RoomLobbyComponent} from './room-lobby/room-lobby.component';
+import {ResultComponent} from './result/result.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: 'game'
+  },
+  {
+    path: 'result',
+    component: ResultComponent
   }
 ];
 

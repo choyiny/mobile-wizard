@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreditsComponent } from './credits/credits.component';
 import { HomeComponent } from './home/home.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {WizardAPIService} from './external/wizard-api.service';
 import {CoreModule} from './core/core.module';
 import {AngularFireModule} from '@angular/fire';
@@ -14,6 +14,7 @@ import {AuthService} from './core/auth.service';
 import {AuthGuard} from './core/auth.guard';
 import {DeviceGuard} from './helpers/device.guard';
 import {GameGuard} from './helpers/game.guard';
+import {TokenInterceptor} from './core/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,18 @@ import {GameGuard} from './helpers/game.guard';
     AngularFireModule.initializeApp(environment.firebase),
     CoreModule
   ],
-  providers: [WizardAPIService, AuthService, AuthGuard, DeviceGuard, GameGuard],
+  providers: [
+    WizardAPIService,
+    AuthService,
+    AuthGuard,
+    DeviceGuard,
+    GameGuard,
+    {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

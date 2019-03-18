@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  backend: 'http://localhost:8000/',
+  backend: 'https://api.projectmobilewizard.com',
   peerserver: {
     host: 'peer.projectmobilewizard.com',
     port: 443,
