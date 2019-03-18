@@ -26,9 +26,10 @@ services:
       - NGINX_PROXY_CONTAINER=nginx-proxy
   frontend:
     build: "frontend/"
+    expose:
+      - 80
     environment:
       - VIRTUAL_HOST=projectmobilewizard.com
-      - VIRTUAL_PORT=80
       - LETSENCRYPT_HOST=projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
   peerserver:
@@ -37,17 +38,17 @@ services:
       - 9000
     environment:
       - VIRTUAL_HOST=peer.projectmobilewizard.com
-#       - VIRTUAL_PORT=9000
       - LETSENCRYPT_HOST=peer.projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
       - SECRET_KEY=peerjs
-#  backend:
-#    build: "backend/"
-#    environment:
-#      - VIRTUAL_HOST=test.choy.in
-#      - VIRTUAL_PORT=5000
-#      - LETSENCRYPT_HOST=test.choy.in
-#      - LETSENCRYPT_EMAIL=i@choy.in
+  backend:
+    build: "backend/"
+    expose:
+      - 5000
+    environment:
+      - VIRTUAL_HOST=api.projectmobilewizard.com
+      - LETSENCRYPT_HOST=api.projectmobilewizard.com
+      - LETSENCRYPT_EMAIL=i@choy.in
 volumes:
   certs:
   html:
