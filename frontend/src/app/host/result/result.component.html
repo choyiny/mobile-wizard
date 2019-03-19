@@ -1,16 +1,21 @@
-<h1 class="title">Game Result</h1>
-<!--<h2 id="loading" class="result-body">Loading......</h2>-->
+<h1 class="title"><i class="nes-icon is-large star"></i> Results <i class="nes-icon is-large star"></i></h1>
 <section class="result-body">
+  <div class="nes-container with-title is-centered">
+    <p class="title"><i class="nes-icon trophy is-medium"></i></p>
+    <h2>1st Place: {{gamestats.playName[gamestats.winner] || 'i dunno'}}</h2>
+    <h5>2nd Place: {{gamestats.playName[1 - gamestats.winner] || 'i dunno'}}</h5>
+  </div>
+  <br/>
   <h2>Game Duration: {{gamestats.getDuration()}}s</h2>
-  <h2>Winner: {{gamestats.playName[gamestats.winner]}}</h2>
+  <br/>
   <div class="result_table">
     <div></div>
-    <h3>{{gamestats.playName[0]}}</h3>
-    <h3>{{gamestats.playName[1]}}</h3>
-    <h3>Best Damage</h3>
+    <h3><i class="snes-jp-logo"></i> {{gamestats.playName[0]}}</h3>
+    <h3><i class="snes-jp-logo"></i> {{gamestats.playName[1]}}</h3>
+    <h3>Most damage done</h3>
     <p>{{gamestats.maxDamage[0]}}</p>
     <p>{{gamestats.maxDamage[1]}}</p>
-    <h3>Best Defense</h3>
+    <h3>Most damage blocked</h3>
     <p>{{gamestats.maxDefense[0]}}</p>
     <p>{{gamestats.maxDefense[1]}}</p>
   </div>
