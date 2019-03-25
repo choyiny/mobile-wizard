@@ -5,7 +5,7 @@ inspiration of backend structuring with Flask.
 ## Development setup
 
 ### Setup
-Note: This project *requires* Python 3.6+, Docker and Docker Compose installed.
+Note: This project *requires* Python 3.6+, Docker, Docker Compose and Redis installed.
 
 1. Create a virtual environment for the project and activate it. Run `pip3 install virtualenv` if virtualenv is not installed on Python3.6+
 ```
@@ -30,6 +30,10 @@ $ source wizard-venv/bin/activate
 ```
 (wizard-venv) $ cd project-mobile-wizard/backend
 (wizard-venv) $ docker-compose up -d
+```
+3. Start redis-server (`brew install redis` if not yet installed on Mac)
+```
+(wizard-venv) $ redis-server
 ```
 _Note: The PostgreSQL server is binded to port 5433 (default port 5432) to prevent clashes with
 the local PostgreSQL instance._
