@@ -49,6 +49,7 @@
       <input #wizardName id="wizard_name" class="nes-input" autocomplete="off" placeholder="Harry" value="{{myWizardName}}" (blur)="updateWizardName(wizardName.value)">
       <label for="rooms_available">Room ID</label>
       <input #roomName id="rooms_available" class="nes-input" autocomplete="off" placeholder="ABC" (blur)="updateRoomId(roomName.value)">
+      <span class="error">{{playerService.error}}</span>
     </div>
   </div>
   <div class="actions">

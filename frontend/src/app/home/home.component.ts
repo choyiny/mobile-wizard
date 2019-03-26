@@ -27,10 +27,6 @@ export class HomeComponent implements OnInit {
               private hostService: GameHostService,
               private router: Router,
               public auth: AuthService) {
-    // apiService.getRooms().subscribe(
-    //   data => this.availableRooms = data,
-    //   err => console.log(err)
-    // );
     this.myWizardName = '';
     this.isHost = deviceService.deviceIsDesktop();
 
@@ -61,16 +57,14 @@ export class HomeComponent implements OnInit {
   }
 
   public joinRoom() {
-    this.playerService.connectToHost(this.roomId, this.myWizardName);
-    this.router.navigate(['players']);
+    this.playerService.connectToHost(this.roomId, this.myWizardName).then(
+      () => {this.router.navigate(['players']); },
+      () => {console.log('On join error'); });
   }
 
   public createRoom() {
-    // this.apiService.createRoom(this.roomName).subscribe(
-    //   data => console.log(data)
-    // );
-    // TODO: fail to create? non-unique room id?
-    this.hostService.createGame(this.roomName);
+    this.hostService.gameName = this.roomName;
+    this.hostService.createGame();
     this.router.navigate(['hosts/lobby']);
   }
 

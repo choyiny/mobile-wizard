@@ -61,7 +61,7 @@ services:
       - wizard-postgres
     networks:
       - wizard-backend-network
-  redis:
+  wizard-redis:
     image: "redis:4.0.11-alpine3.8"
     networks:
       - wizard-backend-network

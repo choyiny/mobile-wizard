@@ -8,7 +8,7 @@ from flask_restful import Resource, reqparse
 
 from wizard.exceptions import ResourceDoesNotExist
 from wizard.extensions import redis_store
-from wizard.helpers.security import AuthorizationError
+from wizard.helpers.security import AuthorizationError, login_required
 
 
 class CreateRoomResource(Resource):
@@ -46,6 +46,7 @@ class RoomResource(Resource):
     /rooms/<string:room_id>
     """
 
+    @login_required
     def get(self, room_id):
         """
         Get a room's peer host id.

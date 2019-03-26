@@ -37,6 +37,7 @@ Post game analysis shown as graphs at the end of the game.
 - [Docker](https://docker.io) - For packaging the application for deployment at ease.
 - [Postman](https://www.getpostman.com) - Testing medium for the backend API.
 - [Firebase](https://firebase.google.com/) - For third-party authentication
+- [Redis](https://redis.io/) - In memory data store
 - [PeerJS](https://peerjs.com/) - Peer to peer javascript library
 - [PeerServer](https://github.com/peers/peerjs-server) - Broker connections between PeerJS clients.
 - [Nginx](https://www.nginx.com/) - Web serving, reverse proxying, caching, load balancing 
