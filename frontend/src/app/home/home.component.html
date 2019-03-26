@@ -24,6 +24,7 @@
   </section>
   <h5>
     <a routerLink="../credits">Credits</a>
+    <span *ngIf="!deviceService.deviceIsDesktop() && !isHostScreen()"> | <a routerLink="../userstats">Game Stats</a> </span>
     <span *ngIf="!deviceService.deviceIsDesktop() && !isHostScreen()"> | <a (click)="setHostScreen(true)">Create room</a></span>
     <span *ngIf="!deviceService.deviceIsDesktop() && isHostScreen()"> | <a (click)="setHostScreen(false)">Join room</a></span>
   </h5>
