@@ -1,23 +1,25 @@
-<div class="players">
-  <div class="player player1">
-    <section class="nes-container with-title">
-      <h3 class="title">Player 1: {{player_name[0]}}</h3>
-      <progress class="nes-progress is-success" [ngClass]="healthClass[0]" value="{{health[0]}}" max="{{maxHealth}}"></progress>
-    </section>
-    <div class="player-canvas">
-      <h2 [ngClass]="actionClass[0]">{{action[0]}}</h2>
-    </div>
-  </div>
-  <div class="player player2">
-    <section class="nes-container with-title">
-      <h3 class="title">Player 2: {{player_name[1]}}</h3>
-      <progress class="nes-progress is-success" [ngClass]="healthClass[1]" value="{{health[1]}}" max="{{maxHealth}}"></progress>
-    </section>
-    <div class="player-canvas">
-      <h2 [ngClass]="actionClass[1]">{{action[1]}}</h2>
-    </div>
-  </div>
-</div>
-<div class="countdown-wrapper">
-  <h1>{{countdown_display}}</h1>
-</div>
+<!--<div class="players">-->
+  <!--<div class="player player1">-->
+    <!--<section class="nes-container with-title">-->
+      <!--<h3 class="title">Player 1: {{player_name[0]}}</h3>-->
+      <!--<progress class="nes-progress is-success" [ngClass]="healthClass[0]" value="{{health[0]}}" max="{{maxHealth}}"></progress>-->
+    <!--</section>-->
+    <!--<div class="player-canvas">-->
+      <!--<h2 [ngClass]="actionClass[0]">{{action[0]}}</h2>-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="player player2">-->
+    <!--<section class="nes-container with-title">-->
+      <!--<h3 class="title">Player 2: {{player_name[1]}}</h3>-->
+      <!--<progress class="nes-progress is-success" [ngClass]="healthClass[1]" value="{{health[1]}}" max="{{maxHealth}}"></progress>-->
+    <!--</section>-->
+    <!--<div class="player-canvas">-->
+      <!--<h2 [ngClass]="actionClass[1]">{{action[1]}}</h2>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+<!--<div class="countdown-wrapper">-->
+  <!--<h1>{{countdown_display}}</h1>-->
+<!--</div>-->
+<wizard-canvas></wizard-canvas>
+
