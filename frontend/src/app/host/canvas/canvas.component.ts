@@ -40,44 +40,44 @@ export class CanvasComponent implements AfterViewInit {
       },
       type: Phaser.CANVAS,
       scene: {
-        preload: function() {
+        preload: function () {
           this.load.spritesheet('character', 'assets/character2.png', {frameWidth: 50, frameHeight: 37});
-          // this.load.setBaseURL('http://labs.phaser.io');
-          // this.load.image('sky', 'assets/skies/space3.png');
-          // this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-          // this.load.image('red', 'assets/particles/red.png');
+          this.load.spritesheet('fireball', 'assets/img/fireball/red/spritesheet-512px-by-197px-per-frame.png', {
+            frameWidth: 512,
+            frameHeight: 197
+          });
         },
-        create: function() {
+        create: function () {
           this.anims.create({
             key: 'idle',
-            frames: this.anims.generateFrameNumbers('character', { start: 0, end: 3 }),
+            frames: this.anims.generateFrameNumbers('character', {start: 38, end: 41}),
             frameRate: 6,
             repeat: -1
           });
-          let player = this.add.sprite(20, 20, 'character');
-          player.anims.play('idle', true);
-          // let player2 = this.add.sprite(27, 20, 'character');
-          // player2.anims.play('idle', true);
-
-          // let character = this.add.sprite(200, 200, 'character');
-          // character.anims.add('idle');
-          // console.log(character.anims);
-          // character.anims.play('idle', 30, true);
-          // this.add.image(400, 300, 'sky');
-          // const particles = this.add.particles('red');
-          // const emitter = particles.createEmitter({
-          //   speed: 100,
-          //   scale: { start: 1, end: 0 },
-          //   blendMode: 'ADD'
-          // });
-          // const logo = this.physics.add.image(400, 100, 'logo');
-          //
-          // logo.setVelocity(100, 200);
-          // logo.setBounce(1, 1);
-          // logo.setCollideWorldBounds(true);
-          //
-          // emitter.startFollow(logo);
-
+          this.anims.create({
+            key: 'swing',
+            frames: this.anims.generateFrameNumbers('character', {start: 48, end: 52}),
+            frameRate: 10,
+            repeat: -1
+          });
+          this.anims.create({
+            key: 'jab',
+            frames: this.anims.generateFrameNumbers('character', {start: 86, end: 93}),
+            frameRate: 13,
+            repeat: -1
+          });
+          this.anims.create({
+            key: 'fly',
+            frames: this.anims.generateFrameNumbers('fireball', {start: 0, end: 5}),
+            frameRate: 13,
+            repeat: -1
+          });
+          const player = this.add.sprite(10, 20, 'character');
+          const fireball = this.add.sprite(30, 20, 'fireball');
+          fireball.setScale(0.07);
+          fireball.flipX = true;
+          player.anims.play('jab', true);
+          fireball.anims.play('fly', true);
         }
       }
     });
