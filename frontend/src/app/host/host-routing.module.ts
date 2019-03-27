@@ -1,27 +1,29 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {GameComponent} from './game/game.component';
-import {GameGuard} from '../helpers/game.guard';
 import {RoomLobbyComponent} from './room-lobby/room-lobby.component';
 import {ResultComponent} from './result/result.component';
 
 const routes: Routes = [
   {
     path: 'lobby',
-    component: RoomLobbyComponent
+    component: RoomLobbyComponent,
+    data: {state: 'host-lobby'}
   },
   {
     path: 'game',
-    component: GameComponent
-  },
-  {
-    path: '',
-    redirectTo: 'game'
+    component: GameComponent,
+    data: {state: 'host-game'}
   },
   {
     path: 'result',
-    component: ResultComponent
-  }
+    component: ResultComponent,
+    data: {state: 'result'}
+  },
+  {
+    path: '',
+    redirectTo: 'game',
+  },
 ];
 
 @NgModule({

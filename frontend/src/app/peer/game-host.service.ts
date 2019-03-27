@@ -4,18 +4,20 @@ import Peer from 'peerjs';
 import {environment} from '../../environments/environment';
 import {GameState} from './game-state.enum';
 import {Observable} from 'rxjs';
+import {RoomService} from '../external/room.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameHostService {
 
-  constructor() {
-
-  }
-
   // Peer connection object
-  private peer: Peer = null;
+  private peer: Peer;
+
+  public gameName;
+
+  public peerId: string;
+
   private connections = {
     1: null,
     2: null
@@ -34,21 +36,32 @@ export class GameHostService {
   private joinListeners = [];
   private leftListeners = [];
 
-
-  public createGame(gameId: string) {
-    this.gameState = GameState.Lobby;
-    this.peer = new Peer(gameId, environment.peerserver);
-    console.log(this.peer);
-    this.initWebRTCListeners();
+  constructor(private roomService: RoomService) {
+    this.peer = null;
+    roomService.gameRoomId = null;
+    this.gameName = null;
   }
 
-  private initWebRTCListeners() {
+  public createGame(): void {
+    this.gameState = GameState.Lobby;
+    this.peer = new Peer(environment.peerserver);
+    this.initWebRTCListeners();
+    this.peer.on('open', (hostId) => {
+      this.roomService.createRoom(hostId).subscribe((data) => {
+        // returns {'my_room_id': room_id, 'delete_password': password}
+        this.roomService.gameRoomId = data['my_room_id'];
+        this.roomService.setDeletePassword(data['delete_password']);
+      });
+    });
+  }
+
+  private initWebRTCListeners(): void {
     this.peer.on('connection', (conn) => {
       this.assignPlayer(conn);
     });
   }
 
-  private attachListenersToConnection(conn: Peer.DataConnection, playerId: number) {
+  private attachListenersToConnection(conn: Peer.DataConnection, playerId: number): void {
     conn.on('open', () => {
       conn.send({type: 'setPlayerId', playerId: playerId});
       this.playerNames[playerId] = conn.metadata['name'];
@@ -67,7 +80,7 @@ export class GameHostService {
     });
   }
 
-  private unassignPlayer(conn: Peer.DataConnection) {
+  private unassignPlayer(conn: Peer.DataConnection): void {
     conn.close();
     if (this.connections[1] && this.connections[1].peer === conn.peer) {
       this.connections[1] = null;
@@ -78,19 +91,19 @@ export class GameHostService {
     }
   }
 
-  public notifyPlayerHasJoined(playerId: number) {
+  public notifyPlayerHasJoined(playerId: number): void {
     this.joinListeners.forEach((joinHandler) => {
       joinHandler(playerId);
     });
   }
 
-  public notifyPlayerHasLeft(playerId: number) {
+  public notifyPlayerHasLeft(playerId: number): void {
     this.leftListeners.forEach((joinHandler) => {
       joinHandler(playerId);
     });
   }
 
-  private assignPlayer(conn: Peer.DataConnection) {
+  private assignPlayer(conn: Peer.DataConnection): void {
     if (this.connections[1] === null) {
       this.connections[1] = conn;
       this.attachListenersToConnection(conn, 1);
@@ -115,15 +128,11 @@ export class GameHostService {
     }
   }
 
-  public gotoCountdown() {
-
-  }
-
-  public changeState(state: GameState) {
+  public changeState(state: GameState): void {
     this.gameState = state;
   }
 
-  public fromEvent(eventName) {
+  public fromEvent(eventName): Observable<any> {
     return new Observable((observer) => {
       const handler = (e) => {
         observer.next(e);
@@ -141,7 +150,7 @@ export class GameHostService {
   }
 
   public hostingGame(): boolean {
-    return this.peer !== null;
+    return this.peer !== null && this.gameName !== null;
   }
 
   public sendGameStats(player: number, fastest_game: number,

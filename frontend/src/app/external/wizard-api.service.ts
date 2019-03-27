@@ -25,12 +25,20 @@ export class WizardAPIService {
     }
   }
 
+  getUserStats(): Observable<object> {
+    if (this.authService.userDetails) {
+      return this.http.get(`${environment.backend}/users/${this.authService.userDetails.uid}/stats`);
+    } else {
+      return of(null);
+    }
+  }
+
   changeNickName(nickname: string): Observable<object> {
     return this.http.patch(`${environment.backend}/users/${this.authService.userDetails.uid}`, {nickname: nickname});
   }
 
   updateStats(fastest_game: number, most_damage: number, most_damage_blocked: number) {
-    return this.http.patch(`${environment.backend}/users/${this.authService.userDetails.uid}`, {
+    return this.http.patch(`${environment.backend}/users/${this.authService.userDetails.uid}/stats`, {
       fastest_game: fastest_game,
       most_damage: most_damage,
       most_damage_blocked: most_damage_blocked

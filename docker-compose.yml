@@ -47,7 +47,7 @@ services:
       - LETSENCRYPT_HOST=peer.projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
       - SECRET_KEY=peerjs
-  backend:
+  wizard-backend:
     build: "backend/"
     volumes:
       - ./project-mobile-wizard-firebase-adminsdk-6bmre-c67afcaefa.json:/app/project-mobile-wizard-firebase-adminsdk-6bmre-c67afcaefa.json
@@ -59,6 +59,12 @@ services:
       - LETSENCRYPT_EMAIL=i@choy.in
     depends_on:
       - wizard-postgres
+    networks:
+      - wizard-backend-network
+  wizard-redis:
+    image: "redis:4.0.11-alpine3.8"
+    networks:
+      - wizard-backend-network
   wizard-postgres:
     image: "postgres:9.6.5"
     volumes:
@@ -70,7 +76,12 @@ services:
       - POSTGRES_PORT=5432
     ports:
       - "5432:5432"
+    networks:
+      - wizard-backend-network
 volumes:
   certs:
   html:
   postgres:
+networks:
+  wizard-backend-network:
+    driver: bridge

@@ -4,8 +4,7 @@ See: https://flask-restful.readthedocs.io/en/0.3.5/extending.html#custom-error-h
 ERROR_MESSAGES = {
     'ResourceDoesNotExist': {
         'message': "A resource with that ID no longer exists.",
-        'status': 404,
-        'extra': "Any extra information you want.",
+        'status': 404
     },
     'AuthorizationError': {
         'message': 'You do not have permission to view the resource.',

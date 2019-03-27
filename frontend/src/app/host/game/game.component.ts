@@ -3,6 +3,8 @@ import {GameHostService} from '../../peer/game-host.service';
 import {GameState} from '../../peer/game-state.enum';
 import {GamestatsService} from '../result/gamestats.service';
 import {Router} from '@angular/router';
+import {Observable, of} from 'rxjs';
+import {delay, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'wizard-game',
@@ -138,7 +140,12 @@ export class GameComponent implements OnInit, OnDestroy {
     this.peerService.sendGameStats(1, this.gamestats.getDuration(),
       this.gamestats.maxDamage[1], this.gamestats.maxDefense[1]);
     // Go to result page after 2s, in case some operations in setAction haven't finished
-      this.router.navigate(['/hosts/result']);
+    of(true).pipe(
+      delay(2000),
+      tap(() => {
+        this.router.navigate(['/hosts/result']);
+      })
+    ).subscribe(() => {});
   }
 
   private startCountdown() {

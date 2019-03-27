@@ -4,6 +4,7 @@ import {Action} from '../processor/action';
 import Peer from 'peerjs';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
+import {RoomService} from '../external/room.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,9 @@ export class PlayerPeerService {
 
   public myName = '';
 
-  constructor() {
+  public error = '';
+
+  constructor(private roomService: RoomService) {
     this.host = null;
     this.peer = new Peer(environment.peerserver);
   }
@@ -34,8 +37,27 @@ export class PlayerPeerService {
 
   public connectToHost(id: string, name: string) {
     this.myName = name;
-    this.host = this.peer.connect(id, {metadata: {name: name}, serialization: 'json'});
-    this.attachHostListeners();
+
+    const promise = new Promise((resolve, reject) => {
+      this.roomService.getRoom(id).subscribe(
+        (data) => {
+          this.error = '';
+          // {'host_id': room.get('host_id')}
+          console.log(data);
+          const hostId = data['host_id'];
+          this.host = this.peer.connect(hostId, {metadata: {name: name}, serialization: 'json'});
+          this.attachHostListeners();
+          resolve();
+        },
+        (err) => {
+          // Resource not found
+          this.error = 'cannot find room';
+          console.log(this.error);
+          reject();
+        });
+    });
+
+    return promise;
   }
 
   public inGame() {

@@ -24,6 +24,7 @@
   </section>
   <h5>
     <a routerLink="../credits">Credits</a>
+    <span *ngIf="!deviceService.deviceIsDesktop() && !isHostScreen()"> | <a routerLink="../userstats">Game Stats</a> </span>
     <span *ngIf="!deviceService.deviceIsDesktop() && !isHostScreen()"> | <a (click)="setHostScreen(true)">Create room</a></span>
     <span *ngIf="!deviceService.deviceIsDesktop() && isHostScreen()"> | <a (click)="setHostScreen(false)">Join room</a></span>
   </h5>
@@ -48,6 +49,7 @@
       <input #wizardName id="wizard_name" class="nes-input" autocomplete="off" placeholder="Harry" value="{{myWizardName}}" (blur)="updateWizardName(wizardName.value)">
       <label for="rooms_available">Room ID</label>
       <input #roomName id="rooms_available" class="nes-input" autocomplete="off" placeholder="ABC" (blur)="updateRoomId(roomName.value)">
+      <span class="error">{{playerService.error}}</span>
     </div>
   </div>
   <div class="actions">

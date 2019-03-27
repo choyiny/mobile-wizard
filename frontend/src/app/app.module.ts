@@ -15,17 +15,21 @@ import {AuthGuard} from './core/auth.guard';
 import {DeviceGuard} from './helpers/device.guard';
 import {GameGuard} from './helpers/game.guard';
 import {TokenInterceptor} from './core/token.interceptor';
+import { UserStatsComponent } from './user-stats/user-stats.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreditsComponent,
     HomeComponent,
+    UserStatsComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
     CoreModule
   ],

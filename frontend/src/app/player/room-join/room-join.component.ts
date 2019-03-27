@@ -7,6 +7,7 @@ import {Defense} from '../../processor/defense';
 import {AuthService} from '../../core/auth.service';
 import {Strike} from '../../processor/strike';
 import {WizardAPIService} from '../../external/wizard-api.service';
+import {RoomService} from '../../external/room.service';
 
 @Component({
   selector: 'wizard-room-join',
@@ -38,9 +39,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     });
     this.gameStatsEvent = this.peerService.fromEvent('gamestats').subscribe((data) => {
       this.apiService.updateStats(data['fastest_game'], data['most_damage'], data['most_damage_blocked'])
-        .subscribe((res) => {
-        console.log(res);
-      });
+        .subscribe((res) => console.log(res));
     });
     // waiting in lobby
     // TODO: we can include how to throw/strike in here.

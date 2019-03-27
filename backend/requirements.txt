@@ -26,3 +26,7 @@ pytest
 # WSGI related for deployment
 gunicorn
 eventlet
+
+# redis
+redis
+hiredis

@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {GameHostService} from '../../peer/game-host.service';
 import {GameState} from '../../peer/game-state.enum';
+import {RoomService} from '../../external/room.service';
 
 @Component({
   selector: 'wizard-room-lobby',
@@ -21,6 +22,7 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
 
   constructor(
     public peerService: GameHostService,
+    private roomService: RoomService,
     public router: Router,
     private ref: ChangeDetectorRef
   ) {
@@ -65,9 +67,11 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
     this.actionEvent.unsubscribe();
     this.joinEvent.unsubscribe();
     this.leftEvent.unsubscribe();
+    this.roomService.deleteRoom();
   }
 
   startGame() {
+    this.roomService.deleteRoom();
     this.peerService.changeState(GameState.Countdown);
     this.router.navigate(['/hosts/game']);
   }
