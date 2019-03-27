@@ -22,7 +22,7 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
 
   constructor(
     public peerService: GameHostService,
-    private roomService: RoomService,
+    public roomService: RoomService,
     public router: Router,
     private ref: ChangeDetectorRef
   ) {

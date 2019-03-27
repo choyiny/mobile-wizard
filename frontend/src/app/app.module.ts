@@ -1,11 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreditsComponent } from './credits/credits.component';
 import { HomeComponent } from './home/home.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {WizardAPIService} from './external/wizard-api.service';
 import {CoreModule} from './core/core.module';
 import {AngularFireModule} from '@angular/fire';
@@ -27,6 +29,8 @@ import { UserStatsComponent } from './user-stats/user-stats.component';
   imports: [
     BrowserModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     CoreModule

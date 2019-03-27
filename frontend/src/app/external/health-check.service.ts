@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environment';
 import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,9 @@ export class HealthCheckService {
     return this.http.get(this.apiEndpoint).pipe(
       map(data => {
         return data['status'];
+      }),
+      catchError(() => {
+        return of(false);
       })
     );
   }
@@ -26,6 +29,9 @@ export class HealthCheckService {
     return this.http.get(this.peerEndpoint).pipe(
       map((data) => {
         return data['name'].length > 0;
+      }),
+      catchError(() => {
+        return of(false);
       })
     );
   }

@@ -10,13 +10,15 @@
   <!--Creating a game from desktop-->
   <section *ngIf="isHostScreen()" class="nes-container with-title">
     <h3 class="title">Create a game</h3>
-    <div id="create_room" class="item">
-      <div class="nes-field">
-        <label for="room_id">Room Name</label>
-        <input #newRoomName type="text" id="room_id" class="nes-input" autocomplete="off" placeholder="Thierry's Office" (blur)="updateRoomName(newRoomName.value)">
+    <form (submit)="createRoom()" [formGroup]="createRoomForm">
+      <div id="create_room" class="item">
+        <div class="nes-field">
+          <label for="room_id">Room Name</label>
+          <input type="text" id="room_id" class="nes-input" autocomplete="off" placeholder="Thierry's Office" formControlName="roomName">
+        </div>
       </div>
-    </div>
-    <button type="button" class="nes-btn is-primary" (click)="createRoom()">Create a game</button>
+      <button type="submit" class="nes-btn is-primary">Create a game</button>
+    </form>
   </section>
 
   <!--Joining a game from mobile-->
@@ -45,18 +47,21 @@
 
 <ng-template #authenticated>
   <h3 class="title">Join a game</h3>
-  <div id="inputs" class="item">
-    <div class="nes-field">
-      <p>You're a wizard, {{auth.userDetails.displayName}}.</p>
-      <label for="wizard_name">Nickname</label>
-      <input #wizardName id="wizard_name" class="nes-input" autocomplete="off" placeholder="Harry" value="{{myWizardName}}" (blur)="updateWizardName(wizardName.value)">
-      <label for="rooms_available">Room ID</label>
-      <input #roomName id="rooms_available" class="nes-input" autocomplete="off" placeholder="ABC" (blur)="updateRoomId(roomName.value)">
-      <span class="error">{{playerService.error}}</span>
+  <form (submit)="joinRoom()" [formGroup]="joinRoomForm">
+    <div id="inputs" class="item">
+      <div class="nes-field">
+        <p>You're a wizard, {{auth.userDetails.displayName}}.</p>
+        <label for="wizard_name">Nickname</label>
+        <input formControlName="wizardName" id="wizard_name" class="nes-input" autocomplete="off" placeholder="Thierry" value="{{myWizardName}}">
+        <label for="game_room_id">Room ID</label>
+        <input formControlName="roomId" id="game_room_id" class="nes-input" autocomplete="off" placeholder="L33T">
+        <span class="error">{{playerService.error}}</span>
+        <span class="error">{{error}}</span>
+      </div>
     </div>
-  </div>
-  <div class="actions">
-    <button type="button" class="nes-btn is-success" (click)="joinRoom()">Fight!</button>
-    <button type="button" class="nes-btn is-warning" (click)="auth.signOut()">Logout</button>
-  </div>
+    <div class="actions">
+      <button type="submit" class="nes-btn is-success">Fight!</button>
+      <button type="button" class="nes-btn is-warning" (click)="auth.signOut()">Logout</button>
+    </div>
+  </form>
 </ng-template>

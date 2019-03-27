@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,11 @@ export class RoomService {
   }
 
   getRoom(roomId: string): Observable<object> {
-    return this.http.get(`${this.endpoint}/rooms/${roomId}`);
+    if (roomId) {
+      return this.http.get(`${this.endpoint}/rooms/${roomId}`);
+    } else {
+      return null;
+    }
   }
 
   deleteRoom(): Observable<object> {
