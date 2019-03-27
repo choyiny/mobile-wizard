@@ -21,7 +21,7 @@ const routes: Routes = [
   {
     path: 'home',
     // component: HomeComponent
-    redirectTo: 'hosts'
+    redirectTo: 'hosts',
     // component: HomeComponent,
     // data: {state: 'home'}
   },

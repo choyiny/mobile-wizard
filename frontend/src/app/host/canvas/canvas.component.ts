@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, Directive, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import * as Phaser from 'phaser';
 import {CanvasService} from './canvas.service';
+import {GameHostService} from '../../peer/game-host.service';
 
 @Component({
   selector: 'wizard-canvas',
@@ -18,11 +18,22 @@ export class CanvasComponent implements AfterViewInit {
   private cx: CanvasRenderingContext2D;
 
   constructor(
-    private cs: CanvasService
+    private cs: CanvasService,
+    private hs: GameHostService
   ) {
+
   }
 
   public ngAfterViewInit() {
     this.cs.initGame(this.canvas);
+    this.hs.fromEvent('action').subscribe((data) => {
+      const action = JSON.parse(data['action']);
+      if (action['actor'] === 1) {
+        switch (action['name']) {
+          case 'Strike':
+            this.cs.player1.state = 'jab';
+        }
+      }
+    });
   }
 }
