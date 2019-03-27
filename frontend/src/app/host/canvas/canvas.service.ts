@@ -1,16 +1,14 @@
 import {ElementRef, Injectable} from '@angular/core';
 import * as Phaser from 'phaser';
+import {Subscribable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CanvasService {
   public game: Phaser.Game;
-  public player1: Player;
-  public player2: Player;
-  public fireballs: Phaser.GameObjects.Group;
 
-  public initGame(canvas: ElementRef = null) {
+  public initGame(canvas: ElementRef = null, actionEmitter: Subscribable<object>) {
     this.game = new Phaser.Game({
       canvas: canvas ? canvas.nativeElement : null,
       height: window.innerHeight,
@@ -25,15 +23,7 @@ export class CanvasService {
       },
       type: Phaser.WEBGL,
     });
-    this.game.scene.add('SceneA', SceneA, true);
-    // const scene = this.game.scene.getScene('SceneA');
-    // this.player1 = new Player(scene, scene.cameras.main.centerX - 300, scene.cameras.main.centerY + 50);
-    // this.player2 = new Player(scene, scene.cameras.main.centerX + 300, scene.cameras.main.centerY + 50);
-    // const thing = [];
-    // for (let i = 0; i < 20; i++) {
-    //   thing.push(new Projectile(this, 0, 0));
-    // }
-    // this.fireballs  = scene.add.group(thing);
+    this.game.scene.add('SceneA', SceneA, true, actionEmitter);
     Phaser.Display.Canvas.CanvasInterpolation.setCrisp(canvas.nativeElement);
     Phaser.Display.Canvas.Smoothing.disable(canvas.nativeElement);
   }
@@ -54,8 +44,9 @@ class Player extends Phaser.GameObjects.Sprite {
    */
   private initStateManager() {
     this.on('animationcomplete', (anim, frame) => {
-      // console.log(`${this.name} is done ${anim.key}ing`);
-      this.state = 'idle';
+      if (anim.key !== 'idle') {
+        this.state = 'idle';
+      }
     });
   }
 
@@ -63,7 +54,6 @@ class Player extends Phaser.GameObjects.Sprite {
   This is not called by Phaser, it must be called explicitly in each scene.update()
    */
   public update() {
-    // play the animation for this state
     this.anims.play(this.state, true);
   }
 }
@@ -103,7 +93,6 @@ class Projectile extends Phaser.GameObjects.Sprite {
   public fire(shooter, target) {
     this.setPosition(shooter.x, shooter.y); // Initial position
     this.direction = Math.atan((target.x - this.x) / (target.y - this.y));
-    console.log(this.direction);
     this.flipX = this.direction > 0;
     // Calculate X and y velocity of bullet to moves it from shooter to target
     if (target.y >= this.y) {
@@ -120,20 +109,21 @@ class Projectile extends Phaser.GameObjects.Sprite {
 }
 
 class SceneA extends Phaser.Scene {
-  private player1;
-  private player2;
+  public player1;
+  public player2;
   private cursors;
-  private playerBullets: Phaser.GameObjects.Group;
+  private playerProjectiles: Phaser.GameObjects.Group;
+  private actionEmitter: Subscribable<object>;
 
   preload() {
-    this.load.spritesheet('character', 'assets/character2.png', {frameWidth: 50, frameHeight: 37});
+    this.load.spritesheet('character', 'assets/character.png', {frameWidth: 50, frameHeight: 37});
     this.load.spritesheet('fireball', 'assets/img/fireball/red/spritesheet-512px-by-197px-per-frame.png', {
       frameWidth: 512,
       frameHeight: 197
     });
   }
 
-  create() {
+  create(actionEmitter: Subscribable<object>) {
     this.cameras.main.setBackgroundColor('#ffffff');
     this.anims.create({
       key: 'idle',
@@ -149,12 +139,12 @@ class SceneA extends Phaser.Scene {
     this.anims.create({
       key: 'jab',
       frames: this.anims.generateFrameNumbers('character', {start: 86, end: 93}),
-      frameRate: 13,
+      frameRate: 10,
     });
     this.anims.create({
       key: 'fly',
       frames: this.anims.generateFrameNumbers('fireball', {start: 0, end: 5}),
-      frameRate: 13,
+      frameRate: 10,
       repeat: -1
     });
     this.player1 = new Player(this, this.cameras.main.centerX - 300, this.cameras.main.centerY + 50);
@@ -164,43 +154,49 @@ class SceneA extends Phaser.Scene {
     // keyboard listeners
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    // generate projectile objects (limited to 20)
     this.physics.world.setBounds(0, 0, this.game.canvas.width, this.game.canvas.height);
-    const thing = [];
+    const projectileGameObjects = [];
     for (let i = 0; i < 20; i++) {
-      thing.push(new Projectile(this, 0, 0));
+      projectileGameObjects.push(new Projectile(this, 0, 0));
     }
-    this.playerBullets = this.add.group(thing);
+    this.playerProjectiles = this.add.group(projectileGameObjects);
+
+    // sync up actions with action emitter
+    this.actionEmitter = actionEmitter;
+    this.actionEmitter.subscribe((data) => {
+      const action = JSON.parse(data['action']);
+      let player: Player;
+
+      // check which player emitted the action
+      if (action['actor'] === 1) {
+        player = this.player1;
+      } else if (action['actor'] === 2) {
+        player = this.player2;
+      }
+
+      // update player states depending on event
+      if (action['name'] === 'Strike') {
+        // player is in 'jab' state
+        player.state = 'jab';
+
+        // spawn a projectile
+        const projectile = this.playerProjectiles.getFirstDead();
+        if (projectile) {
+          projectile.setActive(true);
+          projectile.setVisible(true);
+          projectile.fire(player, action['actor'] === 1 ? this.player2 : this.player1);
+        }
+      }
+      if (action['name'] === 'Throw') {
+        player.state = 'swing';
+      }
+    });
   }
 
   update() {
-    if (this.cursors.left.isDown) {
-      this.player1.state = 'swing';
-    }
-    if (this.cursors.right.isDown) {
-      this.player2.state = 'swing';
-    }
-    if (this.cursors.up.isDown) {
-      this.player1.state = 'jab';
-      const bullet = this.playerBullets.getFirstDead();
-
-      if (bullet) {
-        bullet.setActive(true);
-        bullet.setVisible(true);
-        bullet.fire(this.player1, this.player2);
-      }
-    }
-    if (this.cursors.down.isDown) {
-      this.player2.state = 'jab';
-      const bullet = this.playerBullets.getFirstDead();
-
-      if (bullet) {
-        bullet.setActive(true);
-        bullet.setVisible(true);
-        bullet.fire(this.player2, this.player1);
-      }
-    }
     this.player1.update();
     this.player2.update();
-    this.playerBullets.runChildUpdate = true;
+    this.playerProjectiles.runChildUpdate = true;
   }
 }

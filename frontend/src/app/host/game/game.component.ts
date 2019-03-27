@@ -131,7 +131,7 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  public displayStatic() {
+  private displayStatic() {
     // Send back game statistics
     // For player 1
     this.peerService.sendGameStats(0, this.gamestats.getDuration(),

@@ -11,7 +11,7 @@ const routes: Routes = [
   {
     path: 'hosts',
     loadChildren: './host/host.module#HostModule',
-    canActivateChild: []
+    canActivateChild: [GameGuard]
   },
   {
     path: 'players',
@@ -20,10 +20,8 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    // component: HomeComponent
-    redirectTo: 'hosts',
-    // component: HomeComponent,
-    // data: {state: 'home'}
+    component: HomeComponent,
+    data: {state: 'home'}
   },
   {
     path: 'credits',
@@ -38,7 +36,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'hosts'
+    redirectTo: 'home'
   },
 ];
 

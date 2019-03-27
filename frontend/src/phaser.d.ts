@@ -650,8 +650,13 @@ declare type GameConfig = {
     /**
      * The width of the game, in game pixels.
      */
+
     width?: integer | string;
     /**
+     * Pixelated rendering crisp edges
+     */
+    pixelArt: boolean;
+  /**
      * The height of the game, in game pixels.
      */
     height?: integer | string;
@@ -10026,7 +10031,7 @@ declare namespace Phaser {
          * The parsed XML object is returned, or `null` if there was an error while parsing the data.
          * @param data The XML source stored in a string.
          */
-        function ParseXML(data: string): DOMParser | ActiveXObject;
+        // function ParseXML(data: string): DOMParser | ActiveXObject;
 
         /**
          * Attempts to remove the element from its parentNode in the DOM.
