@@ -23,7 +23,7 @@ export class PlayerPeerService {
 
   constructor(private roomService: RoomService) {
     this.host = null;
-    this.peer = new Peer(environment.peerserver);
+    this.peer = null;
   }
 
   public sendAction(action: Action) {
@@ -45,6 +45,12 @@ export class PlayerPeerService {
           // {'host_id': room.get('host_id')}
           console.log(data);
           const hostId = data['host_id'];
+          // If one peer server opened before, disconnect that.
+          if (this.peer !== null) {
+            this.peer.disconnect();
+          }
+          // Always establish a new server
+          this.peer = new Peer(environment.peerserver);
           this.host = this.peer.connect(hostId, {metadata: {name: name}, serialization: 'json'});
           this.attachHostListeners();
           resolve();

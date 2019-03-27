@@ -7,7 +7,7 @@ import {Defense} from '../../processor/defense';
 import {AuthService} from '../../core/auth.service';
 import {Strike} from '../../processor/strike';
 import {WizardAPIService} from '../../external/wizard-api.service';
-import {RoomService} from '../../external/room.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'wizard-room-join',
@@ -23,11 +23,16 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   private playerIdEvent;
   private gameStatsEvent;
 
+  // Class name for button after game ends
+  public gameEndButton = 'gameEnd';
+
   constructor(
     private peerService: PlayerPeerService,
     private ref: ChangeDetectorRef,
     private apiService: WizardAPIService,
-    public auth: AuthService) {
+    public auth: AuthService,
+    private router: Router) {
+    this.gameEndButton =  'gameEnd';
     this.playerIdEvent = this.peerService.fromEvent('playerId').subscribe((data) => {
       console.log(data);
       if (data['playerId'] === 1) {
@@ -37,9 +42,16 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
       }
       this.ref.detectChanges();
     });
+
     this.gameStatsEvent = this.peerService.fromEvent('gamestats').subscribe((data) => {
+      // When game stats data arrives, game ends. So first update user status.
       this.apiService.updateStats(data['fastest_game'], data['most_damage'], data['most_damage_blocked'])
-        .subscribe((res) => console.log(res));
+        .subscribe((res) => {
+          console.log(res);
+          // Display button for new game
+          this.gameEndButton = 'nes-btn is-success';
+          this.ref.detectChanges();
+      });
     });
     // waiting in lobby
     // TODO: we can include how to throw/strike in here.
@@ -76,5 +88,13 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
 
   testStrike() {
     this.peerService.sendAction(new Strike());
+  }
+
+  public newGame() {
+    this.router.navigate(['home']);
+  }
+
+  public userStats() {
+    this.router.navigate(['userstats']);
   }
 }

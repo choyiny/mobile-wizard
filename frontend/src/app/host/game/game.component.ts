@@ -143,6 +143,7 @@ export class GameComponent implements OnInit, OnDestroy {
     of(true).pipe(
       delay(2000),
       tap(() => {
+        this.peerService.reset();
         this.router.navigate(['/hosts/result']);
       })
     ).subscribe(() => {});

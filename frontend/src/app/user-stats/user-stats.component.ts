@@ -13,7 +13,7 @@ export class UserStatsComponent implements OnInit {
   public username = 'I dunno';
   public most_damage = 0;
   public most_defense = 0;
-  public fastest_game = 10000000;
+  public fastest_game = 'no record';
 
   constructor(
     private authService: AuthService,
@@ -22,10 +22,13 @@ export class UserStatsComponent implements OnInit {
 
     // User's ifo
     this.apiService.getUserProfile().subscribe((user) => {
-      this.username = user['nickname'];
+      if(user['nickname'] !== '') {
+        this.username = user['nickname'];
+      }
       this.ref.detectChanges();
     });
     this.apiService.getUserStats().subscribe((data) => {
+      console.log(data);
       this.fastest_game = data['fastest_game'];
       this.most_damage = data['most_damage'];
       this.most_defense = data['most_damage_blocked'];
