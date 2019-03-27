@@ -12,7 +12,7 @@ services:
       - 80:80
       - 443:443
     environment:
-      - DEFAULT_HOST=projectmobilewizard.com
+      - DEFAULT_HOST=api.projectmobilewizard.com
   letsencrypt:
     container_name: wizard-proxy-letsencrypt
     image: jrcs/letsencrypt-nginx-proxy-companion
@@ -32,12 +32,6 @@ services:
       - VIRTUAL_HOST=beta.projectmobilewizard.com
       - LETSENCRYPT_HOST=beta.projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
-    depends_on:
-      - wizard-proxy
-      - letsencrypt
-      - peerserver
-      - wizard-postgres
-      - backend
   peerserver:
     build: "peerserver/"
     expose:
@@ -59,12 +53,9 @@ services:
       - LETSENCRYPT_EMAIL=i@choy.in
     depends_on:
       - wizard-postgres
-    networks:
-      - wizard-backend-network
+      - wizard-redis
   wizard-redis:
     image: "redis:4.0.11-alpine3.8"
-    networks:
-      - wizard-backend-network
   wizard-postgres:
     image: "postgres:9.6.5"
     volumes:
@@ -74,14 +65,7 @@ services:
       - POSTGRES_PASSWORD=wizard
       - POSTGRES_DB=wizard
       - POSTGRES_PORT=5432
-    ports:
-      - "5432:5432"
-    networks:
-      - wizard-backend-network
 volumes:
   certs:
   html:
   postgres:
-networks:
-  wizard-backend-network:
-    driver: bridge

@@ -18,15 +18,9 @@ export class GameHostService {
 
   public peerId: string;
 
-  private connections = {
-    1: null,
-    2: null
-  };
+  private connections;
 
-  public playerNames = {
-    1: null,
-    2: null
-  };
+  public playerNames;
 
   // public startTime;
 
@@ -37,6 +31,7 @@ export class GameHostService {
   private leftListeners = [];
 
   constructor(private roomService: RoomService) {
+    this.reset();
     this.peer = null;
     roomService.gameRoomId = null;
     this.gameName = null;
@@ -64,7 +59,6 @@ export class GameHostService {
   private attachListenersToConnection(conn: Peer.DataConnection, playerId: number): void {
     conn.on('open', () => {
       conn.send({type: 'setPlayerId', playerId: playerId});
-      this.playerNames[playerId] = conn.metadata['name'];
     });
 
     conn.on('close', () => {
@@ -93,13 +87,15 @@ export class GameHostService {
 
   public notifyPlayerHasJoined(playerId: number): void {
     this.joinListeners.forEach((joinHandler) => {
+      // Update player's name
+      this.playerNames[playerId] = this.connections[playerId].metadata['name'];
       joinHandler(playerId);
     });
   }
 
   public notifyPlayerHasLeft(playerId: number): void {
-    this.leftListeners.forEach((joinHandler) => {
-      joinHandler(playerId);
+    this.leftListeners.forEach((leftHandler) => {
+      leftHandler(playerId);
     });
   }
 
@@ -159,5 +155,16 @@ export class GameHostService {
     conn.send({type: 'gamestats', fastest_game:　fastest_game,
       most_damage:　most_damage, most_damage_blocked: most_damage_blocked});
     console.log('Stats sent to Player ' + (player + 1));
+  }
+
+  public reset() {
+    this.connections = {
+      1: null,
+      2: null
+    };
+    this.playerNames = {
+      1: null,
+      2: null
+    };
   }
 }

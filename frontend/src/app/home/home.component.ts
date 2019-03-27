@@ -5,6 +5,8 @@ import {PlayerPeerService} from '../peer/player-peer.service';
 import {Router} from '@angular/router';
 import {GameHostService} from '../peer/game-host.service';
 import {AuthService} from '../core/auth.service';
+import {HealthCheckService} from '../external/health-check.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'wizard-home',
@@ -15,18 +17,40 @@ export class HomeComponent implements OnInit {
 
   public myWizardName: string;
   private roomId: string;
-  private roomName: string;
 
   private isHost: boolean;
 
-  // TODO: refactor this crap to use angular forms.
+  isPeerUp: boolean;
+  isApiUp: boolean;
+
+  createRoomForm: FormGroup;
+  joinRoomForm: FormGroup;
+  error: string;
 
   constructor(public deviceService: DeviceService,
               private apiService: WizardAPIService,
-              private playerService: PlayerPeerService,
+              public playerService: PlayerPeerService,
               private hostService: GameHostService,
               private router: Router,
-              public auth: AuthService) {
+              public auth: AuthService,
+              private fb: FormBuilder,
+              public healthCheck: HealthCheckService) {
+
+    // form controls
+    this.createRoomForm = this.fb.group({
+      roomName: ['', [Validators.required]]
+    });
+
+    this.joinRoomForm = this.fb.group({
+      wizardName: ['', [Validators.required]],
+      roomId: ['', [Validators.required]]
+    });
+
+    this.isPeerUp = true;
+    this.isApiUp = true;
+    this.healthCheck.getPeerServerStatus().subscribe((check) => this.isPeerUp = check);
+    this.healthCheck.getApiStatus().subscribe((check) => this.isApiUp = check);
+
     this.myWizardName = '';
     this.isHost = deviceService.deviceIsDesktop();
 
@@ -51,33 +75,20 @@ export class HomeComponent implements OnInit {
   public setHostScreen(op: boolean) {
     this.isHost = op;
   }
-
-  public updateRoomId(id: string) {
-    this.roomId = id;
-  }
-
   public joinRoom() {
-    this.playerService.connectToHost(this.roomId, this.myWizardName).then(
-      () => {this.router.navigate(['players']); },
-      () => {console.log('On join error'); });
+    this.apiService.changeNickName(this.joinRoomForm.value.wizardName).subscribe(() => {});
+    this.playerService.connectToHost(this.joinRoomForm.value.roomId, this.joinRoomForm.value.wizardName).then(
+      () => {
+        this.error = '';
+        this.router.navigate(['players']);
+      },
+      () => this.error = 'please enter room id');
   }
 
   public createRoom() {
-    this.hostService.gameName = this.roomName;
+    this.hostService.gameName = this.createRoomForm.value['roomName'] || 'Thierry\'s Office';
     this.hostService.createGame();
     this.router.navigate(['hosts/lobby']);
-  }
-
-  public updateWizardName(value: string) {
-    this.myWizardName = value;
-    this.apiService.changeNickName(this.myWizardName).subscribe(
-      data => console.log('changed nickname to ' + data['nickname'])
-    );
-
-  }
-
-  public updateRoomName(value: string) {
-    this.roomName = value;
   }
 
 }

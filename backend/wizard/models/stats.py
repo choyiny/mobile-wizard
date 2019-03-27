@@ -23,7 +23,7 @@ class UserStats(BaseModel):
 
     def to_dict(self):
         return {
-            'fastest_game': self.fastest_game or '',
-            'most_damage': self.most_damage or '',
-            'most_damage_blocked': self.most_damage_blocked or ''
+            'fastest_game': self.fastest_game or 'no record',
+            'most_damage': self.most_damage or 0,
+            'most_damage_blocked': self.most_damage_blocked or 0
         }

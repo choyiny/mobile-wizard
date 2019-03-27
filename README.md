@@ -27,7 +27,9 @@ will be shown to the player through the host screen.
 The application will be easily deployable through a docker compose script.
 
 ## Final Version additional features
-Post game analysis shown as graphs at the end of the game.
+Ability to join a room through a unique room ID automatically generated, and have the backend store the peer ids using Redis.
+
+Ability to save the nickname of each player, authenticated through Google with Firebase.
 
 In addition to the healthbar shown in the host screen, 2D sprites corresponding with the action made by each player will also be shown.
 
@@ -43,12 +45,13 @@ In addition to the healthbar shown in the host screen, 2D sprites corresponding 
 - [Nginx](https://www.nginx.com/) - Web serving, reverse proxying, caching, load balancing 
 - [LetsEncrypt](https://letsencrypt.org/) - Free, automated certificate generation and renewal
 - [Cloudflare](https://cloudflare.com) - Our Content Delivery Network and DNS Management Tool
+- [Phaser](https://phaser.io/) - Javascript Game Engine to render characters on screen.
 
 ## Top 5 Technical Challenges
 1. **WebRTC Real-time communication** - Synchronizing the game state between the host and the players.
 2. **Capturing and processing motion** - Translate the motion received by the mobile browser[[1]](http://www.albertosarullo.com/demos/accelerometer/) to an actual action.
 3. **External API** - Learning how to integrate external APIs into our application.
-4. **Post game statistics** - Storing data of a game for analysis after the game so that graphing statistics is possible.
+4. **2D Graphics** - Rendering sprites onto the host screen using Phaser.
 5. **Deploy ready application** - Have everything packaged with Docker (reverse proxy, compiling assets, load balancing etc)
 
 [logo]: docs/you_a_wizard.png "You're a Wizard, Thierry."
