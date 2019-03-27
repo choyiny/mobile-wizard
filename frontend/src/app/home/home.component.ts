@@ -15,7 +15,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 export class HomeComponent implements OnInit {
 
-  public myWizardName: string;
   private roomId: string;
 
   private isHost: boolean;
@@ -51,14 +50,13 @@ export class HomeComponent implements OnInit {
     this.healthCheck.getPeerServerStatus().subscribe((check) => this.isPeerUp = check);
     this.healthCheck.getApiStatus().subscribe((check) => this.isApiUp = check);
 
-    this.myWizardName = '';
     this.isHost = deviceService.deviceIsDesktop();
 
     this.auth.user.subscribe((user) => {
       this.apiService.getUserProfile().subscribe(
         (data) => {
           if (data) {
-            this.myWizardName = data['nickname'];
+            this.joinRoomForm.controls.wizardName.setValue(data['nickname']);
           }
         });
     });
@@ -82,7 +80,9 @@ export class HomeComponent implements OnInit {
         this.error = '';
         this.router.navigate(['players']);
       },
-      () => this.error = 'please enter room id');
+      () => {
+        this.error = 'invalid room id';
+      });
   }
 
   public createRoom() {
