@@ -49,7 +49,6 @@ export class GamestatsService {
    * @param damage the new damage this play made.
    */
   public makeDamage(player: number, damage: number) {
-    console.log('Player ' + player + 'make damage');
     // Accumulate given players continuous damage
     this.accuDamage[player] += damage;
     this.maxDamage[player] = Math.max(this.maxDamage[player], this.accuDamage[player]);
@@ -65,7 +64,6 @@ export class GamestatsService {
    * @param damage the new damage this play defensed.
    */
   public makeDefense(player: number, damage: number) {
-    console.log('Player ' + player + 'make defense');
     // Accumulate given players continuous defense
     this.accuDefense[player] += damage;
     this.maxDefense[player] = Math.max(this.maxDefense[player], this.accuDefense[player]);
@@ -84,5 +82,4 @@ export class GamestatsService {
     this.endTime = 0;
     this.winner = -1;
   }
-
 }

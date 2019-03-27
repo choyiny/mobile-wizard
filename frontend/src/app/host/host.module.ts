@@ -5,12 +5,14 @@ import { HostRoutingModule } from './host-routing.module';
 import {RoomLobbyComponent} from './room-lobby/room-lobby.component';
 import { GameComponent } from './game/game.component';
 import { ResultComponent } from './result/result.component';
+import { CanvasComponent } from './canvas/canvas.component';
 
 @NgModule({
   declarations: [
     RoomLobbyComponent,
     GameComponent,
-    ResultComponent
+    ResultComponent,
+    CanvasComponent
   ],
   imports: [
     CommonModule,
