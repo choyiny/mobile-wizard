@@ -4,6 +4,9 @@
 <div class="container">
   <h1>Mobile Wizard</h1>
 
+  <p class="error" *ngIf="!isPeerUp">peerserver is down. Games cannot be created right now.</p>
+  <p class="error" *ngIf="!isApiUp">API is down. Games cannot be created right now.</p>
+
   <!--Creating a game from desktop-->
   <section *ngIf="isHostScreen()" class="nes-container with-title">
     <h3 class="title">Create a game</h3>

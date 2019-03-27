@@ -5,6 +5,7 @@ import {PlayerPeerService} from '../peer/player-peer.service';
 import {Router} from '@angular/router';
 import {GameHostService} from '../peer/game-host.service';
 import {AuthService} from '../core/auth.service';
+import {HealthCheckService} from '../external/health-check.service';
 
 @Component({
   selector: 'wizard-home',
@@ -19,6 +20,9 @@ export class HomeComponent implements OnInit {
 
   private isHost: boolean;
 
+  isPeerUp: boolean;
+  isApiUp: boolean;
+
   // TODO: refactor this crap to use angular forms.
 
   constructor(public deviceService: DeviceService,
@@ -26,7 +30,13 @@ export class HomeComponent implements OnInit {
               private playerService: PlayerPeerService,
               private hostService: GameHostService,
               private router: Router,
-              public auth: AuthService) {
+              public auth: AuthService,
+              public healthCheck: HealthCheckService) {
+    this.isPeerUp = true;
+    this.isApiUp = true;
+    this.healthCheck.getPeerServerStatus().subscribe((check) => this.isPeerUp = check);
+    this.healthCheck.getApiStatus().subscribe((check) => this.isApiUp = check);
+
     this.myWizardName = '';
     this.isHost = deviceService.deviceIsDesktop();
 
