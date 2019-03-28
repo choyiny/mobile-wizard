@@ -159,6 +159,11 @@ class SceneA extends Phaser.Scene {
       frames: this.anims.generateFrameNumbers('character-combat', {start: 32, end: 39}),
       frameRate: 6,
     });
+    this.anims.create({
+      key: 'block',
+      frames: this.anims.generateFrameNames('character-combat', {start: 20, end: 20}),
+      repeat: 15
+    });
     this.player1 = new Player(this, this.cameras.main.centerX - 300, this.cameras.main.centerY + 50);
     this.player2 = new Player(this, this.cameras.main.centerX + 300, this.cameras.main.centerY + 50);
     this.player2.flipX = true;
@@ -201,6 +206,9 @@ class SceneA extends Phaser.Scene {
       }
       if (action['name'] === 'Throw') {
         player.state = 'swing';
+      }
+      if (action['name'] === 'Defense') {
+        player.state = 'block';
       }
     });
 
