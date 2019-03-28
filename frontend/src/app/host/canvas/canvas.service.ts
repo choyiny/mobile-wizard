@@ -43,8 +43,12 @@ class Player extends Phaser.GameObjects.Sprite {
    */
   private initStateManager() {
     this.on('animationcomplete', (anim) => {
-      if (anim.key !== 'idle' && anim.key !== 'die') {
-        this.state = 'idle';
+      if (anim.key === 'die') {
+        this.state = 'dead';
+      } else {
+        if (anim.key !== 'idle' && anim.key !== 'die') {
+          this.state = 'idle';
+        }
       }
     });
   }
@@ -53,7 +57,9 @@ class Player extends Phaser.GameObjects.Sprite {
   This is not called by Phaser, it must be called explicitly in each scene.update()
    */
   public update() {
-    this.anims.play(this.state, true);
+    if (this.state !== 'dead') {
+      this.anims.play(this.state, true);
+    }
   }
 }
 
@@ -152,7 +158,6 @@ class SceneA extends Phaser.Scene {
       key: 'die',
       frames: this.anims.generateFrameNumbers('character-combat', {start: 32, end: 39}),
       frameRate: 6,
-      repeat: -1
     });
     this.player1 = new Player(this, this.cameras.main.centerX - 300, this.cameras.main.centerY + 50);
     this.player2 = new Player(this, this.cameras.main.centerX + 300, this.cameras.main.centerY + 50);
@@ -196,6 +201,15 @@ class SceneA extends Phaser.Scene {
       }
       if (action['name'] === 'Throw') {
         player.state = 'swing';
+      }
+    });
+
+    // kill player when game ends
+    gameEvents.listen('gameEnd', data => {
+      if (data.winner = 1) {
+        this.player2.state = 'die';
+      } else if (data.winner = 0) {
+        this.player1.state = 'die';
       }
     });
   }

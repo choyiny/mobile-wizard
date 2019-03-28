@@ -122,11 +122,13 @@ export class GameComponent implements OnInit, OnDestroy {
       this.countdown_display = 'Player 2 has won!';
       this.peerService.changeState(GameState.Ended);
       this.gamestats.gameEnd(1);
+      this.peerService.events.emit('gameEnd', {winner: 1});
       this.displayStatic();
     } else if (this.health[1] <= 0) {
       this.countdown_display = 'Player 1 has won!';
       this.peerService.changeState(GameState.Ended);
       this.gamestats.gameEnd(0);
+      this.peerService.events.emit('gameEnd', {winner: 0});
       this.displayStatic();
     }
   }
