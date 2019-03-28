@@ -3,7 +3,7 @@ import {GameHostService} from '../../peer/game-host.service';
 import {GameState} from '../../peer/game-state.enum';
 import {GamestatsService} from '../result/gamestats.service';
 import {Router} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import {of} from 'rxjs';
 import {delay, tap} from 'rxjs/operators';
 
 @Component({
@@ -51,7 +51,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.startCountdown();
     }
 
-    this.subscription = peerService.fromEvent('action').subscribe((data) => {
+    this.subscription = peerService.events.listen('action', (data) => {
       // if game state is in game, process action.
       if (peerService.gameState === GameState.InGame) {
         const action = JSON.parse(data['action']);

@@ -27,7 +27,7 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
     private ref: ChangeDetectorRef
   ) {
     // detect when join!
-    this.joinEvent = this.peerService.fromEvent('join').subscribe((playerId) => {
+    this.joinEvent = this.peerService.events.listen('join', (playerId) => {
       if (playerId === 1) {
         this.status[1] = 'Throw to get ready!';
       } else if (playerId === 2) {
@@ -37,7 +37,7 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
     });
 
     // detect when left!
-    this.leftEvent = this.peerService.fromEvent('left').subscribe((playerId) => {
+    this.leftEvent = this.peerService.events.listen('left', (playerId) => {
       if (playerId === 1) {
         this.status[1] = 'Waiting for player to join...';
       } else if (playerId === 2) {
@@ -47,7 +47,7 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
     });
 
     // when ready, start the game, obviously.
-    this.actionEvent = this.peerService.fromEvent('action').subscribe((data) => {
+    this.actionEvent = this.peerService.events.listen('action', data => {
       console.log(data);
       const action = JSON.parse(data['action']);
       if (action['name'] === 'Throw' && action['actor'] === 1) {
