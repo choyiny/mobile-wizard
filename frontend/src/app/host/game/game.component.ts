@@ -99,6 +99,11 @@ export class GameComponent implements OnInit, OnDestroy {
 
   damage(player: number, value: number) {
     this.health[player] -= value;
+    this.peerService.events.emit('damagePlayer', {
+      source: player === 0 ? 2 : 1,
+      target: player === 0 ? 1 : 2,
+      value: value
+    });
     if (this.health[player] < this.YELLOW_THRESHOLD) {
       this.healthClass[player] = 'nes-progress is-warning';
     }

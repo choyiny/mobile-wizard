@@ -164,6 +164,11 @@ class SceneA extends Phaser.Scene {
       frames: this.anims.generateFrameNames('character-combat', {start: 20, end: 20}),
       repeat: 15
     });
+    this.anims.create({
+      key: 'hit',
+      frames: this.anims.generateFrameNumbers('character-combat', {start: 33, end: 33}),
+      repeat: 5
+    });
     this.player1 = new Player(this, this.cameras.main.centerX - 300, this.cameras.main.centerY + 50);
     this.player2 = new Player(this, this.cameras.main.centerX + 300, this.cameras.main.centerY + 50);
     this.player2.flipX = true;
@@ -209,6 +214,16 @@ class SceneA extends Phaser.Scene {
       }
       if (action['name'] === 'Defense') {
         player.state = 'block';
+      }
+    });
+
+    // damage player event
+    gameEvents.listen('damagePlayer', data => {
+      if (data.target === 1) {
+        this.player1.state = 'hit';
+      }
+      if (data.target === 2) {
+        this.player2.state = 'hit';
       }
     });
 
