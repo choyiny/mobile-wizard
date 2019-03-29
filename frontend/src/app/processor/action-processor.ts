@@ -21,7 +21,9 @@ export class ActionProcessor {
       }
     }
     const l = this.actions['x'].length;
-    if (this.actions['y'][l - 1] > 70 || this.actions['x'][l - 1] > 70 || this.actions['z'][l - 1] < -30) {
+    if (!this.lock &&
+      (this.actions['y'][l - 1] > 70 || this.actions['x'][l - 1] > 70 || this.actions['z'][l - 1] < -30)) {
+      this.lock = true;
       this.on_action_data();
     }
   }
@@ -60,8 +62,8 @@ export class ActionProcessor {
   }
 
   private on_action_data() {
-    if (this.lock) { return; }
-    this.lock = true;
+    // if (this.lock) { return; }
+    // this.lock = true;
     const lx = Math.min.apply(null, this.actions['x']);
     const mx = Math.max.apply(null, this.actions['x']);
     const ly = Math.min.apply(null, this.actions['y']);
