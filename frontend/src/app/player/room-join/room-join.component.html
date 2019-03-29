@@ -8,6 +8,23 @@
       <button class="nes-btn is-success" (click)="testDefense()">Defend</button>
     </div>
   </section>
-  <button id="newGame" [class]="gameEndButton" (click)="newGame()">New Game</button>
-  <button id="stats" [class]="gameEndButton" (click)="userStats()">My stats</button>
+
+  <section [class]="gameEndStats">
+    <div class="data">
+      <h4><i class="nes-icon trophy is-small"></i> Game Duration <i class="nes-icon trophy is-small"></i></h4>
+      <div>{{this.duration}}s</div>
+    </div>
+    <div class="data">
+      <h4><i class="nes-icon trophy is-small"></i> Most Damage <i class="nes-icon trophy is-small"></i></h4>
+      <div>{{this.most_damage}}</div>
+    </div>
+    <div class="data">
+      <h4><i class="nes-icon trophy is-small"></i> Most Defense <i class="nes-icon trophy is-small"></i></h4>
+      <div>{{this.most_defense}}</div>
+    </div>
+  </section>
+  <div [class]="buttons">
+    <button id="newGame" [class]="gameEndButton" (click)="newGame()">New Game</button>
+    <button id="stats" [class]="gameEndButton" (click)="userStats()">My stats</button>
+  </div>
 </div>

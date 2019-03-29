@@ -24,7 +24,12 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   private gameStatsEvent;
 
   // Class name for button after game ends
-  public gameEndButton = 'gameEnd';
+  public gameEndButton = 'gameEndHide';
+  public buttons = 'gameEndHide'
+  public gameEndStats = 'gameEndHide';
+  public duration = 'No record';
+  public most_damage = 0;
+  public most_defense = 0;
 
   constructor(
     private peerService: PlayerPeerService,
@@ -45,11 +50,16 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
 
     this.gameStatsEvent = this.peerService.fromEvent('gamestats').subscribe((data) => {
       // When game stats data arrives, game ends. So first update user status.
+      this.duration = data['fastest_game'];
+      this.most_damage = data['most_damage'];
+      this.most_defense = data['most_damage_blocked'];
       this.apiService.updateStats(data['fastest_game'], data['most_damage'], data['most_damage_blocked'])
         .subscribe((res) => {
           console.log(res);
           // Display button for new game
           this.gameEndButton = 'nes-btn is-success';
+          this.gameEndStats = 'userstats nes-container';
+          this.buttons = 'gameEndButton';
           this.ref.detectChanges();
       });
     });
