@@ -24,14 +24,16 @@
     "animate.css": "^3.7.0",
     "core-js": "^2.5.4",
     "firebase": "^5.8.6",
+    "kjua": "^0.1.2",
     "nes.css": "^2.1.0",
+    "ngx-kjua": "^1.3.0",
     "peerjs": "^0.3.24",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.12.0",
+    "@angular-devkit/build-angular": "^0.13.7",
     "@angular/cli": "~7.2.3",
     "@angular/compiler-cli": "~7.2.0",
     "@angular/language-service": "~7.2.0",

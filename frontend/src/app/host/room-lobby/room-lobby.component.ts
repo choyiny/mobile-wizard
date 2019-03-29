@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {GameHostService} from '../../peer/game-host.service';
 import {GameState} from '../../peer/game-state.enum';
 import {RoomService} from '../../external/room.service';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'wizard-room-lobby',
@@ -78,5 +79,9 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
 
   gameStartable(): boolean {
     return this.status[1] === 'Ready' && this.status[2] === 'Ready';
+  }
+
+  getGameRoomUrl() {
+    return environment.frontendUrl + '/join/' + this.roomService.gameRoomId;
   }
 }
