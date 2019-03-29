@@ -6,10 +6,16 @@ export class ActionProcessor {
 
   actions: object;
   lock: boolean;
+  private lastThrow;
+  private lastStrike;
+  private lastDefense;
 
   constructor(private observer) {
     this.actions = {x: [], y: [], z: [], a: [], b: [], g: []};
     this.lock = false;
+    this.lastDefense = -1;
+    this.lastStrike = -1;
+    this.lastThrow = -1;
   }
 
   public add_action(data: object) {
@@ -29,26 +35,33 @@ export class ActionProcessor {
   }
 
   private is_throw(lx) {
-    // let l = this.actions['x'].length;
-    const lxpos = this.actions['x'].lastIndexOf(lx);
-    const cores_y = this.actions['y'][lxpos];
-    const cores_g = this.actions['g'][lxpos];
+    // Only consider last 20 data
+    const lxpos = this.actions['x'].slice(-20).lastIndexOf(lx);
+    if (lxpos < 0) {
+      return false;
+    }
+    const cores_y = this.actions['y'].slice(-20)[lxpos];
+    const cores_g = this.actions['g'].slice(-20)[lxpos];
     return (lx <= -65 && cores_y > 65 && cores_g > 500);
   }
 
   private is_strike(ly, my) {
-    const lxpos = this.actions['y'].lastIndexOf(ly);
-    const mypos = this.actions['y'].lastIndexOf(my);
-    const cores_g = this.actions['g'][mypos];
+    // Only consider last 20 data
+    const lxpos = this.actions['y'].slice(-20).lastIndexOf(ly);
+    const mypos = this.actions['y'].slice(-20).lastIndexOf(my);
+    if (lxpos < 0 || mypos < 0) {
+      return false;
+    }
+    const cores_g = this.actions['g'].slice(-20)[mypos];
 
     // lypos > mypos since reversed
     return (my > 60 && ly < -20 && lxpos < mypos && Math.abs(cores_g) < 500);
   }
 
   private is_defense() {
-
+    // Only consider max z value in last 20 data
     const l = this.actions['z'].length;
-    const lst = this.actions['z'].slice(l - 15);
+    const lst = this.actions['z'].slice(-20);
     const mz = Math.max.apply(null, lst);
     const mzpos = this.actions['z'].lastIndexOf(mz);
 
@@ -62,29 +75,45 @@ export class ActionProcessor {
   }
 
   private on_action_data() {
-    // if (this.lock) { return; }
-    // this.lock = true;
-    const lx = Math.min.apply(null, this.actions['x']);
-    const mx = Math.max.apply(null, this.actions['x']);
-    const ly = Math.min.apply(null, this.actions['y']);
-    const my = Math.max.apply(null, this.actions['y']);
-    const lz = Math.min.apply(null, this.actions['z']);
-    const mz = Math.max.apply(null, this.actions['z']);
+    const lx = Math.min.apply(null, this.actions['x'].slice(-20));
+    const ly = Math.min.apply(null, this.actions['y'].slice(-20));
+    const my = Math.max.apply(null, this.actions['y'].slice(-20));
     if (this.is_strike(ly, my)) {
       this.clear();
       this.lock = false;
       // Call listener with new action
-      this.observer(new Strike());
+      const act = new Strike();
+      const lastAction = this.lastStrike;
+      this.lastStrike = act.timestamp;
+      // Only consider current action as valid when last same action
+      // is before 0.5s
+      if (lastAction < 0 || act.timestamp - lastAction >= 500) {
+        this.observer(act);
+      }
+
     } else if (this.is_throw(lx)) {
       this.clear();
       this.lock = false;
       // Call listener with new action
-      this.observer(new Throw());
+      const act = new Throw();
+      const lastAction = this.lastThrow;
+      this.lastThrow = act.timestamp;
+      // Only consider current action as valid when last same action
+      // is before 0.5s
+      if (lastAction < 0 || act.timestamp - lastAction >= 500) {
+        this.observer(act);
+      }
     } else if (this.is_defense()) {
       this.clear();
       this.lock = false;
-      this.observer(new Defense());
-
+      const act = new Defense();
+      const lastAction = this.lastDefense;
+      this.lastDefense = act.timestamp;
+      // Only consider current action as valid when last same action
+      // is before 0.5s
+      if (lastAction < 0 || act.timestamp - lastAction >= 500) {
+        this.observer(act);
+      }
     } else {
       this.lock = false;
     }
