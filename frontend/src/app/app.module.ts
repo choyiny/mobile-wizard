@@ -19,6 +19,7 @@ import {DeviceGuard} from './helpers/device.guard';
 import {GameGuard} from './helpers/game.guard';
 import {TokenInterceptor} from './core/token.interceptor';
 import { UserStatsComponent } from './user-stats/user-stats.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { UserStatsComponent } from './user-stats/user-stats.component';
     ReactiveFormsModule,
     FormsModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
     CoreModule
   ],

@@ -10,5 +10,11 @@
 </head>
 <body>
   <wizard-root></wizard-root>
+  <!--to fix phaser bug-->
+  <script>
+    if (global === undefined) {
+      var global = window;
+    }
+  </script>
 </body>
 </html>

@@ -24,16 +24,19 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
+    data: {state: 'home'}
   },
   {
     path: 'credits',
-    component: CreditsComponent
+    component: CreditsComponent,
+    data: {state: 'credits'}
   },
   {
     path: 'userstats',
     component: UserStatsComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    data: {state: 'userstats'}
   },
   {
     path: '**',

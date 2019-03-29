@@ -4,7 +4,7 @@
       <h3 class="title">Player 1: {{player_name[0]}}</h3>
       <progress class="nes-progress is-success" [ngClass]="healthClass[0]" value="{{health[0]}}" max="{{maxHealth}}"></progress>
     </section>
-    <div class="player-canvas">
+    <div class="player-canvas" style="position: absolute">
       <h2 [ngClass]="actionClass[0]">{{action[0]}}</h2>
     </div>
   </div>
@@ -14,10 +14,12 @@
       <progress class="nes-progress is-success" [ngClass]="healthClass[1]" value="{{health[1]}}" max="{{maxHealth}}"></progress>
     </section>
     <div class="player-canvas">
-      <h2 [ngClass]="actionClass[1]">{{action[1]}}</h2>
+      <h2 [ngClass]="actionClass[1]" style="position: absolute">{{action[1]}}</h2>
     </div>
   </div>
 </div>
-<div class="countdown-wrapper">
+<div class="countdown-wrapper" style="position: absolute">
   <h1>{{countdown_display}}</h1>
 </div>
+<wizard-canvas></wizard-canvas>
+

@@ -5,7 +5,8 @@ import {RoomJoinComponent} from './room-join/room-join.component';
 const routes: Routes = [
   {
     path: '',
-    component: RoomJoinComponent
+    component: RoomJoinComponent,
+    data: {state: 'player-room-join'}
   }
 ];
 
