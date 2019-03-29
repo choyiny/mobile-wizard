@@ -84,10 +84,10 @@ export class ActionProcessor {
       // Call listener with new action
       const act = new Strike();
       const lastAction = this.lastStrike;
-      this.lastStrike = act.timestamp;
       // Only consider current action as valid when last same action
       // is before 0.5s
       if (lastAction < 0 || act.timestamp - lastAction >= 500) {
+        this.lastStrike = act.timestamp;
         this.observer(act);
       }
 
@@ -97,10 +97,10 @@ export class ActionProcessor {
       // Call listener with new action
       const act = new Throw();
       const lastAction = this.lastThrow;
-      this.lastThrow = act.timestamp;
       // Only consider current action as valid when last same action
       // is before 0.5s
       if (lastAction < 0 || act.timestamp - lastAction >= 500) {
+        this.lastThrow = act.timestamp;
         this.observer(act);
       }
     } else if (this.is_defense()) {
@@ -108,10 +108,10 @@ export class ActionProcessor {
       this.lock = false;
       const act = new Defense();
       const lastAction = this.lastDefense;
-      this.lastDefense = act.timestamp;
       // Only consider current action as valid when last same action
       // is before 0.5s
       if (lastAction < 0 || act.timestamp - lastAction >= 500) {
+        this.lastDefense = act.timestamp;
         this.observer(act);
       }
     } else {
