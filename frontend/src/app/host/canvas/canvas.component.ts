@@ -14,7 +14,6 @@ export class CanvasComponent implements AfterViewInit {
   // setting a width and height for the canvas
   @Input() public width = 400;
   @Input() public height = 400;
-  private actionEmitter: any;
 
   constructor(
     private cs: CanvasService,
@@ -23,7 +22,6 @@ export class CanvasComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    this.actionEmitter = this.hs.fromEvent('action');
-    this.cs.initGame(this.canvas, this.actionEmitter);
+    this.cs.initGame(this.canvas, this.hs.events);
   }
 }

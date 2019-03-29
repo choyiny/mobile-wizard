@@ -17,6 +17,9 @@ Flask-SocketIO = "*"
 Flask-SQLAlchemy = "===2.2"
 SQLAlchemy = "==1.2.7"
 Flask-Cors = "*"
+firebase-admin = "==2.14.0"
+redis = "*"
+hiredis = "*"
 
 [requires]
 python_version = "3.6"

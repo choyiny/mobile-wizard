@@ -1,9 +1,10 @@
+/* tslint:disable:no-unused-expression */
 import {Injectable} from '@angular/core';
 // @ts-ignore
 import Peer from 'peerjs';
 import {environment} from '../../environments/environment';
 import {GameState} from './game-state.enum';
-import {Observable} from 'rxjs';
+import {Subject} from 'rxjs';
 import {RoomService} from '../external/room.service';
 
 @Injectable({
@@ -26,9 +27,7 @@ export class GameHostService {
 
   public gameState: GameState;
 
-  private actionListeners = [];
-  private joinListeners = [];
-  private leftListeners = [];
+  public events = new Emitter();
 
   constructor(private roomService: RoomService) {
     this.reset();
@@ -66,11 +65,9 @@ export class GameHostService {
     });
 
     conn.on('data', (data) => {
-      this.actionListeners.forEach( (actionHandler) => {
-        if (data.type === 'action') {
-          actionHandler(data);
-        }
-      });
+      if (data.type === 'action') {
+        this.events.emit('action', data);
+      }
     });
   }
 
@@ -90,13 +87,12 @@ export class GameHostService {
       // Update player's name - default to harry
       this.playerNames[playerId] = this.connections[playerId].metadata['name'] || 'Harry';
       joinHandler(playerId);
+      this.events.emit('join', playerId);
     });
   }
 
   public notifyPlayerHasLeft(playerId: number): void {
-    this.leftListeners.forEach((leftHandler) => {
-      leftHandler(playerId);
-    });
+    this.events.emit('left', playerId);
   }
 
   private assignPlayer(conn: Peer.DataConnection): void {
@@ -115,7 +111,6 @@ export class GameHostService {
     } else {
       console.log('full');
       conn.send({type: 'error', msg: 'room full'});
-      // conn.close();
       return;
     }
 
@@ -128,23 +123,6 @@ export class GameHostService {
     this.gameState = state;
   }
 
-  public fromEvent(eventName): Observable<any> {
-    return new Observable((observer) => {
-      const handler = (e) => {
-        observer.next(e);
-      };
-      if (eventName === 'action') {
-        this.actionListeners.push(handler);
-      } else if (eventName === 'join') {
-        this.joinListeners.push(handler);
-      } else if (eventName === 'left') {
-        this.leftListeners.push(handler);
-      }
-
-      return () => {};
-    });
-  }
-
   public hostingGame(): boolean {
     return this.peer !== null && this.gameName !== null;
   }
@@ -152,8 +130,10 @@ export class GameHostService {
   public sendGameStats(player: number, fastest_game: number,
                        most_damage: number, most_damage_blocked: number) {
     const conn = this.connections[player + 1];
-    conn.send({type: 'gamestats', fastest_game:　fastest_game,
-      most_damage:　most_damage, most_damage_blocked: most_damage_blocked});
+    conn.send({
+      type: 'gamestats', fastest_game: fastest_game,
+      most_damage: most_damage, most_damage_blocked: most_damage_blocked
+    });
     console.log('Stats sent to Player ' + (player + 1));
   }
 
@@ -166,5 +146,39 @@ export class GameHostService {
       1: null,
       2: null
     };
+  }
+}
+
+class Emitter {
+  private subjects;
+
+  constructor() {
+    this.subjects = {};
+  }
+
+  private createName(name) {
+    return '$' + name;
+  }
+
+  public emit(name, data) {
+    const fnName = this.createName(name);
+    this.subjects[fnName] || (this.subjects[fnName] = new Subject());
+    this.subjects[fnName].next(data);
+  }
+
+  public listen(name, handler) {
+    const fnName = this.createName(name);
+    this.subjects[fnName] || (this.subjects[fnName] = new Subject());
+    return this.subjects[fnName].subscribe(handler);
+  }
+
+  public dispose() {
+    const subjects = this.subjects;
+    for (const prop in subjects) {
+      if (subjects.hasOwnProperty(prop)) {
+        subjects[prop].dispose();
+      }
+    }
+    this.subjects = {};
   }
 }
