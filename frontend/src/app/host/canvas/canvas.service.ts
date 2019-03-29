@@ -1,6 +1,5 @@
 import {ElementRef, Injectable} from '@angular/core';
 import * as Phaser from 'phaser';
-import {Subscribable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +7,7 @@ import {Subscribable} from 'rxjs';
 export class CanvasService {
   public game: Phaser.Game;
 
-  public initGame(canvas: ElementRef = null, actionEmitter: Subscribable<object>) {
+  public initGame(canvas: ElementRef = null, gameEvents) {
     this.game = new Phaser.Game({
       canvas: canvas ? canvas.nativeElement : null,
       height: window.innerHeight,
@@ -23,7 +22,7 @@ export class CanvasService {
       },
       type: Phaser.WEBGL,
     });
-    this.game.scene.add('SceneA', SceneA, true, actionEmitter);
+    this.game.scene.add('SceneA', SceneA, true, gameEvents);
     Phaser.Display.Canvas.CanvasInterpolation.setCrisp(canvas.nativeElement);
     Phaser.Display.Canvas.Smoothing.disable(canvas.nativeElement);
   }
@@ -43,9 +42,13 @@ class Player extends Phaser.GameObjects.Sprite {
   Listen for completion of animations and then update to the next state
    */
   private initStateManager() {
-    this.on('animationcomplete', (anim, frame) => {
-      if (anim.key !== 'idle') {
-        this.state = 'idle';
+    this.on('animationcomplete', (anim) => {
+      if (anim.key === 'die') {
+        this.state = 'dead';
+      } else {
+        if (anim.key !== 'idle' && anim.key !== 'die') {
+          this.state = 'idle';
+        }
       }
     });
   }
@@ -54,7 +57,9 @@ class Player extends Phaser.GameObjects.Sprite {
   This is not called by Phaser, it must be called explicitly in each scene.update()
    */
   public update() {
-    this.anims.play(this.state, true);
+    if (this.state !== 'dead') {
+      this.anims.play(this.state, true);
+    }
   }
 }
 
@@ -113,18 +118,20 @@ class SceneA extends Phaser.Scene {
   public player2;
   private cursors;
   private playerProjectiles: Phaser.GameObjects.Group;
-  private actionEmitter: Subscribable<object>;
 
   preload() {
     this.load.spritesheet('character', 'assets/character.png', {frameWidth: 50, frameHeight: 37});
+    this.load.spritesheet('character-combat', 'assets/character-combat.png', {frameWidth: 50, frameHeight: 37});
     this.load.spritesheet('fireball', 'assets/img/fireball/red/spritesheet-512px-by-197px-per-frame.png', {
       frameWidth: 512,
       frameHeight: 197
     });
   }
 
-  create(actionEmitter: Subscribable<object>) {
+  create(gameEvents) {
     this.cameras.main.setBackgroundColor('#ffffff');
+
+    // setting animations
     this.anims.create({
       key: 'idle',
       frames: this.anims.generateFrameNumbers('character', {start: 38, end: 41}),
@@ -147,6 +154,21 @@ class SceneA extends Phaser.Scene {
       frameRate: 10,
       repeat: -1
     });
+    this.anims.create({
+      key: 'die',
+      frames: this.anims.generateFrameNumbers('character-combat', {start: 32, end: 39}),
+      frameRate: 6,
+    });
+    this.anims.create({
+      key: 'block',
+      frames: this.anims.generateFrameNames('character-combat', {start: 20, end: 20}),
+      repeat: 15
+    });
+    this.anims.create({
+      key: 'hit',
+      frames: this.anims.generateFrameNumbers('character-combat', {start: 33, end: 33}),
+      repeat: 5
+    });
     this.player1 = new Player(this, this.cameras.main.centerX - 300, this.cameras.main.centerY + 50);
     this.player2 = new Player(this, this.cameras.main.centerX + 300, this.cameras.main.centerY + 50);
     this.player2.flipX = true;
@@ -163,8 +185,7 @@ class SceneA extends Phaser.Scene {
     this.playerProjectiles = this.add.group(projectileGameObjects);
 
     // sync up actions with action emitter
-    this.actionEmitter = actionEmitter;
-    this.actionEmitter.subscribe((data) => {
+    gameEvents.listen('action', data => {
       const action = JSON.parse(data['action']);
       let player: Player;
 
@@ -190,6 +211,28 @@ class SceneA extends Phaser.Scene {
       }
       if (action['name'] === 'Throw') {
         player.state = 'swing';
+      }
+      if (action['name'] === 'Defense') {
+        player.state = 'block';
+      }
+    });
+
+    // damage player event
+    gameEvents.listen('damagePlayer', data => {
+      if (data.target === 1) {
+        this.player1.state = 'hit';
+      }
+      if (data.target === 2) {
+        this.player2.state = 'hit';
+      }
+    });
+
+    // kill player when game ends
+    gameEvents.listen('gameEnd', data => {
+      if (data.winner = 1) {
+        this.player2.state = 'die';
+      } else if (data.winner = 0) {
+        this.player1.state = 'die';
       }
     });
   }

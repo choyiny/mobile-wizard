@@ -1,6 +1,11 @@
 <div class="game-details">
   <h2>{{peerService.gameName}}</h2>
   <h2>Room ID: {{roomService.gameRoomId}}</h2>
+  <ngx-kjua
+    [text]="getGameRoomUrl()"
+    [renderAsync]="true"
+    [mSize]="40"
+  ></ngx-kjua>
 </div>
 <div class="players">
   <div class="player player1">

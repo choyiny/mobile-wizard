@@ -3,7 +3,7 @@ import {GameHostService} from '../../peer/game-host.service';
 import {GameState} from '../../peer/game-state.enum';
 import {GamestatsService} from '../result/gamestats.service';
 import {Router} from '@angular/router';
-import {Observable, of} from 'rxjs';
+import {of} from 'rxjs';
 import {delay, tap} from 'rxjs/operators';
 
 @Component({
@@ -51,7 +51,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.startCountdown();
     }
 
-    this.subscription = peerService.fromEvent('action').subscribe((data) => {
+    this.subscription = peerService.events.listen('action', (data) => {
       // if game state is in game, process action.
       if (peerService.gameState === GameState.InGame) {
         const action = JSON.parse(data['action']);
@@ -99,6 +99,11 @@ export class GameComponent implements OnInit, OnDestroy {
 
   damage(player: number, value: number) {
     this.health[player] -= value;
+    this.peerService.events.emit('damagePlayer', {
+      source: player === 0 ? 2 : 1,
+      target: player === 0 ? 1 : 2,
+      value: value
+    });
     if (this.health[player] < this.YELLOW_THRESHOLD) {
       this.healthClass[player] = 'nes-progress is-warning';
     }
@@ -122,11 +127,13 @@ export class GameComponent implements OnInit, OnDestroy {
       this.countdown_display = 'Player 2 has won!';
       this.peerService.changeState(GameState.Ended);
       this.gamestats.gameEnd(1);
+      this.peerService.events.emit('gameEnd', {winner: 1});
       this.displayStatic();
     } else if (this.health[1] <= 0) {
       this.countdown_display = 'Player 1 has won!';
       this.peerService.changeState(GameState.Ended);
       this.gamestats.gameEnd(0);
+      this.peerService.events.emit('gameEnd', {winner: 0});
       this.displayStatic();
     }
   }
