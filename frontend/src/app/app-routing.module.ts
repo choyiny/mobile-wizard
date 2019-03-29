@@ -9,6 +9,10 @@ import {UserStatsComponent} from './user-stats/user-stats.component';
 
 const routes: Routes = [
   {
+    path: 'join/:roomId',
+    component: HomeComponent
+  },
+  {
     path: 'hosts',
     loadChildren: './host/host.module#HostModule',
     canActivateChild: [GameGuard]

@@ -87,8 +87,8 @@ export class GameHostService {
 
   public notifyPlayerHasJoined(playerId: number): void {
     this.joinListeners.forEach((joinHandler) => {
-      // Update player's name
-      this.playerNames[playerId] = this.connections[playerId].metadata['name'];
+      // Update player's name - default to harry
+      this.playerNames[playerId] = this.connections[playerId].metadata['name'] || 'Harry';
       joinHandler(playerId);
     });
   }
