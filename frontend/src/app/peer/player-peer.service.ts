@@ -19,8 +19,6 @@ export class PlayerPeerService {
 
   public myName = '';
 
-  public error = '';
-
   constructor(private roomService: RoomService) {
     this.host = null;
     this.peer = null;
@@ -41,9 +39,7 @@ export class PlayerPeerService {
     const promise = new Promise((resolve, reject) => {
       this.roomService.getRoom(id).subscribe(
         (data) => {
-          this.error = '';
           // {'host_id': room.get('host_id')}
-          console.log(data);
           const hostId = data['host_id'];
           // If one peer server opened before, disconnect that.
           if (this.peer !== null) {
@@ -55,10 +51,7 @@ export class PlayerPeerService {
           this.attachHostListeners();
           resolve();
         },
-        (err) => {
-          // Resource not found
-          this.error = 'cannot find room';
-          console.log(this.error);
+        () => {
           reject();
         });
     });
