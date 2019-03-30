@@ -16,6 +16,7 @@ export class PlayerPeerService {
   public playerId: number;
   private playerIdListeners = [];
   private statsListeners = [];
+  private readyListeners = [];
 
   public myName = '';
 
@@ -77,6 +78,11 @@ export class PlayerPeerService {
         this.statsListeners.forEach((listener) => {
           listener(data);
         });
+      } else if (data.type === 'ready') {
+        console.log('I\'m ready');
+        this.readyListeners.forEach((listener) => {
+          listener(data);
+        });
       }
     });
     this.host.on('close', () => {
@@ -95,6 +101,8 @@ export class PlayerPeerService {
         this.playerIdListeners.push(handler);
       } else if (eventName === 'gamestats') {
         this.statsListeners.push(handler);
+      } else if (eventName === 'ready') {
+        this.readyListeners.push(handler);
       }
 
       return () => {};
