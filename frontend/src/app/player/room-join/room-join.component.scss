@@ -1,3 +1,23 @@
-.gameEnd {
+.gameEndHide {
   display: none;
+}
+
+.gameEndButton {
+  display: grid;
+  grid-template-columns: 49% 49%;
+  grid-column-gap: 2%;
+  align-self: center;
+}
+
+.userstats {
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 5%;
+  text-align: center;
+  padding-left: 2%;
+  padding-right: 2%;
+}
+
+.data {
+  margin-bottom: 5%;
 }

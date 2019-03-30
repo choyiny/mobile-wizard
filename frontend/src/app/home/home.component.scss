@@ -28,3 +28,10 @@
     margin: 2%;
   }
 }
+
+a.myLink {
+  color: #007BFF;
+  &:hover {
+    color: #0056b3;
+  }
+}

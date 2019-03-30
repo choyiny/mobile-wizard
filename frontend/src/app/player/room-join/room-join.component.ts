@@ -16,15 +16,21 @@ import {Router} from '@angular/router';
 })
 export class RoomJoinComponent implements OnInit, OnDestroy {
 
-  private status = '';
+  public playerStatus = '';
 
   private output = 'none';
 
   private playerIdEvent;
   private gameStatsEvent;
+  private readyEvent;
 
   // Class name for button after game ends
-  public gameEndButton = 'gameEnd';
+  public gameEndButton = 'gameEndHide';
+  public buttons = 'gameEndHide'
+  public gameEndStats = 'gameEndHide';
+  public duration = 'No record';
+  public most_damage = 0;
+  public most_defense = 0;
 
   constructor(
     private peerService: PlayerPeerService,
@@ -36,27 +42,38 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     this.playerIdEvent = this.peerService.fromEvent('playerId').subscribe((data) => {
       console.log(data);
       if (data['playerId'] === 1) {
-        this.status = 'Throw to get ready!';
+        this.playerStatus = 'Throw to get ready!';
       } else if (data['playerId'] === 2) {
-        this.status = 'Strike to get ready!';
+        this.playerStatus = 'Strike to get ready!';
       }
       this.ref.detectChanges();
     });
 
     this.gameStatsEvent = this.peerService.fromEvent('gamestats').subscribe((data) => {
       // When game stats data arrives, game ends. So first update user status.
+      this.duration = data['fastest_game'];
+      this.most_damage = data['most_damage'];
+      this.most_defense = data['most_damage_blocked'];
       this.apiService.updateStats(data['fastest_game'], data['most_damage'], data['most_damage_blocked'])
         .subscribe((res) => {
           console.log(res);
           // Display button for new game
           this.gameEndButton = 'nes-btn is-success';
+          this.gameEndStats = 'userstats nes-container';
+          this.buttons = 'gameEndButton';
           this.ref.detectChanges();
       });
     });
+
+    this.readyEvent = this.peerService.fromEvent('ready').subscribe((data) => {
+      this.playerStatus = 'I\'m ready';
+      this.ref.detectChanges();
+    });
+
     // waiting in lobby
     // TODO: we can include how to throw/strike in here.
     const processor = new ActionProcessor((action) => {
-      this.status = action.name;
+      this.playerStatus = action.name;
       peerService.sendAction(action);
     });
     const detector = new Detector(processor);
@@ -72,10 +89,8 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.playerIdEvent.unsubscribe();
-  }
-
-  public getStatus(): string {
-    return this.status;
+    this.gameStatsEvent.unsubscribe();
+    this.readyEvent.unsubscribe();
   }
 
   testThrow() {

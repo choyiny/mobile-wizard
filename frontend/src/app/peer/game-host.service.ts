@@ -92,6 +92,10 @@ export class GameHostService {
     this.events.emit('left', playerId);
   }
 
+  public tellPlayerIsReady(playerId: number) {
+    this.connections[playerId].send({type: 'ready'});
+  }
+
   private assignPlayer(conn: Peer.DataConnection): void {
     if (this.connections[1] === null) {
       this.connections[1] = conn;
