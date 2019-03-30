@@ -85,6 +85,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.playerStatus = 'Connecting...';
   }
 
   ngOnDestroy() {
