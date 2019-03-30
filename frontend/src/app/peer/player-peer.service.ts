@@ -50,6 +50,11 @@ export class PlayerPeerService {
           this.peer = new Peer(environment.peerserver);
           this.host = this.peer.connect(hostId, {metadata: {name: name}, serialization: 'json'});
           this.attachHostListeners();
+
+          // temp possible fix for some browser's inability to send actions
+          this.host.on('connection', () => {
+            this.host.send({'type': 'getPlayerId'});
+          });
           resolve();
         },
         () => {

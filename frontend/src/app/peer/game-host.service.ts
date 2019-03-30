@@ -67,6 +67,8 @@ export class GameHostService {
     conn.on('data', (data) => {
       if (data.type === 'action') {
         this.events.emit('action', data);
+      } else if (data.type === 'getPlayerId') {
+        conn.send({type: 'setPlayerId', playerId: playerId});
       }
     });
   }
@@ -85,6 +87,9 @@ export class GameHostService {
   public notifyPlayerHasJoined(playerId: number): void {
     // Update player's name - default to harry
     this.playerNames[playerId] = this.connections[playerId].metadata['name'] || 'Harry';
+
+    // send another setPlayerId packet just in case...
+    this.connections[playerId].send({type: 'setPlayerId', playerId: playerId});
     this.events.emit('join', playerId);
   }
 
@@ -97,13 +102,13 @@ export class GameHostService {
   }
 
   private assignPlayer(conn: Peer.DataConnection): void {
-    if (this.connections[1] === null) {
+    if (this.connections[1] == null) {
       this.connections[1] = conn;
       this.attachListenersToConnection(conn, 1);
       this.notifyPlayerHasJoined(1);
       console.log('assigned player 1');
       conn.send({type: 'setPlayerId', playerId: 1});
-    } else if (this.connections[2] === null) {
+    } else if (this.connections[2] == null) {
       this.connections[2] = conn;
       this.attachListenersToConnection(conn, 2);
       this.notifyPlayerHasJoined(2);
