@@ -53,8 +53,10 @@ export class RoomLobbyComponent implements OnInit, OnDestroy {
       const action = JSON.parse(data['action']);
       if (action['name'] === 'Throw' && action['actor'] === 1) {
         this.status[1] = 'Ready';
+        this.peerService.tellPlayerIsReady(1);
       } else if (action['name'] === 'Strike' && action['actor'] === 2) {
         this.status[2] = 'Ready';
+        this.peerService.tellPlayerIsReady(2);
       }
       this.ref.detectChanges();
     });
