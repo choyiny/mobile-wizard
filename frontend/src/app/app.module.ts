@@ -20,6 +20,7 @@ import {GameGuard} from './helpers/game.guard';
 import {TokenInterceptor} from './core/token.interceptor';
 import { UserStatsComponent } from './user-stats/user-stats.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 import * as Sentry from '@sentry/browser';
 
@@ -51,7 +52,8 @@ export class SentryErrorHandler implements ErrorHandler {
     AppRoutingModule,
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    CoreModule
+    CoreModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     WizardAPIService,
