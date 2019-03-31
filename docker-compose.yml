@@ -40,7 +40,7 @@ services:
       - VIRTUAL_HOST=peer.projectmobilewizard.com
       - LETSENCRYPT_HOST=peer.projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
-      - SECRET_KEY=81d474a5a4abde3a6e0e23e74aac01151993b12042a1d11032c1f736d165054e
+      - SECRET_KEY=peerjs
   wizard-backend:
     build: "backend/"
     volumes:
