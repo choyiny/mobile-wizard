@@ -10,6 +10,9 @@ like street fighters.
 ## Live Demo
 A live demo is available at https://beta.projectmobilewizard.com.
 
+## Documentation
+Documentation is available in [Postman](https://documenter.getpostman.com/view/3226853/S17wNmYP#4951e759-a815-4894-aa5b-dc7cb2b10492)
+
 ## Project Contributors
 Cho Yin Yong, Zhili Pan, Guo Bin Liu
 
