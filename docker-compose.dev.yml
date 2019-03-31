@@ -1,0 +1,19 @@
+version: '3'
+services:
+  wizard-redis:
+    ports: 
+      - 6379:6379
+    image: "redis:4.0.11-alpine3.8"
+  wizard-postgres:
+    image: "postgres:9.6.5"
+    ports:
+      - 5432:5432
+    volumes:
+      - "postgres:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=wizard
+      - POSTGRES_DB=wizard
+      - POSTGRES_PORT=5432
+volumes:
+  postgres:
