@@ -106,16 +106,13 @@ export class GameHostService {
       this.connections[1] = conn;
       this.attachListenersToConnection(conn, 1);
       this.notifyPlayerHasJoined(1);
-      console.log('assigned player 1');
       conn.send({type: 'setPlayerId', playerId: 1});
     } else if (this.connections[2] == null) {
       this.connections[2] = conn;
       this.attachListenersToConnection(conn, 2);
       this.notifyPlayerHasJoined(2);
-      console.log('assigned player 2');
       conn.send({type: 'setPlayerId', playerId: 2});
     } else {
-      console.log('full');
       conn.send({type: 'error', msg: 'room full'});
       return;
     }
@@ -140,7 +137,6 @@ export class GameHostService {
       type: 'gamestats', fastest_game: fastest_game,
       most_damage: most_damage, most_damage_blocked: most_damage_blocked
     });
-    console.log('Stats sent to Player ' + (player + 1));
   }
 
   public reset() {

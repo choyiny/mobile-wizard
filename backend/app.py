@@ -21,7 +21,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(c)
 
-    CORS(app, expose_headers=['Authorization'], resources={'/*': {'origins': ['*']}})
+    CORS(app, expose_headers=['Authorization'], resources={'/*': {'origins': [c.FRONTEND_URL]}})
 
     api = Api(app, errors=ERROR_MESSAGES)
 

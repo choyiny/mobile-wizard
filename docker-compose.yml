@@ -29,8 +29,8 @@ services:
     expose:
       - 80
     environment:
-      - VIRTUAL_HOST=beta.projectmobilewizard.com
-      - LETSENCRYPT_HOST=beta.projectmobilewizard.com
+      - VIRTUAL_HOST=game.projectmobilewizard.com
+      - LETSENCRYPT_HOST=game.projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
   peerserver:
     build: "peerserver/"
@@ -40,7 +40,7 @@ services:
       - VIRTUAL_HOST=peer.projectmobilewizard.com
       - LETSENCRYPT_HOST=peer.projectmobilewizard.com
       - LETSENCRYPT_EMAIL=i@choy.in
-      - SECRET_KEY=peerjs
+      - SECRET_KEY=81d474a5a4abde3a6e0e23e74aac01151993b12042a1d11032c1f736d165054e
   wizard-backend:
     build: "backend/"
     volumes:

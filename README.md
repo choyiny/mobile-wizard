@@ -8,7 +8,7 @@ deaths by casting spells at the other player. The game host will show the health
 like street fighters.
 
 ## Live Demo
-A live demo is available at https://beta.projectmobilewizard.com.
+A live demo is available at https://game.projectmobilewizard.com.
 
 ## Documentation
 Documentation is available in [Postman](https://documenter.getpostman.com/view/3226853/S17wNmYP#4951e759-a815-4894-aa5b-dc7cb2b10492)
@@ -27,14 +27,16 @@ and actions will cause damage to the other player, or prevent damage from the ot
 At the end of the game, some interesting statistics of the game such as the damage done by each player
 will be shown to the player through the host screen.
 
-The application will be easily deployable through a docker compose script.
+The application will be easily deployable through a docker compose script with automatic certificate renewal with LetsEncrypt and nginx.
 
 ## Final Version additional features
 Ability to join a room through a unique room ID automatically generated, and have the backend store the peer ids using Redis.
 
-Ability to save the nickname of each player, authenticated through Google with Firebase.
+Players can save their data or change their nickname through authenticating with Firebase.
 
 In addition to the healthbar shown in the host screen, 2D sprites corresponding with the action made by each player will also be shown.
+
+Error tracking with Sentry.
 
 ## Technologies
 - [Flask](http://flask.pocoo.org/) - Backend Webserver.
@@ -49,6 +51,7 @@ In addition to the healthbar shown in the host screen, 2D sprites corresponding 
 - [LetsEncrypt](https://letsencrypt.org/) - Free, automated certificate generation and renewal
 - [Cloudflare](https://cloudflare.com) - Our Content Delivery Network and DNS Management Tool
 - [Phaser](https://phaser.io/) - Javascript Game Engine to render characters on screen.
+- [Sentry](https://sentry.io) - Error Tracking Software for production.
 
 ## Top 5 Technical Challenges
 1. **WebRTC Real-time communication** - Synchronizing the game state between the host and the players.

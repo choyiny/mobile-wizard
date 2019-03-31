@@ -40,7 +40,6 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
     private router: Router) {
     this.gameEndButton =  'gameEnd';
     this.playerIdEvent = this.peerService.fromEvent('playerId').subscribe((data) => {
-      console.log(data);
       if (data['playerId'] === 1) {
         this.playerStatus = 'Throw to get ready!';
       } else if (data['playerId'] === 2) {
@@ -56,7 +55,6 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
       this.most_defense = data['most_damage_blocked'];
       this.apiService.updateStats(data['fastest_game'], data['most_damage'], data['most_damage_blocked'])
         .subscribe((res) => {
-          console.log(res);
           // Display button for new game
           this.gameEndButton = 'nes-btn is-success';
           this.gameEndStats = 'userstats nes-container';

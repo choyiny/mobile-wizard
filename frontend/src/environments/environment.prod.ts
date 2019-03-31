@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  frontendUrl: 'https://beta.projectmobilewizard.com',
+  frontendUrl: 'https://game.projectmobilewizard.com',
   backend: 'https://api.projectmobilewizard.com',
   peerserver: {
     host: 'peer.projectmobilewizard.com',

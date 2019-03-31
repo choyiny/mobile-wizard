@@ -71,20 +71,16 @@ export class PlayerPeerService {
 
   private attachHostListeners() {
     this.host.on('data', data => {
-      console.log(data);
       if (data.type === 'setPlayerId') {
         this.playerId = data['playerId'];
-        console.log(`I am player ${this.playerId}`);
         this.playerIdListeners.forEach( (listener) => {
           listener({'type': 'playerId', 'playerId': this.playerId});
         });
       } else if (data.type === 'gamestats') {
-        console.log('Ready to update stats');
         this.statsListeners.forEach((listener) => {
           listener(data);
         });
       } else if (data.type === 'ready') {
-        console.log('I\'m ready');
         this.readyListeners.forEach((listener) => {
           listener(data);
         });

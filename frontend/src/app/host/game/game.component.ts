@@ -76,7 +76,6 @@ export class GameComponent implements OnInit, OnDestroy {
     const me = action['actor'] - 1;
     const oppo = action['actor'] % 2;
     if (action['name'] === 'Strike' || action['name'] === 'Throw') {
-      console.log('Player' + (oppo + 1) + ' last defense: ' + this.player_defense[oppo]);
       // On attack action, it current player didn't perform a defense, or last defense is
       // performed before attack defense time range, this attack succeeds, calculate damage.
       if (this.player_defense[oppo] < 0 || action['timestamp'] - this.player_defense[oppo] > action['dfrange']) {

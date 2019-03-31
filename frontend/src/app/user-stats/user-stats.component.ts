@@ -22,13 +22,12 @@ export class UserStatsComponent implements OnInit {
 
     // User's ifo
     this.apiService.getUserProfile().subscribe((user) => {
-      if(user['nickname'] !== '') {
+      if (user['nickname'] !== '') {
         this.username = user['nickname'];
       }
       this.ref.detectChanges();
     });
     this.apiService.getUserStats().subscribe((data) => {
-      console.log(data);
       this.fastest_game = data['fastest_game'];
       this.most_damage = data['most_damage'];
       this.most_defense = data['most_damage_blocked'];
