@@ -36,9 +36,9 @@ Ability to join a room through a unique room ID automatically generated, and hav
 
 Players can save their data or change their nickname through authenticating with Firebase.
 
-In addition to the healthbar shown in the host screen, 2D sprites corresponding with the action made by each player will also be shown.
+In addition to the healthbar shown in the host screen, 2D sprites corresponding with the action made by each player will also be shown. (strike, throw, defense, hit, death)
 
-Error tracking with Sentry.
+Error tracking with Sentry. PWA-ify frontend Angular app.
 
 ## Technologies
 - [Flask](http://flask.pocoo.org/) - Backend Webserver.
