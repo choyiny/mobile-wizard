@@ -57,7 +57,9 @@ class Player extends Phaser.GameObjects.Sprite {
   This is not called by Phaser, it must be called explicitly in each scene.update()
    */
   public update() {
-    if (this.state !== 'dead') {
+    if (this.state === 'die') {
+      this.anims.play('die', false);
+    } else if (this.state !== 'dead') {
       this.anims.play(this.state, true);
     }
   }
