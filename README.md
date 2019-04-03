@@ -3,6 +3,9 @@
 
 Note: For marking purposes, we have included Firebase secrets file and deployment instructions in the `secrets` branch.
 
+## Project Demo
+Youtube link: https://www.youtube.com/watch?v=_yBl1-YVUmw
+
 ## Introduction
 Mobile Wizard is a web based 2-player street fighter like game that utilizes mobile browsers as player controllers.
 Controller inspired by Nintendo Switch and mechanics inspired by Harry Potter wand dueling games, 2 players will fight to their
