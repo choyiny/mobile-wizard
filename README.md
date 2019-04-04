@@ -37,6 +37,8 @@ The application will be easily deployable through a docker compose script with a
 ## Final Version additional features
 Ability to join a room through a unique room ID automatically generated, and have the backend store the peer ids using Redis.
 
+For convenience, a QR code is generated for each room so players can scan the QR code to join a room.
+
 Players can save their data or change their nickname through authenticating with Firebase.
 
 In addition to the healthbar shown in the host screen, 2D sprites corresponding with the action made by each player will also be shown. (strike, throw, defense, hit, death)
