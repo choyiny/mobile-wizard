@@ -1,7 +1,4 @@
 # Mobile Wizard
-![alt text][logo]
-
-Note: For marking purposes, we have included Firebase secrets file and deployment instructions in the `secrets` branch.
 
 ## Project Demo
 Youtube link: https://www.youtube.com/watch?v=_yBl1-YVUmw
@@ -54,7 +51,7 @@ Error tracking with Sentry. PWA-ify frontend Angular app.
 - [Redis](https://redis.io/) - In memory data store
 - [PeerJS](https://peerjs.com/) - WebRTC Peer to peer javascript library
 - [PeerServer](https://github.com/peers/peerjs-server) - Broker connections between PeerJS clients.
-- [Nginx](https://www.nginx.com/) - Web serving, reverse proxying, caching, load balancing 
+- [Nginx](https://www.nginx.com/) - Web serving, reverse proxying, caching, load balancing
 - [LetsEncrypt](https://letsencrypt.org/) - Free, automated certificate generation and renewal
 - [Cloudflare](https://cloudflare.com) - Our Content Delivery Network and DNS Management Tool
 - [Phaser](https://phaser.io/) - Javascript Game Engine to render characters on screen.
@@ -66,5 +63,3 @@ Error tracking with Sentry. PWA-ify frontend Angular app.
 3. **External API** - Learning how to integrate external APIs into our application.
 4. **2D Graphics** - Rendering sprites onto the host screen using Phaser.
 5. **Deploy ready application** - Have everything packaged with Docker (reverse proxy, compiling assets, load balancing etc)
-
-[logo]: docs/you_a_wizard.png "You're a Wizard, Thierry."
