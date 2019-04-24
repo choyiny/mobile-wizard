@@ -29,4 +29,4 @@ eventlet
 
 # redis
 redis
-hiredis
+hiredis==1.0.0
