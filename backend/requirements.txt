@@ -11,7 +11,7 @@ firebase-admin==2.14.0
 
 # database
 psycopg2-binary==2.7.6
-Flask-SQLAlchemy===2.2
+Flask-SQLAlchemy==2.4.0
 sqlalchemy==1.2.7
 
 # sending external requests
