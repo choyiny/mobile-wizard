@@ -21,7 +21,7 @@ requests==2.19.1
 flask-cors
 
 # testing library
-pytest
+pytest==4.4.1
 
 # WSGI related for deployment
 gunicorn
