@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 psycopg2-binary = "==2.7.6"
-requests = "==2.19.1"
+requests = "==2.20.0"
 pytest = "*"
 gunicorn = "*"
 eventlet = "*"
