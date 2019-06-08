@@ -18,7 +18,7 @@ sqlalchemy==1.2.7
 requests==2.21.0
 
 # API related
-flask-cors
+flask-cors==3.0.8
 
 # testing library
 pytest==4.4.2
