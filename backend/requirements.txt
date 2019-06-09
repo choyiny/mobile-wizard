@@ -3,7 +3,7 @@ flask==1.0.2
 flask-restful==0.3.7
 
 # Websockets related
-flask-socketio
+flask-socketio==4.1.0
 
 # Firebase
 firebase-admin==2.16.0
