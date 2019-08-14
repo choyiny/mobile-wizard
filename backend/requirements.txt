@@ -28,5 +28,5 @@ gunicorn
 eventlet==0.25.0
 
 # redis
-redis==3.3.6
+redis==3.3.7
 hiredis
