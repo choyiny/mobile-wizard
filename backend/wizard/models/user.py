@@ -11,7 +11,7 @@ class User(BaseModel):
 
     def assign_attributes(self, nickname=None):
         if nickname:
-           self.nickname = nickname
+            self.nickname = nickname
 
     def __repr__(self):
         return f"<User: {self.nickname or self.email}>"

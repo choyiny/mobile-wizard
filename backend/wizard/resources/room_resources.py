@@ -25,18 +25,25 @@ class CreateRoomResource(Resource):
 
         # auto generate room id of 4 characters long
         room_id = ''.join(
-            random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(4)
+            random.SystemRandom().choice(
+                string.ascii_uppercase + string.digits
+            ) for _ in range(4)
         )
         store_result = redis_store.get(room_id)
         while store_result is not None:
             room_id = ''.join(
-                random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(4)
+                random.SystemRandom().choice(
+                    string.ascii_uppercase + string.digits
+                ) for _ in range(4)
             )
             store_result = redis_store.get(room_id)
 
         # therefore we have obtained a unique room id, store it in redis
         password = token_hex(16)
-        redis_store.set(room_id, dumps({'host_id': args.get('id'), 'delete_password': password}))
+        redis_store.set(
+            room_id,
+            dumps({'host_id': args.get('id'), 'delete_password': password})
+        )
 
         return {'my_room_id': room_id, 'delete_password': password}
 
