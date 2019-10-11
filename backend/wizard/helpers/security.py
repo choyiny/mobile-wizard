@@ -25,7 +25,10 @@ def login_required(f):
         # verify with Firebase
         decoded_token = auth.verify_id_token(id_token)
         # get our user with the uid (create if not exists)
-        g.user = User.first_or_create(firebase_id=decoded_token['uid'], email=decoded_token['email'])
+        g.user = User.first_or_create(
+            firebase_id=decoded_token['uid'],
+            email=decoded_token['email']
+        )
 
         # create user stats if it doesn't yet exist
         UserStats.first_or_create(firebase_id=decoded_token['uid'])
