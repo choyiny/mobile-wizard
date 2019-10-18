@@ -26,7 +26,7 @@ export class RoomJoinComponent implements OnInit, OnDestroy {
 
   // Class name for button after game ends
   public gameEndButton = 'gameEndHide';
-  public buttons = 'gameEndHide'
+  public buttons = 'gameEndHide';
   public gameEndStats = 'gameEndHide';
   public duration = 'No record';
   public most_damage = 0;

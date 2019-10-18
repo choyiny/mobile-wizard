@@ -25,7 +25,6 @@
     "@angular/service-worker": "~7.2.0",
     "ajv": "^6.10.0",
     "ajv-keywords": "^3.4.0",
-    "@angular/router": "~7.2.0",
     "@sentry/browser": "^4.6.6",
     "animate.css": "^3.7.0",
     "core-js": "^2.5.4",

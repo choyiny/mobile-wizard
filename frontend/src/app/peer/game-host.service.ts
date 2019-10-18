@@ -1,11 +1,11 @@
 /* tslint:disable:no-unused-expression */
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 // @ts-ignore
 import Peer from 'peerjs';
-import {environment} from '../../environments/environment';
-import {GameState} from './game-state.enum';
-import {Subject} from 'rxjs';
-import {RoomService} from '../external/room.service';
+import { environment } from '../../environments/environment';
+import { GameState } from './game-state.enum';
+import { RoomService } from '../external/room.service';
+import { Emitter } from './emitter';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +57,7 @@ export class GameHostService {
 
   private attachListenersToConnection(conn: Peer.DataConnection, playerId: number): void {
     conn.on('open', () => {
-      conn.send({type: 'setPlayerId', playerId: playerId});
+      conn.send({ type: 'setPlayerId', playerId: playerId });
     });
 
     conn.on('close', () => {
@@ -68,7 +68,7 @@ export class GameHostService {
       if (data.type === 'action') {
         this.events.emit('action', data);
       } else if (data.type === 'getPlayerId') {
-        conn.send({type: 'setPlayerId', playerId: playerId});
+        conn.send({ type: 'setPlayerId', playerId: playerId });
       }
     });
   }
@@ -89,7 +89,7 @@ export class GameHostService {
     this.playerNames[playerId] = this.connections[playerId].metadata['name'] || 'Harry';
 
     // send another setPlayerId packet just in case...
-    this.connections[playerId].send({type: 'setPlayerId', playerId: playerId});
+    this.connections[playerId].send({ type: 'setPlayerId', playerId: playerId });
     this.events.emit('join', playerId);
   }
 
@@ -98,7 +98,7 @@ export class GameHostService {
   }
 
   public tellPlayerIsReady(playerId: number) {
-    this.connections[playerId].send({type: 'ready'});
+    this.connections[playerId].send({ type: 'ready' });
   }
 
   private assignPlayer(conn: Peer.DataConnection): void {
@@ -106,14 +106,14 @@ export class GameHostService {
       this.connections[1] = conn;
       this.attachListenersToConnection(conn, 1);
       this.notifyPlayerHasJoined(1);
-      conn.send({type: 'setPlayerId', playerId: 1});
+      conn.send({ type: 'setPlayerId', playerId: 1 });
     } else if (this.connections[2] == null) {
       this.connections[2] = conn;
       this.attachListenersToConnection(conn, 2);
       this.notifyPlayerHasJoined(2);
-      conn.send({type: 'setPlayerId', playerId: 2});
+      conn.send({ type: 'setPlayerId', playerId: 2 });
     } else {
-      conn.send({type: 'error', msg: 'room full'});
+      conn.send({ type: 'error', msg: 'room full' });
       return;
     }
 
@@ -131,7 +131,7 @@ export class GameHostService {
   }
 
   public sendGameStats(player: number, fastest_game: number,
-                       most_damage: number, most_damage_blocked: number) {
+    most_damage: number, most_damage_blocked: number) {
     const conn = this.connections[player + 1];
     conn.send({
       type: 'gamestats', fastest_game: fastest_game,
@@ -148,39 +148,5 @@ export class GameHostService {
       1: null,
       2: null
     };
-  }
-}
-
-class Emitter {
-  private subjects;
-
-  constructor() {
-    this.subjects = {};
-  }
-
-  private createName(name) {
-    return '$' + name;
-  }
-
-  public emit(name, data) {
-    const fnName = this.createName(name);
-    this.subjects[fnName] || (this.subjects[fnName] = new Subject());
-    this.subjects[fnName].next(data);
-  }
-
-  public listen(name, handler) {
-    const fnName = this.createName(name);
-    this.subjects[fnName] || (this.subjects[fnName] = new Subject());
-    return this.subjects[fnName].subscribe(handler);
-  }
-
-  public dispose() {
-    const subjects = this.subjects;
-    for (const prop in subjects) {
-      if (subjects.hasOwnProperty(prop)) {
-        subjects[prop].dispose();
-      }
-    }
-    this.subjects = {};
   }
 }

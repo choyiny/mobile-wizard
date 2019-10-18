@@ -21,9 +21,11 @@ export class ActionProcessor {
   public add_action(data: object) {
     if (this.lock) { return; }
     for (const key in data) {
-      const value = data[key];
-      if (key in this.actions) {
-        this.actions[key].push(value);
+      if (data[key]) {
+        const value = data[key];
+        if (key in this.actions) {
+          this.actions[key].push(value);
+        }
       }
     }
     const l = this.actions['x'].length;
