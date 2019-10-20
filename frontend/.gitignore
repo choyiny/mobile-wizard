@@ -1,5 +1,9 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# Project Specific
+# NOTE: https://github.com/choyiny/mobile-wizard/pull/73#discussion_r336759276
+yarn.*
+
 # compiled output
 /dist
 /tmp
