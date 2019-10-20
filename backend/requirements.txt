@@ -10,7 +10,7 @@ firebase-admin==2.16.0
 
 
 # database
-psycopg2-binary==2.7.6
+psycopg2-binary==2.8.4
 Flask-SQLAlchemy===2.2
 sqlalchemy==1.2.7
 
