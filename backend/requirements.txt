@@ -6,7 +6,7 @@ flask-restful==0.3.8
 flask-socketio==4.2.1
 
 # Firebase
-firebase-admin==4.0.1
+firebase-admin==4.2.0
 
 
 # database
