@@ -23,7 +23,7 @@
     "@angular/pwa": "^0.13.7",
     "@angular/router": "^7.2.11",
     "@angular/service-worker": "~7.2.0",
-    "ajv": "^6.10.0",
+    "ajv": "^6.12.3",
     "ajv-keywords": "^3.4.0",
     "@angular/router": "~7.2.0",
     "@sentry/browser": "^4.6.6",
