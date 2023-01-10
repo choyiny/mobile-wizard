@@ -29,4 +29,4 @@ eventlet==0.25.0
 
 # redis
 redis==3.5.3
-hiredis
+hiredis==2.1.1
