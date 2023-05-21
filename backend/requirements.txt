@@ -1,6 +1,6 @@
 # Base Flask Packages
 flask==1.0.2
-flask-restful==0.3.8
+flask-restful==0.3.10
 
 # Websockets related
 flask-socketio==4.3.0
