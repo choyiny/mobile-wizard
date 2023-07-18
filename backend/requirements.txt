@@ -24,7 +24,7 @@ flask-cors
 pytest==5.4.3
 
 # WSGI related for deployment
-gunicorn==20.0.4
+gunicorn==21.0.1
 eventlet==0.25.0
 
 # redis
