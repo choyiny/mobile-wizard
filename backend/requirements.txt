@@ -25,7 +25,7 @@ pytest==5.4.3
 
 # WSGI related for deployment
 gunicorn==20.0.4
-eventlet==0.25.0
+eventlet==0.34.1
 
 # redis
 redis==3.5.3
